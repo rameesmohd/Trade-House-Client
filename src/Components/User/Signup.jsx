@@ -2,6 +2,15 @@ import React, { useRef,useState} from 'react'
 import loginImg from '../../assets/stock-exchange-trading-floor.jpg'
 import { Link, useNavigate } from 'react-router-dom'
 import userAxios from '../../Axios/UserAxios'
+import {BsFillShieldLockFill, BsTelephoneFill} from 'react-icons/bs'
+import OtpInput from "otp-input-react"
+import {CgSpinner} from 'react-icons/cg'
+import 'react-phone-input-2/lib/style.css'
+import PhoneInput from 'react-phone-input-2'
+import {auth} from '../../config/firbase.config'
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import {  toast } from 'react-toastify'
+
 
 const Signup = () => {
     const nameRef = useRef()
@@ -9,11 +18,20 @@ const Signup = () => {
     const mobileRef = useRef()
     const passRef = useRef()
     const confRef = useRef()
-    const navigate = useNavigate()
+
+    const [flag,setFlag] = useState(true)
+    const [formData,setFormData] = useState({})
     const [error,setError] = useState({})
 
-    const handleSubmit =(event)=>{
-        event.preventDefault()
+    const [otp,setOtp] = useState()
+    const [loading ,setLoading] = useState(false)
+    const [showOTP,setShowOTP] = useState(false)
+    // const [ph,setPh] = useState('')
+
+    const navigate = useNavigate()
+
+    const formValidation =(e)=>{
+        e.preventDefault()
         const name = nameRef.current.value
         const email = emailRef.current.value
         const mobile = mobileRef.current.value
@@ -36,32 +54,120 @@ const Signup = () => {
         if(conf != password){validationErrors.nomatch = 'Password entered not matching'}
 
         if(Object.keys(validationErrors).length === 0) {
-            setError(validationErrors);
-            console.log('Form values:', { name, email, mobile, password });
-            userAxios.post('/signup',{name,email,mobile,password}).then((res)=>{
-                    if(res.data.status){
-                        navigate('/login')} 
-                    else{
-                        validationErrors.resError = 'Something went wrong!!'
-                        setError(validationErrors)
-                    }
-            })
+            setFormData({name,email,password,mobile})
+            handleOTP()
+            // setError(validationErrors);
+            // console.log('Form values:', { name, email, mobile, password });
+            // userAxios.post('/signup',{name,email,mobile,password}).then((res)=>{
+            //     if(res.data.status){
+            //         navigate('/login')} 
+            //     else{
+            //         validationErrors.resError = 'Something went wrong!!'
+            //         setError(validationErrors)
+            //     }
+            // })
         }else{
             setError(validationErrors);}
     }
+
+    const handleOTP =async ()=>{
+        try {
+            if(formData){
+                onCaptchaVerify()
+                const appVerifier = window.recaptchaVerifier
+                const formatPh = '+91'+ formData.mobile
+                signInWithPhoneNumber(auth, formatPh, appVerifier)
+                    .then((confirmationResult) => {
+                        window.confirmationResult = confirmationResult;
+                        setFlag(false)
+                        setLoading(false)
+                        setShowOTP(true)
+                        toast.success('OTP sent succesfully!!')
+                    }).catch((error) => {
+                        console.log(error);
+                        setLoading(false)
+                        const recaptchaContainer = document.getElementById('recaptcha-container');
+                        if (recaptchaContainer) {
+                            recaptchaContainer.innerHTML = ''; // Clear the recaptcha-container
+                            const newRecaptchaContainer = document.createElement('div');
+                            newRecaptchaContainer.id = 'recaptcha-container';
+                            recaptchaContainer.parentNode.replaceChild(newRecaptchaContainer, recaptchaContainer);
+                        }
+                        toast.error('invalid mobile number')
+                    });
+            }else{
+                formValidation()
+            }                
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    function onCaptchaVerify() {
+        try{
+            if (!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new RecaptchaVerifier(
+                    "recaptcha-container",
+                    {
+                    size: "invisible",
+                    callback: () => {
+                    },
+                    "expired-callback": () => {
+                        toast.error("TimeOut");
+                    }
+                    },auth            
+        )}
+    }catch(err){
+            console.log(err);
+        }
+    }
+
+    const verifyOtp = ()=>{
+          if (otp) {
+          window.confirmationResult.confirm(otp)
+              .then(async () =>{
+                handleSubmit()
+              })
+              .catch(() => {
+                setError("Enter a valid OTP");
+                toast.error('Enter a valid OTP')
+              });
+          } else {
+          setError("Enter OTP");
+          toast.error('Enter OTP')
+        }
+    }
+
+    const handleSubmit =async()=>{
+        try {
+            setLoading(true)
+            await userAxios.post('/signup',formData).then((res)=>{
+                if(res.status == 200){
+                    toast.success(res?.data?.msg)
+                    navigate('/login')} 
+                else{
+                    toast.error('Something went wrong in route!!')
+                }
+            }).catch((error)=>{
+                toast.error(error)
+            })    
+        } catch (error) {
+            toast.error(error.respons.data.errMsg)
+        }
+    }
+
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 h-screen w-full'>
-            <div className='hidden sm:block'>
-                <img className='w-full h-full object-cover' src={loginImg}/>
-            </div>
-            <div className='bg-grey-100 flex flex-col justify-center'>
-            <form onSubmit={handleSubmit} action="" className='max-w-[400px] w-full mx-auto bg-white p-4'>
+    <div className='flex flex-col justify-center'>     
+    <div id='recaptcha-container'></div>
+      { flag ? 
+        <div className='bg-grey-100 '>
+            <form onSubmit={formValidation} action="" className='max-w-[400px] w-full mx-auto bg-white p-4'>
                 <h2 className='text-4xl font-bold text-center py-6'>Sign Up</h2>
                 <div className='flex flex-col py-2'>
-                    <label>Username</label>
-                    <input ref={nameRef} type='text' className='border p-2' required/>
+                <label>Username</label>
+                <input ref={nameRef} type='text' className='border p-2' required/>
                     {error.name && <div className="error">{error.name}</div>}
-                </div>
+                    </div>
                 <div className='flex flex-col py-2'>
                     <label>Email</label>
                     <input ref={emailRef} type='email' className='border p-2' required/>
@@ -69,7 +175,7 @@ const Signup = () => {
                 </div> 
                 <div className='flex flex-col py-2'>
                     <label>Mobile</label>
-                    <input ref={mobileRef} type='number' className='border p-2' required/>
+                    <input ref={mobileRef} type='tel' className='border p-2' required/>
                     {error.mobile && <div className="error text-red-700">{error.mobile}</div>}
                 </div>   
                 <div className='flex flex-col py-2'>
@@ -80,7 +186,7 @@ const Signup = () => {
                 <div className='flex flex-col py-2'>
                     <label>Confirm Password</label>
                     <input ref={confRef} type='password' className='border p-2' required/>
-                     {error.nomatch && <div className="error text-red-700">{error.nomatch}</div>}
+                    {error.nomatch && <div className="error text-red-700">{error.nomatch}</div>}
                 </div>
                     <button type='submit' className='text-white border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-400'>Sign Up</button>
                     {error.resError && <div className="error text-red-700">{error.resError}</div>}
@@ -89,8 +195,39 @@ const Signup = () => {
                     <Link to={'/login'}>Already have account</Link>
                 </div>
             </form>
-        </div>
-    </div>
+        </div>  : 
+            <div className='bg-grey-100 flex flex-col justify-center'>
+            <h2 className='text-4xl font-bold text-center py-6'>Sign Up</h2>
+            {
+                showOTP && 
+            <>
+            <form  className='max-w-[400px] w-full mx-auto bg-slate-100 p-4'>
+                <div className='flex flex-col py-2'>
+                    <label className='text-center'>Enter OTP</label>
+                    <div className='text-blue-600 w-fit mx-auto py-2'>
+                        <BsFillShieldLockFill size={30}/>
+                    </div>
+                    <OtpInput 
+                     value={otp}
+                     onChange={setOtp}
+                     OTPLength={6}
+                     otpType="number" 
+                     disabled={false}
+                     autoFocus
+                     className="opt-container mx-auto flex justify-between" />
+                </div>
+                <button type='button' onClick={verifyOtp} className='text-white border w-full my-5 py-2 bg-indigo-600 flex justify-center' >
+                    { 
+                        loading && <CgSpinner size={20} className='mt-1 animate-spin mr-2' />
+                    }
+                    <span>Verify OTP</span>
+                </button>
+            </form>     
+            </> 
+            }
+        </div>    
+        }
+    </div>   
 )}
 
 export default Signup

@@ -1,15 +1,15 @@
 import React from 'react'
 import {Routes,Route} from 'react-router-dom'
 import Home from '../Pages/User/Home'
-import Login from '../Pages/User/Login'
-import Signup from '../Pages/User/Signup'
+import LoginAndSignup from '../Pages/User/LoginAndSignup'
 const User = () => {
   return (
     <>
       <Routes>
             <Route path='/' element={<Home/>}/>
-            <Route path='/login' element={<Login/>}/>
-            <Route path='/signup' element={<Signup/>}/>
+            <Route path='/home' element={<Home/>}/>
+            <Route path='/login' element={<LoginAndSignup props='login'/>}/>
+            <Route path='/signup' element={<LoginAndSignup props='register'/>}/>
       </Routes>
     </>
   )
