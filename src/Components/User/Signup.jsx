@@ -20,18 +20,17 @@ const Signup = () => {
     const confRef = useRef()
 
     const [flag,setFlag] = useState(true)
-    const [formData,setFormData] = useState({})
+    const [formData,setFormData] = useState()
     const [error,setError] = useState({})
 
     const [otp,setOtp] = useState()
     const [loading ,setLoading] = useState(false)
     const [showOTP,setShowOTP] = useState(false)
-    // const [ph,setPh] = useState('')
+    const [ph,setPh] = useState('')
 
     const navigate = useNavigate()
 
-    const formValidation =(e)=>{
-        e.preventDefault()
+    const formValidation =()=>{
         const name = nameRef.current.value
         const email = emailRef.current.value
         const mobile = mobileRef.current.value
@@ -39,8 +38,10 @@ const Signup = () => {
         const conf = confRef.current.value
         const validationErrors = {};
 
-        if (!name){ validationErrors.name = 'Name is required';}
-            else if(name.trim() === ''){ validationErrors.name = 'Invalid name'}
+        if (!name){ 
+            validationErrors.name = 'Name is required';
+            }else if(name.trim() === ''){ 
+                validationErrors.name = 'Invalid name'}
         if (!email){
             validationErrors.email = 'Email is required'
         }else if (!/\S+@\S+\.\S+/.test(email)){
@@ -55,6 +56,7 @@ const Signup = () => {
 
         if(Object.keys(validationErrors).length === 0) {
             setFormData({name,email,password,mobile})
+            console.log(formData);
             handleOTP()
             // setError(validationErrors);
             // console.log('Form values:', { name, email, mobile, password });
@@ -72,10 +74,11 @@ const Signup = () => {
 
     const handleOTP =async ()=>{
         try {
-            if(formData){
+            if(Object.keys(formData).length != 0){
+                console.log(formData+'fgdgbdzfgadfg');
                 onCaptchaVerify()
                 const appVerifier = window.recaptchaVerifier
-                const formatPh = '+91'+ formData.mobile
+                const formatPh = '+91'+formData.mobile
                 signInWithPhoneNumber(auth, formatPh, appVerifier)
                     .then((confirmationResult) => {
                         window.confirmationResult = confirmationResult;
@@ -96,7 +99,7 @@ const Signup = () => {
                         toast.error('invalid mobile number')
                     });
             }else{
-                formValidation()
+                toast.error('form data is invalid')
             }                
         } catch (error) {
             console.log(error);
@@ -115,8 +118,8 @@ const Signup = () => {
                     "expired-callback": () => {
                         toast.error("TimeOut");
                     }
-                    },auth            
-        )}
+                    },auth
+                    )}
     }catch(err){
             console.log(err);
         }
@@ -161,7 +164,7 @@ const Signup = () => {
     <div id='recaptcha-container'></div>
       { flag ? 
         <div className='bg-grey-100 '>
-            <form onSubmit={formValidation} action="" className='max-w-[400px] w-full mx-auto bg-white p-4'>
+            <form className='max-w-[400px] w-full mx-auto bg-white p-4'>
                 <h2 className='text-4xl font-bold text-center py-6'>Sign Up</h2>
                 <div className='flex flex-col py-2'>
                 <label>Username</label>
@@ -175,7 +178,7 @@ const Signup = () => {
                 </div> 
                 <div className='flex flex-col py-2'>
                     <label>Mobile</label>
-                    <input ref={mobileRef} type='tel' className='border p-2' required/>
+                    <input ref={mobileRef} type='number' className='border p-2' required/>
                     {error.mobile && <div className="error text-red-700">{error.mobile}</div>}
                 </div>   
                 <div className='flex flex-col py-2'>
@@ -188,7 +191,7 @@ const Signup = () => {
                     <input ref={confRef} type='password' className='border p-2' required/>
                     {error.nomatch && <div className="error text-red-700">{error.nomatch}</div>}
                 </div>
-                    <button type='submit' className='text-white border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-400'>Sign Up</button>
+                    <button type='button' onClick={formValidation} className='text-white border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-400'>Sign Up</button>
                     {error.resError && <div className="error text-red-700">{error.resError}</div>}
                 <div className='flex justify-between '>
                     <p className='flex items-center'><input className='mr-2' type="checkbox"/>Remember Me</p>
