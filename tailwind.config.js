@@ -4,9 +4,12 @@ export default {
     './src/**/*.{js,jsx,ts,tsx}', // Include JSX files
     './public/index.html', // Include your HTML file
   ],
+  darkMode: false,
   theme: {
     extend: {},
   },
-  plugins: [],
+  daisyui: {
+    themes: [],
+  },
+  plugins: [require("daisyui")],
 }
-

@@ -94,6 +94,9 @@ const Login = () => {
             { !forgot ? 
             <form onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-4'>
                 <h2 className='text-4xl font-bold text-center py-6'>Sign In</h2>
+                    <div className=' flex justify-center'><GoogleLogin/> </div>
+                    <p className='text-center'>or</p>
+                    <hr className='my-5' />
                 <div className='flex flex-col py-2'>
                     <label>Username</label>
                     <input ref={emailRef} type='text' className='border p-2' placeholder='Enter your email'/>
@@ -104,14 +107,13 @@ const Login = () => {
                     <input ref={passwordRef} type='text' className='border p-2' placeholder='Password'/>
                     {error.password && <div className="error text-red-700">{error.password}</div>}
                 </div>
-                <GoogleLogin />
                 <button type='submit' className='text-white border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-400'>Login</button>
                 {error.resError && <div className="error text-red-700">{error.resError}</div>}
                 <div className='flex justify-between '>
                     <p className='flex items-center'><input className='mr-2' type="checkbox"/>Remember Me</p>
                     <Link to={'/signup'}>Create an account</Link>
                 </div>
-                <Link onClick={()=>setForgot(true)}>Forget password</Link>
+                <Link onClick={()=>setForgot(true)} className='text-blue-500'>Forget password?</Link>
             </form> :
             ( !userExist ?
             <form onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-4 border '>
