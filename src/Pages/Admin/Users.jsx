@@ -8,13 +8,14 @@ const Users = () => {
   return (
     <>
     <Navbar/>
-    <div className='flex'>
+      <div className='flex'>
           <Sidebar/>
-          <div className="w-40 h-full px-3 shrink-0"/>
-          <div className="w-full px-3">
+          <div className="w-40 h-full px-3 shrink-0 hidden md:block"/>
+          <div className='w-16 h-full shrink-0 md:hidden'/>
+          
               <User/>
-          </div>
-        </div>
+        
+      </div>
     </>
   )
 }

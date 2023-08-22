@@ -7,7 +7,7 @@ const Admin = () => {
   return (
     <>
     <Routes>
-        <Route path='/Dashboard' element={<Dashboard/>}/>    
+        <Route path='/dashboard' element={<Dashboard/>}/>    
         <Route path='/users' element={<Users/>}/>
         <Route path='/' element={<Dashboard/>}/>
     </Routes>

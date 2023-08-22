@@ -1,13 +1,54 @@
-import axios from 'axios'
-import React,{ useState,useEffect }from 'react'
+import React,{ useState,useEffect, useRef }from 'react'
+import adminAxios from '../../Axios/AdminAxios'
+import { toast } from 'react-toastify'
+import EditUser from './EditUser'
 
 
 const Users=()=>{
+    const [usersData , setUsersData] = useState([])
+    const [searchInput ,setSearchInput] = useState('')
+    const [edit,setEdit] = useState(false)
+    const [userDetails,setUser] = useState({})
+    const searchRef = useRef()
+
     useEffect(()=>{
-            
-    },[])
+            adminAxios.get('/users-details').then((res)=>{
+                console.log(res.data.result);
+                setUsersData(res.data.result)
+            }).catch((error)=>{
+                console.log(error);
+                toast.error(error.message)
+            })
+    },[]);
+
+    const search=()=>{
+        setSearchInput(searchRef.current.value);
+        // if(searchInput == ''){
+        //     setData(usersData)
+        // }else{
+        //     let Data = usersData.filter(user => {
+        //         const lowerSearchInput = searchInput.toLowerCase();
+        //         let emailMatch = user.email.toLowerCase().includes(lowerSearchInput);
+        //         let nameMatch = user.name.toLowerCase().includes(lowerSearchInput);
+        //         let mobileMatch = false; 
+        
+        //         if (!isNaN(searchInput)) {
+        //           const mobileString = String(user.mobile); 
+        //           mobileMatch = mobileString.includes(searchInput);
+        //         }
+              
+        //         return emailMatch || nameMatch || mobileMatch;})
+        //     setData(Data)
+        //     }   
+        }
+    const editUser =(user)=>{
+        setUser(user)
+        setEdit(true)
+    }    
 return (
     <>
+    {!edit ? 
+    <div className="w-full px-3">
     <div className="flex flex-col">
     <div className="m-5">
         <nav className="bg-light">
@@ -15,11 +56,12 @@ return (
                 <form className="flex flex-col items-start md:flex-row md:items-end" role="search">
                     <input
                         className="w-full px-2 py-1 border rounded-md form-input md:mr-2 md:w-auto focus:outline-none focus:ring focus:border-blue-300"
-                        type="search"
+                        type=""
+                        ref={searchRef}
                         placeholder="Search"
                         aria-label="Search"
                     />
-                    <button className="p-1 rounded bg-slate-200">
+                    <button className="p-1 rounded bg-slate-200" type='button' onClick={search}>
                         Search
                     </button>
                 </form>
@@ -38,22 +80,28 @@ return (
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td className="px-4 py-2 text-center">1</td>
-                <td className="px-4 py-2 text-center">John Doe</td>
-                <td className="px-4 py-2 text-center">john@example.com</td>
-                <td className="px-4 py-2 text-center">123-456-7890</td>
-                <td className="">
-                </td>
+            {usersData
+            .filter((obj)=>obj.email.toLowerCase().includes(searchInput))
+            .map((obj,index)=>{
+                return(
+            <tr key={obj._id}>
+                <td className="px-4 py-2 text-center">{index+1}</td>
+                <td className="px-4 py-2 text-center">{obj.name}</td>
+                <td className="px-4 py-2 text-center">{obj.email}</td>
+                <td className="px-4 py-2 text-center">{obj.mobile}</td>
+            
                 <td className="px-4 py-2">
-                    <button className='mx-5 text-blue-600'>Edit</button>
-                    <button className="text-red-600">Block</button>
+                    <button className='mx-5 text-blue-600' onClick={()=>editUser(obj)}>Edit</button>
+                    <button className="text-red-600" onClick={()=>block(obj._id)}>Block</button>
                 </td>
-            </tr>
+            </tr> )
+            })}
         </tbody>
     </table>
-</div>
-
+    </div>
+    </div> : (
+    <EditUser user={userDetails} />
+    )}
 </>
 )}
 

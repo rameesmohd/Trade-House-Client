@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import {CgSpinner} from 'react-icons/cg'
 import { toast } from 'react-toastify'
 import GoogleLogin  from '../Google/GoogleLogin'
+import { useDispatch } from 'react-redux'
+import { clientLogin } from '../../Redux/ClientAuth'
 
 const Login = () => {
     const emailRef = useRef()
@@ -17,6 +19,7 @@ const Login = () => {
     const [email,setEmail] = useState()
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleSubmit=(event)=>{
         event.preventDefault()
@@ -31,7 +34,18 @@ const Login = () => {
         if(Object.keys(validationErrors).length === 0){
             setError(validationErrors)
             userAxios.post('/login',{email,password}).then((res)=>{
-                res.status ? navigate('/home') : setError(validationErrors)
+                console.log(res.data);
+                const result = res.data.response
+                 if(result.status){                    
+                     dispatch(clientLogin({
+                        token : result?.token,
+                        email : result?.email,
+                        name : result?.name
+                     }))
+                     navigate('/home')
+                 }else{
+                     toast.error(result.message)     
+                 }
             }).catch((error)=>{
                 console.log(error);
                 toast.error(error.response.data?.response?.message) 

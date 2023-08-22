@@ -1,8 +1,8 @@
 import axios from 'axios'
-import {AdminAPI} from '../Constants/API'
+import {adminAPI} from '../Constants/API'
 
 const adminAxios = axios.create({
-    baseURL: AdminAPI
+    baseURL: adminAPI
 })
 
 export default adminAxios;

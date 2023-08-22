@@ -1,14 +1,15 @@
 import React from 'react'
 import Navbar from '../../Components/User/Navbar'
 
+import Home from '../../Components/User/Home'
 
-function Home() {
+function HomePage() {
   return (
     <>
       <Navbar/>
-      <h1 className='text-zinc-800 text-2xl'>User Home</h1>
+      <Home/>
     </>
   )
 }
 
-export default Home
+export default HomePage
