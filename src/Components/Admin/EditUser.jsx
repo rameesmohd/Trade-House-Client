@@ -1,19 +1,23 @@
 import React from 'react'
 import { useState } from 'react'
 import adminAxios from '../../Axios/AdminAxios'
+import { toast } from 'react-toastify'
 
-const EditUser = ({user}) => {
+const EditUser = ({user,func}) => {
     const [id,setId] = useState(user._id)
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [mobile ,setMobile] = useState(user.mobile);
 
     const updateProfile=()=>{
-      adminAxios.post("/update-profile",{ id,name,email,mobile
+      adminAxios.post("/update-user",{ id,name,email,mobile
         }).then((res)=>{
-            console.log('success');
+            console.log(res);
+            toast.success(res.message)
+            func(false)
         }).catch((error)=>{
           console.log(error.message);
+          toast.error(error.message)
         })
     }
 
