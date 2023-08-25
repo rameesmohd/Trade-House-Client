@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState ,useEffect} from 'react'
 import userAxios from '../../Axios/UserAxios'
 import { Link, useNavigate } from 'react-router-dom'
 import {CgSpinner} from 'react-icons/cg'
@@ -6,6 +6,8 @@ import { toast } from 'react-toastify'
 import GoogleLogin  from '../Google/GoogleLogin'
 import { useDispatch } from 'react-redux'
 import { clientLogin } from '../../Redux/ClientAuth'
+import {BsFillShieldLockFill} from 'react-icons/bs'
+import OtpInput from "otp-input-react"
 
 const Login = () => {
     const emailRef = useRef()
@@ -17,6 +19,12 @@ const Login = () => {
     const [userExist,setUserExist] =useState(false)
     const [loading,setLoading] = useState(false)
     const [email,setEmail] = useState()
+    const [otp,setOtp] = useState()
+    const [otpFieldShow,setOtpFieldShow] = useState(false)
+    const [compareOTP,setCompareOtp] = useState('')
+
+    const [resendOtp,setResendOtp] = useState(false)
+    const [count,setCount] = useState(10)
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -54,6 +62,12 @@ const Login = () => {
             setError(validationErrors)
         }
     }
+
+    const generateOTP =()=> {
+        const min = 100000; // Smallest 6-digit number
+        const max = 999999; // Largest 6-digit number
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
     
     const forgotPassAuth =async(email)=>{
         if(!email){
@@ -63,12 +77,17 @@ const Login = () => {
         }else{
             try {
                 setLoading(true)
-                await userAxios.get(`/forgetpassword?email=${email}`).then((res)=>{
+                const OTP =  generateOTP()
+                setOtp(OTP)
+                await userAxios.post('/forgetpasswordauth',{email,OTP}).then((res)=>{
                     console.log(res);
-                    res.status ? setUserExist(true) : ''   
+                    toast.success(res.data.message)
+                    //------
+                    res.status ? setOtpFieldShow(true) : ''   
                     setEmail(email)
+                    timerStart()
                 }).catch((error)=>{
-                    toast.error(error.response.data.msg)
+                    toast.error(error.response.data.message)
                 })
                 setLoading(false)    
             } catch (error) {
@@ -82,7 +101,6 @@ const Login = () => {
         const password = newPassRef.current.value
         const confirmPass = newPassConfirmRef.current.value
         const validationErrors = {}
-
         if (!password)
             validationErrors.password = 'Password is required';
         if(confirmPass != password)
@@ -95,6 +113,7 @@ const Login = () => {
                 setForgot(false)
                 setLoading(false)
                 setUserExist(false)
+                setOtpFieldShow(false)
             }).catch((err)=>{
                 toast.error(error.response.data.msg)
             })
@@ -103,6 +122,43 @@ const Login = () => {
         }
     }
 
+    const verifyOTP=()=>{
+        if(compareOTP==otp){
+            console.log(compareOTP,otp);
+            setUserExist(true)
+        }else{
+            toast.error('incurrect OTP')
+        }
+    }
+
+    const [seconds, setSeconds] = useState(60);
+    const [isActive, setIsActive] = useState(false);
+
+    useEffect(() => {
+        let timer;
+        if (isActive && seconds > 0) {
+        timer = setInterval(() => {
+            setSeconds(prevSeconds => prevSeconds - 1);
+        }, 1000);
+        }else{
+            timerReset()
+        }
+        return () => {
+        clearInterval(timer)};
+    }, [isActive, seconds]);
+
+    const timerStart = () => {
+        setIsActive(true);
+    };
+
+    const timerReset = () => {
+        setIsActive(false);
+        setSeconds(30);
+    };
+
+
+
+ 
     return (
         <div className='bg-grey-100 flex flex-col justify-center'>
             { !forgot ? 
@@ -130,26 +186,57 @@ const Login = () => {
                 <Link onClick={()=>setForgot(true)} className='text-blue-500'>Forget password?</Link>
             </form> :
             ( !userExist ?
-            <form onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-4 border '>
-                <h2 className='text-4xl font-bold text-center py-6'>Forget Password</h2>
+            ( !otpFieldShow ? <form onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-4 border '>
+               <h2 className='text-4xl font-bold text-center py-6'>Forget Password</h2>
                 <div className='flex flex-col py-2'>
                     <input ref={emailRef} type='text' className='border p-2' placeholder='Enter your email'/>
-                    <button type='button' onClick={()=>forgotPassAuth(emailRef.current.value)} className='text-white border
+                   <button type='button' onClick={()=>forgotPassAuth(emailRef.current.value)} className='text-white border
                      w-full my-8 py-2 bg-indigo-600 hover:bg-indigo-400 flex justify-center'>
                     { 
                         loading && <CgSpinner size={20} className='mt-1 animate-spin mr-2' />
                     }
                         <span>Submit</span>
-                    </button>
-                    {error.user && <div className="error text-red-700">{error.user}</div>}
+                    </button> 
+                    {error.message && <div className="error text-red-700">{error.message}</div>}
                     <Link onClick={()=>setForgot(false)} className='text-right'>Back to login</Link>
                 </div>
             </form> : 
+            <form  className='max-w-[400px] w-full mx-auto bg-slate-100 p-4'>
+            <div className='flex flex-col py-2'>
+                <label className='text-center'>Enter OTP</label>
+                <div className='text-blue-600 w-fit mx-auto py-2'>
+                    <BsFillShieldLockFill size={30}/>
+                </div>
+                <OtpInput 
+                 value={compareOTP}
+                 onChange={setCompareOtp}
+                 OTPLength={6}
+                 otpType="number" 
+                 disabled={false}
+                 autoFocus
+                 className="opt-container mx-auto flex justify-between" />
+            </div>
+            { isActive ? 
+                <button type='button' onClick={verifyOTP} className='text-white border w-full my-5 py-2 bg-indigo-600 flex justify-center' >
+                { 
+                    loading && <CgSpinner size={20} className='mt-1 animate-spin mr-2' />
+                }
+                <span>Verify OTP <h1>{seconds}</h1></span>
+            </button> :
+               <button type='button' onClick={()=>forgotPassAuth(email)} className='text-white border w-full my-5 py-2 bg-indigo-600 flex justify-center' >
+               { 
+                   loading && <CgSpinner size={20} className='mt-1 animate-spin mr-2' />
+               }
+               <span>Resend OTP </span>
+           </button>
+            }
+            </form>    
+            ) : 
             <form onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-4 border '>
                  <h2 className='text-4xl font-bold text-center py-6'>Forget Password</h2>
                 <div className='flex flex-col py-2'>
                     <div className='flex flex-col py-2'>
-                    <label>Password</label>
+                    <label>New Password</label>
                     <input ref={newPassRef} type='text' className='border p-2' required/>
                     {error.password && <div className="error text-red-700">{error.password}</div>}
                     </div>

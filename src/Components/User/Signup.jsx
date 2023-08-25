@@ -1,15 +1,15 @@
 import React, { useRef,useState} from 'react'
-import loginImg from '../../assets/stock-exchange-trading-floor.jpg'
 import { Link, useNavigate } from 'react-router-dom'
 import userAxios from '../../Axios/UserAxios'
 import {BsFillShieldLockFill, BsTelephoneFill} from 'react-icons/bs'
 import OtpInput from "otp-input-react"
 import {CgSpinner} from 'react-icons/cg'
 import 'react-phone-input-2/lib/style.css'
-import PhoneInput from 'react-phone-input-2'
 import {auth} from '../../config/firbase.config'
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import {  toast } from 'react-toastify'
+// import PhoneInput from 'react-phone-input-2'
+// import loginImg from '../../assets/stock-exchange-trading-floor.jpg'
 
 
 const Signup = () => {
@@ -26,7 +26,7 @@ const Signup = () => {
     const [otp,setOtp] = useState()
     const [loading ,setLoading] = useState(false)
     const [showOTP,setShowOTP] = useState(false)
-    const [ph,setPh] = useState('')
+    // const [ph,setPh] = useState('')
 
     const navigate = useNavigate()
 
@@ -227,7 +227,7 @@ const Signup = () => {
                 </button>
             </form>     
             </> 
-            }
+            } 
         </div>    
         }
     </div>   
