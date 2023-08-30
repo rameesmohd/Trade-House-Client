@@ -25,7 +25,8 @@ const Login = ( ) => {
                             dispatch(clientLogin({
                                token : result?.token,
                                email : result?.email,
-                               name : result?.name
+                               name : result?.name,
+                               is_requested : result?.is_requested
                             }))
                             navigate('/home')
                         }else{

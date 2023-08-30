@@ -10,6 +10,7 @@ import graph1 from '../../../assets/grade1-trendlines.png'
 import meta4 from '../../../assets/meta4.jpeg'
 import meta5 from '../../../assets/meta5.jpeg'
 import img6 from '../../../assets/faa2b801f1a2a58d3458bd13983842d3.jpeg'
+import Footer from '../Footer'
 
 
 function Home() {
@@ -17,8 +18,8 @@ function Home() {
     <>
     <div className='flex  flex-col'>
     {/* section-1 */}
-    <div className='bg-slate-100'>
-    <div className='grid grid-cols-1 md:grid-cols-2  container mx-auto'>
+    <div className='bg-yellow-300 lg:h-[500px]'>
+    <div className='grid grid-cols-1 md:grid-cols-2 container mx-auto'>
         <div className='p-6 md:p-12 '>
             <img className='object-cover rounded-md shadow-2xl' src={img3} alt="" />
         </div>
@@ -30,7 +31,7 @@ function Home() {
             <p>to select a performing trade. This is exactly what you will </p>
             <p>learn with Trade House</p>
                 <div className='w-100 m-14 flex justify-start'>
-                <button className='w-28 h-12 bg-blue-800 text-slate-200 rounded-md hover:bg-gray-500 transition duration-300'>Get Started</button>
+                <button className='w-28 h-12 bg-blue-800 text-slate-200 rounded-md hover:bg-gray-500 transition duration-300 btn-sm md:btn-md'>Get Started</button>
                 </div>
         </div>
     </div>
@@ -41,7 +42,7 @@ function Home() {
         <div className='col-span-3 p-4'>
             <img className=' w-80 h-40 md:h-60 object-cover rounded-md ' src={img4} alt="" />
         </div>
-        <div className='col-span-9 md:py-10 p-4 md:my-2 bg-slate-100 rounded-md shadow-sm'>
+        <div className='col-span-9 md:py-10 px-4 md:my-2 bg-slate-100 rounded-md shadow-sm'>
             <div className="container px-8 sm:px-8 lg:grid lg:grid-cols-2 lg:gap-x-12">
             <div className="lg:col-span-7">
             <div className="text-box mb-12 ">
@@ -59,7 +60,7 @@ function Home() {
         <div className='col-span-3 p-4'>
             <img className=' w-80 h-40 md:h-60 object-cover rounded-md ' src={img5} alt="" />
         </div>
-        <div className='col-span-9 md:py-10 p-4 md:my-2 bg-slate-100 rounded-md shadow-sm'>
+        <div className='col-span-9 md:py-10 px-4 md:my-2 bg-slate-100 rounded-md shadow-sm'>
             <div className="container px-8 sm:px-8 lg:grid lg:grid-cols-2 lg:gap-x-12 ">
             <div className="lg:col-span-7">
             <div className="text-box mb-12 ">
@@ -170,11 +171,10 @@ function Home() {
             </div>         
         </div>
         {/* section-6 */}
-        <div className='h-[700px] min-w-full overflow-hidden'>
+        <div className='h-auto min-w-full' >
                 <img className='object-cover' src={img6} alt="" srcset="" />
-        </div>
-        
-
+        </div> 
+        <Footer/>
         </div>
     </>
   )

@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../../Components/User/Home/Navbar'
+import Navbar from '../../Components/User/Navbar'
 import Header from '../../Components/User/Home/Header'
 import Home from '../../Components/User/Home/Home'
 
@@ -8,8 +8,10 @@ function HomePage() {
   return (
     <>
       <Navbar/>
+      <div className='container mx-auto pt-24 lg:pt-0'>
       <Header/>
       <Home/>
+      </div>
     </>
   )
 }

@@ -3,12 +3,14 @@ import UserRouter from './Routes/User'
 import AdminRouter from './Routes/Admin'
 import { ToastContainer,  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import TutorRouter from './Routes/Tutor';
 
 function App() {
   return (
     <BrowserRouter>
         <Routes>
             <Route path='/admin/*' element={<AdminRouter/>}/>
+            <Route path='/tutor/*' element={<TutorRouter/>}/>
             <Route path='/*' element={<UserRouter/>}/>
         </Routes>
         <ToastContainer

@@ -8,9 +8,9 @@ const Admin = () => {
   return (
     <>
     <Routes>
-        <Route path='/dashboard' element={<Dashboard/>}/>    
         <Route path='/users' element={<Users/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/dashboard' element={<Dashboard/>}/>    
         <Route path='/' element={<Dashboard/>}/>
     </Routes>
     </>

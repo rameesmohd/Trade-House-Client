@@ -22,10 +22,8 @@ const Login = () => {
     const [otp,setOtp] = useState()
     const [otpFieldShow,setOtpFieldShow] = useState(false)
     const [compareOTP,setCompareOtp] = useState('')
-
-    const [resendOtp,setResendOtp] = useState(false)
-    const [count,setCount] = useState(10)
-
+    const [seconds, setSeconds] = useState(60);
+    const [isActive, setIsActive] = useState(false);
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -42,13 +40,13 @@ const Login = () => {
         if(Object.keys(validationErrors).length === 0){
             setError(validationErrors)
             userAxios.post('/login',{email,password}).then((res)=>{
-                console.log(res.data);
                 const result = res.data.response
-                 if(result.status){                    
+                 if(result.status){   
                      dispatch(clientLogin({
                         token : result?.token,
                         email : result?.email,
-                        name : result?.name
+                        name : result?.name,
+                        is_requested : result?.is_requested
                      }))
                      navigate('/home')
                  }else{
@@ -121,7 +119,7 @@ const Login = () => {
             setError(validationErrors)
         }
     }
-
+    
     const verifyOTP=()=>{
         if(compareOTP==otp){
             console.log(compareOTP,otp);
@@ -130,10 +128,7 @@ const Login = () => {
             toast.error('incurrect OTP')
         }
     }
-
-    const [seconds, setSeconds] = useState(60);
-    const [isActive, setIsActive] = useState(false);
-
+    
     useEffect(() => {
         let timer;
         if (isActive && seconds > 0) {
