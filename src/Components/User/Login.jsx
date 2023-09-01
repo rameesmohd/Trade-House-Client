@@ -42,13 +42,14 @@ const Login = () => {
             userAxios.post('/login',{email,password}).then((res)=>{
                 const result = res.data.response
                  if(result.status){   
-                     dispatch(clientLogin({
+                    dispatch(clientLogin({
                         token : result?.token,
                         email : result?.email,
                         name : result?.name,
-                        is_requested : result?.is_requested
+                        is_requested : result?.is_requested,
+                        is_tutor : result?.is_tutor
                      }))
-                     navigate('/home')
+                    navigate('/home')
                  }else{
                      toast.error(result.message)     
                  }

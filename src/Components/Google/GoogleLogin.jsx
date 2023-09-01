@@ -26,7 +26,8 @@ const Login = ( ) => {
                                token : result?.token,
                                email : result?.email,
                                name : result?.name,
-                               is_requested : result?.is_requested
+                               is_requested : result?.is_requested,
+                               is_tutor : result?.is_tutor
                             }))
                             navigate('/home')
                         }else{

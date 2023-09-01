@@ -6,7 +6,8 @@ export const ClientAuth = createSlice({
         Token : null,
         email: "",
         name : "",
-        is_requested : false
+        is_requested : false,
+        is_tutor : false
     },
     reducers:{
         clientLogin(state, action){
@@ -14,11 +15,14 @@ export const ClientAuth = createSlice({
             state.name = action.payload.name
             state.email = action.payload.email
             state.is_requested = action.payload.is_requested
+            state.is_tutor = action.payload.is_tutor
         },
         clientLogout(state, action){
             state.Token = ""
             state.name = {}
             state.email = ""
+            state.is_requested=false
+            state.is_tutor=false
         },
         tutorReqSubmit(state,action){
             state.is_requested = true

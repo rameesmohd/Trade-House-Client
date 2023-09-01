@@ -4,15 +4,18 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
 import { clientLogout } from '../../Redux/ClientAuth'
+import { tutorLogout } from '../../Redux/TutorAuth'
 
 const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const clientAuth = useSelector((state)=>state.Client.Token)
-  const tutorAuth = useSelector((state)=>state?.Tutor?.Token)
+  const tutorAuth = useSelector((state)=>state.Client?.is_tutor)
 
   const logOut=()=>{
+    dispatch(tutorLogout())
     dispatch(clientLogout())
+    navigate('/')
   }
   return (
     <>
@@ -102,8 +105,11 @@ const Navbar = () => {
             </li>
             {tutorAuth && <li>
               <a
-                href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                onClick={()=>navigate('/tutor')}
+                className="block py-2 pl-3 pr-4 text-gray-900 rounded cursor-pointer
+                 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0
+                  md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700
+                   dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Tutor Panel
               </a>
