@@ -2,6 +2,7 @@ import React,{ useState,useEffect, useRef }from 'react'
 import adminAxios from '../../Axios/AdminAxios'
 import { toast } from 'react-toastify'
 import EditUser from './EditUser'
+import { useSelector } from 'react-redux'
 
 
 const Users=()=>{
@@ -10,10 +11,12 @@ const Users=()=>{
     const [userDetails,setUser] = useState({})
     const [edit,setEdit] = useState(false)
     const searchRef = useRef()
+    const token = useSelector((state)=>state.Admin.Token)
     
     useEffect(()=>{
-            adminAxios.get('/users-details').then((res)=>{
-                console.log(res.data.result);
+            adminAxios.get('/users-details',{
+                headers : { Authorization : `admin ${token}`}}
+            ).then((res)=>{
                 setUsersData(res.data.result)
             }).catch((error)=>{
                 console.log(error);
@@ -77,10 +80,10 @@ const Users=()=>{
 return (
     <>
     {!edit ? 
-    <div className="w-full px-3">
+    <div className="w-full px-3 py-1">
     <div className="flex flex-col">
     <div className="m-5">
-        <nav className="bg-light">
+        <nav className="bg-slate-200 py-3 px-3 rounded-md">
             <div className="container flex justify-end mx-auto">
                 <form className="flex flex-col items-start md:flex-row md:items-end" role="search">
                     <input
@@ -90,7 +93,7 @@ return (
                         placeholder="Search"
                         aria-label="Search"
                     />
-                    <button className="p-1 rounded bg-slate-200" type='button' onClick={search}>
+                    <button className="p-1 rounded bg-blue-400" type='button' onClick={search}>
                         Search
                     </button>
                 </form>
@@ -100,12 +103,12 @@ return (
     <table className="table">
         <thead>
             <tr>
-                <th scope="col" className='py-2 text-center bg-slate-200' >#</th>
-                <th scope="col" className='py-2 text-center bg-slate-200'>Name</th>
-                <th scope="col" className='py-2 text-center bg-slate-200'>Email</th>
-                <th scope="col" className='py-2 text-center bg-slate-200'>Phone</th>
-                <th scope="col" className='py-2 text-center bg-slate-200'></th>
-                <th scope="col" className='py-2 text-center bg-slate-200'></th>
+                <th scope="col" className='py-4 text-center bg-slate-200' >#</th>
+                <th scope="col" className='py-4 text-center bg-slate-200'>Name</th>
+                <th scope="col" className='py-4 text-center bg-slate-200'>Email</th>
+                <th scope="col" className='py-4 text-center bg-slate-200'>Phone</th>
+                <th scope="col" className='py-4 text-center bg-slate-200'></th>
+                <th scope="col" className='py-4 text-center bg-slate-200'></th>
             </tr>
         </thead>
         <tbody>

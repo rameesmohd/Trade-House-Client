@@ -14,7 +14,7 @@ const Footer = () => {
                         <li className='my-2'>Mobile Apps</li>
                         <li className='my-2'>Home</li>
                         <li className='my-2'>Contact</li>
-                        {<Link className='my-2 text-md underline' to={'/request-tutorship'}>Become an instructor</Link>}
+                        { <Link className='my-2 text-md underline' to={'/request-tutorship'}>Become an instructor</Link> }
                     </ul>
                 </div>
                 <div className='space-x-1 px-10 md:px-20 lg:px-40'>

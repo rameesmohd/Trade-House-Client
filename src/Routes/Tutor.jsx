@@ -4,7 +4,7 @@ import Dashboard from '../Pages/Tutor/Dashboard'
 import Students from '../Pages/Tutor/Students';
 
 const Tutor = () => {
-    console.log('xxxxxxxxx');
+  
   return (
     <>
         <Routes>

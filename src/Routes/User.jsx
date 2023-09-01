@@ -6,16 +6,16 @@ import { useSelector } from 'react-redux'
 import Reqform from '../Pages/User/Reqform'
 
 const User = () => {
-    const Auth = useSelector((state)=>state.Client)
+  const userAuth = useSelector((state)=>state.Client.Token)
 
   return (
     <>
       <Routes>
             <Route path='/' element={<Home/>}/>
             <Route path='/home' element={<Home/>}/>
-            <Route path='/login' element={Auth.Token ? <Home/> : <LoginAndSignup props='login'/>}/>
-            <Route path='/signup' element={Auth.Token ? <Home/> : <LoginAndSignup props='register'/>}/>
-            <Route path='/request-tutorship' element={<Reqform/>}/>
+            <Route path='/login' element={userAuth ? <Home/> : <LoginAndSignup props='login'/>}/>
+            <Route path='/signup' element={userAuth ? <Home/> : <LoginAndSignup props='register'/>}/>
+            <Route path='/request-tutorship' element={userAuth ? <Reqform/> : <LoginAndSignup props='login'/> }/>
       </Routes>
     </>
   )

@@ -4,7 +4,8 @@ import { useRef } from 'react';
 import adminAxios from '../../Axios/AdminAxios'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { useDispatch } from 'react-redux';
+import {adminLogin} from '../../Redux/AdminAuth'
 function Login() {
   const sectionStyle = {
     backgroundColor: '#F3F4F6', 
@@ -13,13 +14,18 @@ function Login() {
   const emailRef = useRef()
   const passRef = useRef()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleSubmit =(e)=>{
     e.preventDefault()
     const email = emailRef.current.value
     const pass = passRef.current.value
     adminAxios.post('/login',{email,pass}).then((res)=>{
-      console.log(res);
+      console.log(res.data);
+      dispatch(adminLogin({
+        token : res.data.token,
+        email : res.data.email
+      }))
       navigate('/admin/')      
     }).catch((error)=>{
       console.log(error)
@@ -69,7 +75,6 @@ function Login() {
                       aria-describedby="remember"
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required
                     />
                   </div>
                   <div className="ml-3 text-sm">
