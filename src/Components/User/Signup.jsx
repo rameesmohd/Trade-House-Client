@@ -75,7 +75,6 @@ const Signup = () => {
     const handleOTP =async ()=>{
         try {
             if(Object.keys(formData).length != 0){
-                console.log(formData+'fgdgbdzfgadfg');
                 onCaptchaVerify()
                 const appVerifier = window.recaptchaVerifier
                 const formatPh = '+91'+formData.mobile

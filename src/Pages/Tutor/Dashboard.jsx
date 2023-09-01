@@ -36,7 +36,7 @@ const Dashboard = () => {
   },[])
     
   return (
-      <div className='flex pt-24 md:pl-64'>
+      <div className='pt-24 md:pl-64'>
           <Navbar/>
           <Sidebar/>
           <Overview/>
