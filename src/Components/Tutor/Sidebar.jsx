@@ -1,9 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 const Sidebar = () => {
     const navigate= useNavigate()
+    const location = useLocation()
   return (
         <div className='md:mt-24'>
             <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -33,7 +35,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <Link to={'/tutor/my-courses'} className={`flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group ${location.pathname === '/tutor/my-courses' ? 'bg-gray-700' : ''} dark:text-white dark:hover:bg-gray-700`}>
                         <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" d="M2 2a2 2 0 00-2 2v12a2 2 0 002 2h9a2 2 0 002-2v-1h2a2 2 0 002-2V6a2 2 0 00-2-2H2zm2 2h12v6H4V4zm0 8v2h3v-2H4zm5 0v2h9v-2H9z" clipRule="evenodd"></path>
                         </svg>
@@ -50,7 +52,7 @@ const Sidebar = () => {
                     </li>
        
                     <li>
-                        <Link to={'/tutor/add-course'} className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" >
+                        <Link to={'/tutor/add-course'} className={`flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group ${location.pathname === '/tutor/add-course' ? 'bg-gray-700' : ''} dark:text-white dark:hover:bg-gray-700`} >
                             <svg
                                 aria-hidden="true"
                                 className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"

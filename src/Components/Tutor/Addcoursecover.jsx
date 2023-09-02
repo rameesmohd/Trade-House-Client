@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 
 function Addcoursecover() {
   const token = useSelector((state)=>state.Tutor.Token)
+  const id = useSelector((state)=>state.Tutor.id)
+
   const titleRef = useRef()
   const levelRef = useRef()
   const durRef = useRef()
@@ -34,16 +36,20 @@ function Addcoursecover() {
         category : categoryRef.current.value,
         description : desRef.current.value,
         skillsOffering : splitParagraph,
+        tutor : id ,
         preview : preview,
         banner : banner
       }
+      console.log(formData);
     tutorAxios.post('/add-course',formData,{
       headers: { Authorization: `tutor ${token}`,
           'Content-Type': 'multipart/form-data'},
     }).then((res)=>{
         console.log(res);
+        toast.success(res.data.message)
     }).catch((error)=>{
       toast.error(error.message)
+      toast.error(error.response.data.message)
       console.log(error);
     })
   }

@@ -24,8 +24,9 @@ const Dashboard = () => {
         tutorAxios.post('/t-verify',{userEmail}).then((res)=>{
           console.log( res.data?.token);
           const token = res.data?.token
+          const id = res.data?.id
           if(token){
-            dispatch(tutorLogin({token : token}))
+            dispatch(tutorLogin({token : token,id : id}))
           }
         }).catch((error)=>{
           navigate('/')
