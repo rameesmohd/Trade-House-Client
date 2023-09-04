@@ -15,7 +15,9 @@ const adminPersistorReducer = persistReducer(adminpersistConfig,AdminAuth.reduce
 
 const tutorpersistConfig = {key : 'Tutor',storage ,version : 1}
 const tutorPersistorReducer = persistReducer(tutorpersistConfig,TutorAuth.reducer)
-const coursesPersistorReducer = persistReducer(tutorpersistConfig,Courses.reducer)
+
+const coursespersistConfig = {key : 'Courses',storage ,version : 1}
+const coursesPersistorReducer = persistReducer(coursespersistConfig,Courses.reducer)
 
 
 export const store = configureStore({
@@ -27,6 +29,8 @@ export const store = configureStore({
 
 
         Tutor : tutorPersistorReducer,
+
+
         Courses : coursesPersistorReducer
     }
 })

@@ -5,20 +5,28 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdCheckCircle,MdCancel  } from 'react-icons/md'
 import { saveMyCourse } from '../../Redux/TutorSlice/Courses'
+import Editcourse from './Editcourse'
+import { Spinner } from '@material-tailwind/react'
+import Addcourse from './Addcourse'
 
 
 
 const Mycourse = () => {
-  const {Token,id} = useSelector((state)=>state.Tutor)
+  const Token =useSelector((state)=>state.Tutor.Token)
+  const id = useSelector((state)=>state.Tutor.id)
+  const mycourses = useSelector((state)=>state.Courses.myCourses)
   const [myCourses,setMyCourses] = useState([])
   const navigate = useNavigate()
-  const mycourses = useSelector((state)=>state.Courses.myCourses)
   const dispatch = useDispatch()
+  const [edit,setEdit]=useState(false)
+  const [editCourse,setEditCourse]=useState({})
+  const[addCourse,setAddcourse] = useState(false)
+  const [loading,setLoading]= useState({})
+
 
   useEffect(()=>{
     if(!mycourses){
       tutorAxios.get(`/my-courses?id=${id}`,{headers : {Authorization : `tutor ${Token}`}}).then((res)=>{
-        console.log(res.data);
         setMyCourses(res.data.result)
         dispatch(saveMyCourse(res.data.result))
       }).catch((error)=>{
@@ -28,19 +36,27 @@ const Mycourse = () => {
     }else{
       setMyCourses(mycourses)
     }
-  },[])
+  },[mycourses])
 
+  const handleEdit=(details)=>{
+    setEdit(true)
+    setEditCourse(details)
+  }
 
   return (
-    <div className='mx-5 py-5 '>
+    <>
+    {
+      addCourse ? <Addcourse setAddcourse={setAddcourse} setLoading={setLoading}/>
+      : 
+    (!edit ? <div className='mx-5 py-5 '>
       <div className='w-full h-16 bg-slate-100 my-2  rounded-md flex justify-end items-center p-4'> 
-              <div onClick={()=>navigate('/tutor/add-course')} className='btn btn-sm border-none hover:bg-black hover:text-white bg-slate-400'>
+              <div onClick={()=>setAddcourse(true)} className='btn btn-sm border-none hover:bg-black hover:text-white bg-slate-400'>
                         Add Course
               </div>
       </div>
 
-      <div className="overflow-x-auto">
-      <table className="table h-full">
+      <div className="">
+      <table className="table">
         {/* head */}
         <thead className='bg-slate-300'>
           <tr>
@@ -58,24 +74,29 @@ const Mycourse = () => {
         <tbody>
           {  
             myCourses.map((obj,index)=>{
-              console.log(obj);
+                console.log(obj);
               return(
               <tr key={obj._id}>
               <td>
-                  <div className="">
-                    <div className="h-[180px]">
-                      {
-                        !obj.banner ? 
-                        <div className='h-full w-full bg-slate-100 flex justify-center items-center'><h1>Upload banner</h1></div>
-                        :
-                       <img className='max-w-[250px] h-full bg-slate-50 mx-auto' src={obj.banner} alt="" /> 
-                      }
-                    </div>
+                <div className="">
+                  <div className="h-[180px]">
+                    { obj.banner=='loading' ? 
+                      <div class="flex items-center justify-center max-w-[250px] h-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                          <div class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">loading...</div>
+                      </div> : (
+                      !obj.banner ? 
+                      <div className='h-full w-full bg-slate-100 flex justify-center items-center'><h1>Upload banner</h1></div>
+                      : <img className='max-w-[250px] h-full bg-slate-50 mx-auto' src={obj.banner} alt="" /> )
+                    }
                   </div>
+                </div>
               </td>
               <td>
                 <div className="max-w-[250px] h-[180px]">
-                  {
+                  { obj.preview=='loading' ? 
+                        <div class="flex items-center justify-center max-w-[250px] h-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                            <div class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">loading...</div>
+                        </div> : (
                     obj.preview ? 
                       <div>
                           <video className="max-w-[250px] h-[180px] rounded-lg" controls autoPlay muted>
@@ -86,7 +107,7 @@ const Mycourse = () => {
                     : <div className='h-full w-full bg-slate-100 flex justify-center items-center'>
                          <h1 className=''>Upload preview</h1>
                       </div>
-                  }
+                    )}
                   </div>
               </td>
               <td>
@@ -103,7 +124,7 @@ const Mycourse = () => {
                   <div tabIndex={0} className="dropdown-content z-[1] card card-compact w-96 p-2 shadow bg-slate-100 text-primary-content overflow-y-scroll max-h-56">
                     <div className="card-body">
                       <h3 className="card-title">Skills offering </h3>
-                      {obj.skillsOffering.map((value)=>{
+                      {obj?.skillsOffering.map((value)=>{
                           return  <p>-{value}</p> 
                       })}
                     </div>
@@ -111,19 +132,22 @@ const Mycourse = () => {
                 </div>
               </td>
               <td>
-                      <div className='card card-compact'>
-                          <div className='card-body overflow-y-scroll max-h-[180px] max-w-[250px]'>
-                             {obj.description}
-                          </div>
+                  <div className='card card-compact'>
+                      <div className='card-body overflow-y-scroll max-h-[180px] max-w-[250px]'>
+                          {obj.description}
                       </div>
+                  </div>
               </td>
               <td>
                 <Link className='underline text-blue-800'>Modules</Link>
                 <br />
               </td>
               <td>
-
-                <Link className='underline text-red-800'>Edit</Link>
+                      {
+                        loading.id === obj._id && loading.spinner  ? 
+                        <Spinner/> :
+                        <div onClick={()=>handleEdit(obj)} className='underline text-red-800 cursor-pointer'>Edit</div> 
+                      }
               </td>
               <td>
                 {
@@ -135,12 +159,12 @@ const Mycourse = () => {
             </tr>)
             })
         }
-         
-
         </tbody>
       </table>
     </div>
-    </div>
+    </div> : <Editcourse editCourse={editCourse} goBack={setEdit} setLoading={setLoading}/>)
+      }
+    </>
   )
 }
 

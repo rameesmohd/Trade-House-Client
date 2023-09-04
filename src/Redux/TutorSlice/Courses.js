@@ -11,9 +11,13 @@ export const Courses = createSlice({
         },
         emptyMyCourse(state,action){
             state.myCourses = null
+        },
+        addCourse(state, action) {
+            state.myCourses = [...state.myCourses, action.payload];
+            console.log('in redux',action.payload);
         }
     }
 })
 
-export const {saveMyCourse,emptyMyCourse} = Courses.actions
+export const {saveMyCourse,emptyMyCourse,addCourse} = Courses.actions
 export default Courses.reducer

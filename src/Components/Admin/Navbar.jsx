@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { adminLogout } from '../../Redux/AdminAuth'
 import { useNavigate } from 'react-router-dom'
+import { emptyMyCourse } from '../../Redux/TutorSlice/Courses'
 
 const Navbar = () => {
   const Token =  useSelector((state) => state.Admin.Token)

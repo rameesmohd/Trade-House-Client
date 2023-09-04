@@ -1,16 +1,16 @@
 import React from 'react'
 import Navbar from '../../Components/User/Navbar'
 import Sidebar from '../../Components/Tutor/Sidebar'
-import Addcourse from '../../Components/Tutor/Addcourse'
+import TutorProfile from '../../Components/Tutor/Profile'
 
-const AddCourse = () => {
+const Profile = () => {
   return (
     <div className='pt-24 md:pt-0 md:pl-64'>
-      <Navbar/>
-      <Sidebar/>
-      <Addcourse/>
+    <Navbar/>
+    <Sidebar/>
+    <TutorProfile/>
     </div>
   )
 }
 
-export default AddCourse
+export default Profile
