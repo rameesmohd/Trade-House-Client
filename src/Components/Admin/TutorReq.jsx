@@ -8,14 +8,13 @@ import Modal from '../modal';
 import { toast } from 'react-toastify';
 
 const TutorReq = () => {
+    const axiosInstance = adminAxios()
     const [showModal, setShowModal] = useState(false);
-    const token = useSelector((state)=>state.Admin.Token)
     const [usersData , setUserData] = useState([])
     const [id,setId] = useState('')
 
     useEffect(()=>{
-        adminAxios.get('/tutor-requests',{
-            headers : { Authorization : `admin ${token}`}}).then((res)=>{
+        axiosInstance.get('/tutor-requests').then((res)=>{
                     setUserData(res.data.result)
         }).catch((error)=>{
             console.log(error.message);
@@ -40,8 +39,7 @@ const TutorReq = () => {
     }
 
     const handleApprove=()=>{
-        adminAxios.get(`/approve-request?id=${id}`,{
-            headers : { Authorization : `admin ${token}`}})
+        axiosInstance.get(`/approve-request?id=${id}`)
         .then((res)=>{
             setUserData(res.data.result)
         }).catch((error)=>{

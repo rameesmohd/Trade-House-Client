@@ -7,7 +7,7 @@ import { emptyMyCourse } from '../../Redux/TutorSlice/Courses';
 import {addCourse} from '../../Redux/TutorSlice/Courses';
 
 function Addcourse({setAddcourse,setLoading}) {
-  const token = useSelector((state)=>state.Tutor.Token)
+  const axiosInstance  = tutorAxios()
   const id = useSelector((state)=>state.Tutor.id)
   const titleRef = useRef()
   const levelRef = useRef()
@@ -77,9 +77,8 @@ function Addcourse({setAddcourse,setLoading}) {
       }))
       setLoading({id:'123456',spinner:true})
 
-    tutorAxios.post('/add-course',formData,{
-      headers: { Authorization: `tutor ${token}`,
-          'Content-Type': 'multipart/form-data'},
+      axiosInstance.post('/add-course',formData,{
+      headers: {'Content-Type': 'multipart/form-data'},
     }).then((res)=>{
         toast.success(res.data.message)
         dispatch(emptyMyCourse())
@@ -137,11 +136,11 @@ function Addcourse({setAddcourse,setLoading}) {
         </div>
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900">Preview</label>
-          <input onChange={(e)=>setPreview(e.target.files[0])} type="file" className="file-input file-input-bordered w-full max-w-xs"/>
+          <input onChange={(e)=>setPreview(e.target.files[0])}  accept="video/*"  type="file" className="file-input file-input-bordered w-full max-w-xs"/>
         </div>
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900">Banner</label>
-          <input onChange={(e)=>setBanner(e.target.files[0])} type="file" className="file-input file-input-bordered w-full max-w-xs" />
+          <input onChange={(e)=>setBanner(e.target.files[0])}  accept="image/jpeg, image/png"  type="file" className="file-input file-input-bordered w-full max-w-xs" />
         </div>
       </div>
 

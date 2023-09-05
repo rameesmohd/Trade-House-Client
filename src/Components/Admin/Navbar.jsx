@@ -11,6 +11,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const logOut=()=>{
       dispatch(adminLogout())
+      dispatch(emptyMyCourse())
       navigate('/admin/login')
   }
 

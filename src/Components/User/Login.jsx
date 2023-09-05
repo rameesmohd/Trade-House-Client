@@ -10,6 +10,7 @@ import {BsFillShieldLockFill} from 'react-icons/bs'
 import OtpInput from "otp-input-react"
 
 const Login = () => {
+    const axiosInstance = userAxios()
     const emailRef = useRef()
     const passwordRef = useRef()
     const newPassRef = useRef()
@@ -27,7 +28,7 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const handleSubmit=(event)=>{
+    const handleSubmit=async(event)=>{
         event.preventDefault()
         const email = emailRef.current.value
         const password = passwordRef.current.value
@@ -39,7 +40,7 @@ const Login = () => {
         }
         if(Object.keys(validationErrors).length === 0){
             setError(validationErrors)
-            userAxios.post('/login',{email,password}).then((res)=>{
+            await axiosInstance.post('/login',{email,password}).then((res)=>{
                 const result = res.data.response
                  if(result.status){   
                     dispatch(clientLogin({
@@ -78,7 +79,7 @@ const Login = () => {
                 setLoading(true)
                 const OTP =  generateOTP()
                 setOtp(OTP)
-                await userAxios.post('/forgetpasswordauth',{email,OTP}).then((res)=>{
+                await axiosInstance.post('/forgetpasswordauth',{email,OTP}).then((res)=>{
                     console.log(res);
                     toast.success(res.data.message)
                     //------
@@ -106,7 +107,7 @@ const Login = () => {
             validationErrors.nomatch = 'Password entered not matching'
         if(Object.keys(validationErrors).length === 0) {
             setLoading(true)
-            await userAxios.post('/forgetpassword',{password,email}).then((res)=>{
+            await axiosInstance.post('/forgetpassword',{password,email}).then((res)=>{
                 res.status ? toast.success(res.data.msg) : 
                 toast.error('something went wrong')
                 setForgot(false)
@@ -170,7 +171,7 @@ const Login = () => {
                 </div>
                 <div className='flex flex-col py-2'>
                     <label>Password</label>
-                    <input ref={passwordRef} type='text' className='border p-2' placeholder='Password'/>
+                    <input ref={passwordRef} type='password' className='border p-2' placeholder='Password'/>
                     {error.password && <div className="error text-red-700">{error.password}</div>}
                 </div>
                 <button type='submit' className='text-white border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-400'>Login</button>

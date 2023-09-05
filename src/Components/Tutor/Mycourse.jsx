@@ -9,9 +9,8 @@ import Editcourse from './Editcourse'
 import { Spinner } from '@material-tailwind/react'
 import Addcourse from './Addcourse'
 
-
-
 const Mycourse = () => {
+  const axiosInstance = tutorAxios()
   const Token =useSelector((state)=>state.Tutor.Token)
   const id = useSelector((state)=>state.Tutor.id)
   const mycourses = useSelector((state)=>state.Courses.myCourses)
@@ -26,7 +25,7 @@ const Mycourse = () => {
 
   useEffect(()=>{
     if(!mycourses){
-      tutorAxios.get(`/my-courses?id=${id}`,{headers : {Authorization : `tutor ${Token}`}}).then((res)=>{
+      axiosInstance.get(`/my-courses?id=${id}`).then((res)=>{
         setMyCourses(res.data.result)
         dispatch(saveMyCourse(res.data.result))
       }).catch((error)=>{

@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 const TutorReq = () => {
+    const axiosInstance = adminAxios()
     const [showModal, setShowModal] = useState(false);
     const token = useSelector((state)=>state.Admin.Token)
     const [tutorsData , setTutersData] = useState([])
@@ -14,8 +15,7 @@ const TutorReq = () => {
     const [BlockToggle,setBlockToggle] = useState(false)
 
     useEffect(()=>{
-        adminAxios.get('/tutors-list',{
-            headers : { Authorization : `admin ${token}`}})
+        axiosInstance.get('/tutors-list')
             .then((res)=>{
               setTutersData(res.data.result)
         }).catch((error)=>{
@@ -30,8 +30,8 @@ const TutorReq = () => {
         setShowModal(true)
     }
 
-    const handleApprove=()=>{
-        adminAxios.get(`/toggle-block?id=${id}&blockToggle=${BlockToggle}`,
+    const handleApprove=async()=>{
+        await axiosInstance.get(`/toggle-block?id=${id}&blockToggle=${BlockToggle}`,
         {headers : { Authorization : `admin ${token}`}})
         .then((res)=>{
           console.log(res.data);

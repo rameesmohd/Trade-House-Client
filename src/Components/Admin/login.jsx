@@ -15,12 +15,13 @@ function Login() {
   const passRef = useRef()
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const axiosInstance = adminAxios()
 
   const handleSubmit =(e)=>{
     e.preventDefault()
     const email = emailRef.current.value
     const pass = passRef.current.value
-    adminAxios.post('/login',{email,pass}).then((res)=>{
+    axiosInstance.post('/login',{email,pass}).then((res)=>{
       console.log(res.data);
       dispatch(adminLogin({
         token : res.data.token,

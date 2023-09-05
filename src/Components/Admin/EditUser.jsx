@@ -4,13 +4,14 @@ import adminAxios from '../../Axios/AdminAxios'
 import { toast } from 'react-toastify'
 
 const EditUser = ({user,func}) => {
+    const axiosInstance = adminAxios()
     const [id,setId] = useState(user._id)
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [mobile ,setMobile] = useState(user.mobile);
 
     const updateProfile=()=>{
-      adminAxios.post("/update-user",{ id,name,email,mobile
+      axiosInstance.post("/update-user",{ id,name,email,mobile
         }).then((res)=>{
             console.log(res);
             toast.success(res.message)

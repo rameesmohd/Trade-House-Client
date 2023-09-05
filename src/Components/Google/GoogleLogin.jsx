@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import {clientLogin} from '../../Redux/ClientAuth'
 
 const Login = ( ) => {
+    const axiosInstance = userAxios()
     const dispatch = useDispatch()
     const navigate = useNavigate()
   return (
@@ -19,7 +20,7 @@ const Login = ( ) => {
                 const payload = credential ? decodeJwt(credential) : undefined
                 if(payload){
                     console.log(payload);
-                    userAxios.post('/login',{payload,google:true}).then((res)=>{
+                    axiosInstance.post('/login',{payload,google:true}).then((res)=>{
                         const result = res.data.response
                         if(result.status){                    
                             dispatch(clientLogin({

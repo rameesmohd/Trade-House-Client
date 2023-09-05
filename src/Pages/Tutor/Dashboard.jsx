@@ -11,6 +11,7 @@ import { tutorLogin } from '../../Redux/TutorAuth'
 import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
+  const axiosInstance = tutorAxios()
   const userEmail = useSelector((state)=>state.Client.email)
   const tutorToken = useSelector((state)=>state.Tutor?.Token)
   const dispatch = useDispatch()
@@ -21,7 +22,7 @@ const Dashboard = () => {
       navigate('/')
     }else{
       if(!tutorToken){
-        tutorAxios.post('/t-verify',{userEmail}).then((res)=>{
+        axiosInstance.post('/t-verify',{userEmail}).then((res)=>{
           console.log( res.data?.token);
           const token = res.data?.token
           const id = res.data?.id

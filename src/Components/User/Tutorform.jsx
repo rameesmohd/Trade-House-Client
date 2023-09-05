@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 import { tutorReqSubmit } from '../../Redux/ClientAuth'
 
 const Tutorform = () => {
+    const axiosInstance = userAxios()
     const email =  useSelector((state)=>state.Client.email)
     const is_requested =  useSelector((state)=>state.Client.is_requested)
     const categoryRef = useRef()
@@ -42,7 +43,7 @@ const Tutorform = () => {
             email : email,
             file :pdfDataUrl,
         }
-        userAxios.post('/tutor-request',obj,{headers:{ 'Content-Type': 'multipart/form-data'}}).then((res)=>{
+        axiosInstance.post('/tutor-request',obj,{headers:{ 'Content-Type': 'multipart/form-data'}}).then((res)=>{
             console.log(res)
             dispatch(tutorReqSubmit())
             toast.success(res.data.message)

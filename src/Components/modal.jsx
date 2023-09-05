@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Modal({setShowModal,confirm,message,description}) {
+export default function Modal({setShowModal,confirm,message,description,id}) {
     return (
         <>
             <div className="fixed inset-0 z-10 overflow-y-auto">

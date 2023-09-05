@@ -13,6 +13,7 @@ import {  toast } from 'react-toastify'
 
 
 const Signup = () => {
+    const axiosInstance = userAxios()
     const nameRef = useRef()
     const emailRef = useRef()
     const mobileRef = useRef()
@@ -143,7 +144,7 @@ const Signup = () => {
     const handleSubmit =async()=>{
         try {
             setLoading(true)
-            await userAxios.post('/signup',formData).then((res)=>{
+            await axiosInstance.post('/signup',formData).then((res)=>{
                 if(res.status == 200){
                     toast.success(res?.data?.msg)
                     navigate('/login')} 

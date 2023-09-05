@@ -2,21 +2,21 @@ import React,{ useState,useEffect, useRef }from 'react'
 import adminAxios from '../../Axios/AdminAxios'
 import { toast } from 'react-toastify'
 import EditUser from './EditUser'
-import { useSelector } from 'react-redux'
-
+import Modal from '../modal'
+let toggle;
 
 const Users=()=>{
+    const axiosInstance = adminAxios()
     const [usersData , setUsersData] = useState([])
     const [searchInput ,setSearchInput] = useState('')
     const [userDetails,setUser] = useState({})
     const [edit,setEdit] = useState(false)
     const searchRef = useRef()
-    const token = useSelector((state)=>state.Admin.Token)
+    const [showModal, setShowModal] = useState(false);
     
     useEffect(()=>{
-            adminAxios.get('/users-details',{
-                headers : { Authorization : `admin ${token}`}}
-            ).then((res)=>{
+        axiosInstance.get('/users-details')
+            .then((res)=>{
                 setUsersData(res.data.result)
             }).catch((error)=>{
                 console.log(error);
@@ -47,9 +47,10 @@ const Users=()=>{
     const editUser =(user)=>{
         setUser(user)
         setEdit(true)
-    }    
+    }  
+
     const block=(id)=>{
-        adminAxios.get(`block-user?id=${id}`).then((res)=>{
+        axiosInstance.get(`block-user?id=${id}`).then((res)=>{
             // SetBlockHandle(true)
             setUsersData(prev =>{
                 const updated = prev.filter(user =>{
@@ -64,7 +65,7 @@ const Users=()=>{
         })
     }
     const unBlock=(id)=>{
-        adminAxios.get(`unblock-user?id=${id}`).then((res)=>{
+        axiosInstance.get(`unblock-user?id=${id}`).then((res)=>{
             setUsersData(prev =>{
                 const updated = prev.filter(user =>{
                     if(user._id == id) user.is_blocked = false
@@ -76,6 +77,20 @@ const Users=()=>{
             console.log(error);
             toast.error(error.message)
         })
+    }
+
+    const handleModal=(id,state)=>{
+        if(!state){
+            toggle =()=>{
+                block(id)
+                setShowModal(false)}
+        }else{
+            toggle =()=>{
+                unBlock(id)
+                setShowModal(false)
+            }
+        }
+        setShowModal(true)
     }
 return (
     <>
@@ -125,8 +140,8 @@ return (
                 <td className="px-4 py-2">
                     <button className='mx-5 text-blue-600' onClick={()=>editUser(obj)}>Edit</button>
                     
-                    {obj?.is_blocked ? <button className="text-red-600" onClick={()=>unBlock(obj._id)}>Unblock</button>
-                    : <button className="text-red-600" onClick={()=>block(obj._id)}>Block</button>
+                    {obj?.is_blocked ? <button className="text-red-600" onClick={()=>handleModal(obj._id,true)}>Unblock</button>
+                    : <button className="text-red-600" onClick={()=>handleModal(obj._id,false)}>Block</button>
                     }
                 </td>
             </tr> )
@@ -137,6 +152,13 @@ return (
     </div> : (
     <EditUser user={userDetails} func={setEdit}/>
     )}
+    { showModal ?
+       <Modal 
+       setShowModal={setShowModal} 
+       confirm={toggle} 
+       message={'Are you sure?'} 
+       description={'Please confirm to proceed this action?'} />  
+       : '' }
 </>
 )}
 
