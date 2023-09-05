@@ -73,7 +73,6 @@ const Mycourse = () => {
         <tbody>
           {  
             myCourses.map((obj,index)=>{
-                console.log(obj);
               return(
               <tr key={obj._id}>
               <td>

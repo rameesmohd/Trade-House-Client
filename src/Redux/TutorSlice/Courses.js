@@ -14,7 +14,6 @@ export const Courses = createSlice({
         },
         addCourse(state, action) {
             state.myCourses = [...state.myCourses, action.payload];
-            console.log('in redux',action.payload);
         }
     }
 })

@@ -4,7 +4,7 @@ export const TutorAuth = createSlice({
     name : 'Tutor',
     initialState: {
         Token : null,
-        id : null
+        id : null,
     },
     reducers:{
         tutorLogin(state,action){
