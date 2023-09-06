@@ -10,9 +10,9 @@ const TutorProfile = () => {
   const id = useSelector((store)=>store.Tutor.id)
   const [tutorData,setProfileData] = useState({})
   const [imgDataUrl, setImgDataUrl] = useState('');
+  const [editAbout,setEditAbout] = useState(false)
 
   useEffect(()=>{
-    console.log('useEffect');
       axiosInstance.get(`/tutor-profile?id=${id}`)
       .then((res)=>{
          setProfileData(res.data.tutor)
@@ -28,7 +28,7 @@ const TutorProfile = () => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      // setProfileData({...tutorData,image :URL.createObjectURL(selectedFile)})
+      setProfileData({...tutorData,image :URL.createObjectURL(selectedFile)})
       let reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onload = () => {
@@ -48,7 +48,29 @@ const TutorProfile = () => {
       toast.error(error.message)
     })
   }
+
   imgDataUrl ? updateImage() : ''
+
+  const handleAboutEdit=()=>{
+    !tutorData.about_me ? 
+    (() => {
+      const tutorDataNew = { ...tutorData, about_me: '' };
+      setProfileData(tutorDataNew);
+      setEditAbout(true);
+    })() : setEditAbout(true);
+  }
+
+  const handleAboutSave=()=>{
+    axiosInstance.post('/update-about',{id : id,about_me: tutorData.about_me,tutorData : tutorData})
+    .then((res)=>{
+     toast.success('Updated successfully')
+    //  setProfileData(res.data.tutor)
+    }).catch((error)=>{
+     console.log(error);
+     toast.error(error.message)
+    })
+    setEditAbout(false)
+  }
 
   return(
   <div className="bg-gray-100">
@@ -59,7 +81,7 @@ const TutorProfile = () => {
             <div className="flex flex-col items-center">
               <img
                 src={tutorData?.image ? tutorData.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'}
-                className="w-36 h-36 bg-gray-300 rounded-md mb-4 shrink-0"
+                className="bg-gray-300 rounded-md mb-4 shrink-0"
                 alt="User"
               />
                 <div className=" flex justify-end">
@@ -72,8 +94,7 @@ const TutorProfile = () => {
                     accept=".jpg,.jpeg,.png"
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
-                    ref={fileInputRef}
-                  />
+                    ref={fileInputRef} />
               </div>
               <h1 className="text-xl font-bold">{tutorData?.firstName+' '+tutorData?.lastName}</h1>
               <p className="text-gray-600">{tutorData?.type_of_trader}</p>
@@ -95,23 +116,29 @@ const TutorProfile = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-4 sm:col-span-9">
+        <div className="col-span-4 sm:col-span-9 ">
           <div className="bg-white shadow rounded-lg p-6">
             <h2 className="text-xl font-bold mb-4">About Me</h2>
-              {
-                tutorData?.about_me ? tutorData.about_me : 
-              <p className="text-gray-700">
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est 
-              tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit
-              egestas suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis in
-              faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Nulla
-              vulputate pharetra tellus, luctus risus rhoncus id'
-              </p>
+             {
+              !editAbout ? 
+                  <p className='resize w-full h-28 rounded-md whitespace-normal break-words'>{tutorData?.about_me || ''}</p>
+              : 
+              <textarea className="resize w-full h-28 rounded-md" 
+                placeholder='Please enter here' 
+                value={tutorData?.about_me} 
+                onChange={(e) => setProfileData({ ...tutorData, about_me: e.target.value })}>
+              </textarea>
             }
           <div className=" flex justify-end">
-              <div className='cursor-pointer hover:text-red-600 underline'>
+            {
+              !editAbout ? 
+              <div className='cursor-pointer hover:text-red-600 underline' onClick={()=>handleAboutEdit()}>
                   Edit
+              </div> : 
+              <div className='cursor-pointer hover:text-red-600 underline' onClick={()=>handleAboutSave()}>
+                  Save
               </div>
+              }
           </div>
           </div>
         </div>

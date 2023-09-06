@@ -19,6 +19,15 @@ function Editcourse({editCourse,goBack,setLoading}) {
   const [description,setDescription]=useState()
   const [paragraph, setParagraph] = useState('');
   const [splitParagraph, setSplitParagraph] = useState([]);
+  const [categoryData ,setCategoryData] = useState([])
+
+  useEffect(()=>{
+    axiosInstance.get('/category').then((res)=>{
+      setCategoryData(res.data.result)
+    }).catch((error)=>{
+      toast.error(error.message)
+    })
+  },[])
 
   useEffect(()=>{
     splitParagraphByPeriod()
@@ -101,9 +110,8 @@ function Editcourse({editCourse,goBack,setLoading}) {
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900">Category</label>
           <select  defaultValue={editCourse?.category} onChange={(e)=>setCategory(e.target.value)} className="select select-bordered w-full max-w-xs">
-              <option disabled defaultValue>Who shot first?</option>
-              <option>Han Solo</option>
-              <option>Greedo</option>
+              <option disabled defaultValue>Choose category</option>
+              {categoryData && categoryData.map((obj)=><option key={obj._id} value={obj._id}>{obj.category}</option>)}
             </select>
         </div>
         <div>

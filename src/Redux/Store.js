@@ -6,7 +6,6 @@ import {AdminAuth} from './AdminAuth'
 import {TutorAuth} from './TutorAuth'
 import {Courses} from './TutorSlice/Courses'
 
-//users
 const persistConfig = { key : 'Client',storage,version : 1}
 const userPersistReducer = persistReducer(persistConfig,ClientAuth.reducer)
 
@@ -16,22 +15,12 @@ const adminPersistorReducer = persistReducer(adminpersistConfig,AdminAuth.reduce
 const tutorpersistConfig = {key : 'Tutor',storage ,version : 1}
 const tutorPersistorReducer = persistReducer(tutorpersistConfig,TutorAuth.reducer)
 
-const coursespersistConfig = {key : 'Courses',storage ,version : 1}
-const coursesPersistorReducer = persistReducer(coursespersistConfig,Courses.reducer)
-
-
 export const store = configureStore({
     reducer : {
         Client : userPersistReducer,
-
-
         Admin : adminPersistorReducer,
-
-
         Tutor : tutorPersistorReducer,
-
-
-        Courses : coursesPersistorReducer
+        Courses : Courses.reducer
     }
 })
 

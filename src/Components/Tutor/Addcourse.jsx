@@ -19,6 +19,15 @@ function Addcourse({setAddcourse,setLoading}) {
   const [banner,setBanner] = useState(null)
   const [paragraph, setParagraph] = useState('');
   const [splitParagraph, setSplitParagraph] = useState([]);
+  const [categoryData ,setCategoryData] = useState([])
+
+  useEffect(()=>{
+    axiosInstance.get('/category').then((res)=>{
+      setCategoryData(res.data.result)
+    }).catch((error)=>{
+      toast.error(error.message)
+    })
+  },[])
 
   useEffect(()=>{
     splitParagraphByPeriod()
@@ -51,7 +60,7 @@ function Addcourse({setAddcourse,setLoading}) {
       alert('Please enter a course description.');
       return;
     }
-      setAddcourse(false)
+    setAddcourse(false)
       const formData = {
         title : titleRef.current.value,
         level : levelRef.current.value,
@@ -76,7 +85,6 @@ function Addcourse({setAddcourse,setLoading}) {
         banner : 'loading'
       }))
       setLoading({id:'123456',spinner:true})
-
       axiosInstance.post('/add-course',formData,{
       headers: {'Content-Type': 'multipart/form-data'},
     }).then((res)=>{
@@ -129,9 +137,8 @@ function Addcourse({setAddcourse,setLoading}) {
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900">Category</label>
           <select ref={categoryRef} className="select select-bordered w-full max-w-xs" required>
-              <option disabled defaultValue>Who shot first?</option>
-              <option>Han Solo</option>
-              <option>Greedo</option>
+              <option  defaultValue>Choose category</option>
+              {categoryData && categoryData.map((obj)=><option key={obj._id} value={obj._id}>{obj.category}</option>)}
             </select>
         </div>
         <div>

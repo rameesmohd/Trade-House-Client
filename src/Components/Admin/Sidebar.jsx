@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 
 const Sidebar = () => {
-	const location = useLocation()
+const location = useLocation()
 
-  return (
-<div>
+ return (
+<>
 <div className="flex items-center h-screen fixed ">
 	{/* component sm */}
 	<div className=" flex-col items-center w-16 h-full overflow-hidden text-gray-400 bg-gray-900  md:hidden">
@@ -98,11 +98,23 @@ const Sidebar = () => {
 					</svg>
 					<span className="ml-2 text-sm font-medium">Tutor Requests</span>
 				</Link>
-				<Link className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300" href="#">
-					<svg className="w-6 h-6 stroke-current"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+				<Link className={`flex items-center w-full h-12 px-3 mt-2 rounded ${location.pathname === '/admin/category' ? 'bg-gray-700 text-gray-300' : ''} 
+					hover:bg-gray-700 hover:text-gray-300`} to={'/admin/category'}>
+				<svg
+					className="w-6 h-6 stroke-current" 
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth="2"
+						d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+					/>
 					</svg>
-					<span className="ml-2 text-sm font-medium">Settings</span>
+					<span className="ml-2 text-sm font-medium">Category</span>
 				</Link>
 				<Link className="relative flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300" href="#">
 					<svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -115,7 +127,7 @@ const Sidebar = () => {
 			</div>
 		</div>
 	</div>
-</div>
+</>
   )
 }
 

@@ -26,6 +26,7 @@ const Mycourse = () => {
   useEffect(()=>{
     if(!mycourses){
       axiosInstance.get(`/my-courses?id=${id}`).then((res)=>{
+        console.log(res.data.result);
         setMyCourses(res.data.result)
         dispatch(saveMyCourse(res.data.result))
       }).catch((error)=>{
@@ -112,7 +113,7 @@ const Mycourse = () => {
                 <div className='w-44'>
                     <div className="font-bold">{obj.title}</div>
                     <div className="text-sm opacity-50">Level : {obj.level}</div>
-                    <div className="text-sm opacity-50">Category : {obj.category}</div>
+                    <div className="text-sm opacity-50">Category : {obj.category && obj?.category.category}</div>
                     <div className="text-sm opacity-50">Duration : {obj.duration} Hours</div>
                 </div>
               </td>
