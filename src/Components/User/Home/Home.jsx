@@ -18,7 +18,7 @@ function Home() {
     <>
     <div className='flex  flex-col'>
     {/* section-1 */}
-    <div className='bg-yellow-300 lg:h-[500px]'>
+    <div className='bg-amber-400 lg:h-[500px]'>
     <div className='grid grid-cols-1 md:grid-cols-2 container mx-auto'>
         <div className='p-6 md:p-12 '>
             <img className='object-cover rounded-md shadow-2xl' src={img3} alt="" />

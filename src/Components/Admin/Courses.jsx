@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { MdCheckCircle,MdCancel  } from 'react-icons/md'
-import { Spinner } from '@material-tailwind/react'
 import adminAxios from '../../Axios/AdminAxios'
 import people from '../../assets/people.svg'
-import Rating from '../rating'
+import Rating from '../RatingStar'
 import Modal from '../modal'
 import Loading from '../Loading'
 let toggle;
@@ -86,8 +85,8 @@ const Courses = () => {
                 </div>
               </td>
               <td>
-                <div className="max-w-[150px] h-[100px]">
-                    <img src={obj.tutor.image} alt="" />
+                <div className="max-w-[150px] h-[150px]">
+                    <img className='w-full h-full object-cover' src={obj.tutor.image} alt="" />
                     <h2 className='w-full text-center font-semibold text-base'>{obj.tutor.firstName+' '+obj.tutor.lastName }</h2>
                   </div>
               </td>

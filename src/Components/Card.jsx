@@ -6,9 +6,11 @@ import {
     Typography,
     Button,
   } from "@material-tailwind/react";
-  import Rating from './Rating'
+  import Rating from './RatingStar'
+  import { useNavigate } from "react-router-dom";
    
   export function Cards({coursedata}) {
+    const navigate = useNavigate()
     return (
       <Card className="w-auto mx-1 my-2">
         <CardHeader shadow={false} floated={false} className="h-44">
@@ -42,11 +44,14 @@ import {
             <hr className="w-5/6" />
         </div>
         <CardFooter className="pt-0 flex justify-between items-center">
-            <h1>0000</h1>
+            <h1>₹{ coursedata?.price ? coursedata.price : '0.00' }</h1>
           <Button
             ripple={false}
             fullWidth={true}
-            className="text-right underline text-blue-800 bg-blue-gray-900/10  shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100">
+            onClick={()=>navigate('/course-details',{state : coursedata})}
+            className="text-right underline text-blue-800 bg-blue-gray-900/10  
+                shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none
+                active:scale-100">
            View Details {">>"}
           </Button>
         </CardFooter>
