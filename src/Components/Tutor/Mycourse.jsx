@@ -11,7 +11,6 @@ import Addcourse from './Addcourse'
 
 const Mycourse = () => {
   const axiosInstance = tutorAxios()
-  const Token =useSelector((state)=>state.Tutor.Token)
   const id = useSelector((state)=>state.Tutor.id)
   const mycourses = useSelector((state)=>state.Courses.myCourses)
   const [myCourses,setMyCourses] = useState([])
@@ -63,8 +62,8 @@ const Mycourse = () => {
             <th className='text-sm'>Banner</th>
             <th className='text-sm'>Preview video</th>
             <th className='text-sm'>Title</th>
+            <th className='text-sm'>Price</th>
             <th className='text-sm'>Description</th>
-            <th className='text-sm'>Duration(Hours)</th>
             <th className='text-sm'>Modules</th>
             <th className='text-sm'>Edit</th>
             <th className='text-sm'>Status</th>
@@ -118,6 +117,7 @@ const Mycourse = () => {
                 </div>
               </td>
               <td>
+                <h3 className="mb-3">{obj.price ? `₹${obj?.price}` : '₹ 0.00'}</h3>
                 <div className="dropdown w-24">
                   <label tabIndex={0} className="badge badge-ghost badge-sm bg-green-500 text-white border-gray-950 p-2">Skills Offering</label>
                   <div tabIndex={0} className="dropdown-content z-[1] card card-compact w-96 p-2 shadow bg-slate-100 text-primary-content overflow-y-scroll max-h-56">

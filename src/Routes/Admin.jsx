@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux'
 import TutorRequests from '../Pages/Admin/TutorRequests'
 import Tutors from '../Pages/Admin/Tutors'
 import Categories from '../Pages/Admin/Categories'
+import Allcourses from '../Pages/Admin/AllCourses'
+
 
 const Admin = () => {
   const adminAuth = useSelector((state) => state.Admin.Token)
@@ -20,11 +22,13 @@ const Admin = () => {
       <Route path="/login" element={adminAuth? <Navigate to={'/admin/'}/> : <Login />} />
 
       {/* Private routes */}
-      <Route path="/*" element={<PrivateRoute element={<Dashboard />}/>}/>
+      <Route path="/" element={<PrivateRoute element={<Dashboard />}/>}/>
+      <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />}/>}/>
       <Route path="/tutors" element={<PrivateRoute element={<Tutors/>}/>}/>
       <Route path="/tutor-requests" element={<PrivateRoute element={<TutorRequests />}/>}/>
       <Route path="/users" element={<PrivateRoute element={<Users />}/>}/>
       <Route path="/category" element={<PrivateRoute element={<Categories/>}/>}/>
+      <Route path="/courses" element={<PrivateRoute element={<Allcourses/>}/>}/>
     </Routes>
   );
 }

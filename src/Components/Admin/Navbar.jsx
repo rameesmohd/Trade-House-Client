@@ -16,7 +16,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="card-header p-0 z-40 h-fit bg-slate-900 col-span-8 sticky top-0 w-auto">
+    <div className="card-header p-0 z-40 h-fit bg-slate-900 col-span-8 sticky top-0 w-screen ">
         <div className="bg-gradient-dark shadow-dark rounded-lg pt-4 pb-3">
         <div className="flex justify-between items-center px-3">
             <span className="ml-10 text-lg text-white font-medium">ADMIN</span>
@@ -26,7 +26,7 @@ const Navbar = () => {
             }
         </div>
     </div>
-</div>
+  </div>
   )
 }
                           

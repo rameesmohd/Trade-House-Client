@@ -1,9 +1,12 @@
 import React from 'react'
+import Loading from '../Loading'
+
 
 const Dashboard = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className='w-full h-screen'>
+      <h1>Dashboardsssssssssssssssss</h1>
+      {/* <Loading/> */}
     </div>
   )
 }

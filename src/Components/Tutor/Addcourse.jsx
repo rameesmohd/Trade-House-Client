@@ -7,13 +7,14 @@ import { emptyMyCourse } from '../../Redux/TutorSlice/Courses';
 import {addCourse} from '../../Redux/TutorSlice/Courses';
 
 function Addcourse({setAddcourse,setLoading}) {
-  const axiosInstance  = tutorAxios()
   const id = useSelector((state)=>state.Tutor.id)
+  const dispatch = useDispatch()
+  const axiosInstance  = tutorAxios()
   const titleRef = useRef()
   const levelRef = useRef()
   const durRef = useRef()
   const desRef = useRef()
-  const dispatch = useDispatch()
+  const priceRef =useRef()
   const categoryRef = useRef()
   const [preview,setPreview] = useState(null)
   const [banner,setBanner] = useState(null)
@@ -69,6 +70,7 @@ function Addcourse({setAddcourse,setLoading}) {
         description : desRef.current.value,
         skillsOffering : splitParagraph,
         tutor : id ,
+        price : priceRef.current.value,
         preview : preview,
         banner : banner
       }
@@ -79,6 +81,7 @@ function Addcourse({setAddcourse,setLoading}) {
         duration : durRef.current.value,
         category : categoryRef.current.value,
         description : desRef.current.value,
+        price : priceRef.current.value,
         skillsOffering : [''],
         tutor : id,
         preview : 'loading',
@@ -140,6 +143,16 @@ function Addcourse({setAddcourse,setLoading}) {
               <option  defaultValue>Choose category</option>
               {categoryData && categoryData.map((obj)=><option key={obj._id} value={obj._id}>{obj.category}</option>)}
             </select>
+        </div>
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-900">Price(₹)</label>
+          <input
+            type="number"
+            ref={priceRef}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder='0.00'
+            required
+          />
         </div>
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-900">Preview</label>

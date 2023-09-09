@@ -153,7 +153,7 @@ const MarketCategory = () => {
           </div>
           </div>
 
-        <img className='w-full h-full ' src={download} alt="" />
+        <img className='w-full h-screen overflow-y-hidden object-cover ' src={download} alt="" />
       </div>
     </div>
   )

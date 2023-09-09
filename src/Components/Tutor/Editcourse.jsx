@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { emptyMyCourse } from '../../Redux/TutorSlice/Courses';
 
 function Editcourse({editCourse,goBack,setLoading}) {
+
+  const tutorId = useSelector((state)=>state.Tutor.id)
   const axiosInstance  = tutorAxios()
   const dispatch = useDispatch()
-  const token = useSelector((state)=>state.Tutor.Token)
-  const tutorId = useSelector((state)=>state.Tutor.id)
   const [title,setTitle] = useState()
   const [level,setLevel] = useState()
   const [duration,setDuration] = useState()
@@ -20,6 +20,7 @@ function Editcourse({editCourse,goBack,setLoading}) {
   const [paragraph, setParagraph] = useState('');
   const [splitParagraph, setSplitParagraph] = useState([]);
   const [categoryData ,setCategoryData] = useState([])
+  const [price,setPrice] = useState()
 
   useEffect(()=>{
     axiosInstance.get('/category').then((res)=>{
@@ -48,6 +49,7 @@ function Editcourse({editCourse,goBack,setLoading}) {
         category : category ? category : editCourse?.category,
         description : description ? description : editCourse?.description,
         skillsOffering : splitParagraph[0].length ? splitParagraph : editCourse?.skillsOffering,
+        price : price ? price :  editCourse?.price,
         tutor : tutorId,
         preview : preview ? preview : editCourse?.preview,
         banner : banner ? banner : editCourse?.banner
@@ -114,6 +116,7 @@ function Editcourse({editCourse,goBack,setLoading}) {
               {categoryData && categoryData.map((obj)=><option key={obj._id} value={obj._id}>{obj.category}</option>)}
             </select>
         </div>
+        
         <div>
         <div className="max-w-[250px] h-[180px]">
                   {
@@ -147,7 +150,17 @@ function Editcourse({editCourse,goBack,setLoading}) {
           <input onChange={(e)=>setBanner(e.target.files[0])} type="file" accept='image/jpeg, image/png' className="file-input file-input-bordered w-full max-w-xs" />
         </div>
       </div>
-
+      <div>
+          <label className="block mb-2 text-sm font-medium text-gray-900">Price(₹)</label>
+          <input
+            type="number" 
+            defaultValue={editCourse?.price}
+            onChange={(e)=>setPrice(e.target.value)}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder='0.00'
+            required
+          />
+        </div>
       <div className="mb-6">
         <label  className="block mb-2 text-sm font-medium text-gray-900">Description</label>
         <textarea  defaultValue={editCourse?.description} onChange={(e)=>setDescription(e.target.value)} placeholder="Description" className="textarea textarea-bordered textarea-md w-full" ></textarea>

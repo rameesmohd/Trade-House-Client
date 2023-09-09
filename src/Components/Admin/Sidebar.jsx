@@ -7,7 +7,7 @@ const location = useLocation()
 
  return (
 <>
-<div className="flex items-center h-screen fixed ">
+<div className="flex items-center h-screen fixed z-50">
 	{/* component sm */}
 	<div className=" flex-col items-center w-16 h-full overflow-hidden text-gray-400 bg-gray-900  md:hidden">
 			<div className="flex flex-col items-center mt-3 border-t border-gray-700">
@@ -82,12 +82,12 @@ const location = useLocation()
 					</svg>
 					<span className="ml-2 text-sm font-medium">Tutors</span>
 				</Link>
-				<Link className={`flex items-center w-full h-12 px-3 mt-2 rounded ${location.pathname === '/admin/courses' ? 'bg-gray-700 text-gray-300' : ''} 
+				<Link to={'/admin/courses'} className={`flex items-center w-full h-12 px-3 mt-2 rounded ${location.pathname === '/admin/courses' ? 'bg-gray-700 text-gray-300' : ''} 
 					hover:bg-gray-700 hover:text-gray-300`} >
 					<svg className="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
 					</svg>
-					<span className="ml-2 text-sm font-medium">Course</span>
+					<span className="ml-2 text-sm font-medium">Courses</span>
 				</Link>
 			</div>
 			<div className="flex flex-col items-center w-full mt-2 border-t border-gray-700">

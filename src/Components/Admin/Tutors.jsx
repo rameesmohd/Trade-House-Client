@@ -30,8 +30,8 @@ const TutorReq = () => {
         setShowModal(true)
     }
 
-    const handleApprove=async()=>{
-        await axiosInstance.get(`/toggle-block?id=${id}&blockToggle=${BlockToggle}`,
+    const handleApprove=()=>{
+         axiosInstance.get(`/toggle-block?id=${id}&blockToggle=${BlockToggle}`,
         {headers : { Authorization : `admin ${token}`}})
         .then((res)=>{
           console.log(res.data);
