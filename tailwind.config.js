@@ -9,9 +9,9 @@ export default {
   darkMode: false,
   theme: {
     extend: {
-      screens: {
-        'lg': '1024px', // You can adjust this value
-      }
+      // screens: {
+      //   'lg': '1024px', // You can adjust this value
+      // }
     },
     fontFamily: {
     poppins: ['Poppins', 'sans'],

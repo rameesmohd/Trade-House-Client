@@ -6,6 +6,9 @@
     @apply !w-full py-6 !text-base;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Hide the scrollbar for WebKit-based browsers */
+  }
 
 @tailwind base;
 @tailwind components;
