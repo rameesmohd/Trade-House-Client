@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import adminAxios from '../../Axios/AdminAxios'
-import { useSelector } from 'react-redux'
 import { BsDownload } from 'react-icons/bs';
 import { MdCheckCircle,MdCancel } from 'react-icons/md';
 import Modal from '../modal';
@@ -39,11 +38,10 @@ const TutorReq = () => {
         state ? action = handleApprove : action = handleReject
         setId(_id)
         setShowModal(true)
-        console.log(action);
     }
 
-    const handleApprove=()=>{
-        axiosInstance.get(`/approve-request?id=${id}`)
+    const handleApprove=async()=>{
+        await axiosInstance.patch(`/approve-request?id=${id}`)
         .then((res)=>{
             setUserData(res.data.result)
         }).catch((error)=>{
@@ -52,8 +50,8 @@ const TutorReq = () => {
         setShowModal(false)
     }
 
-    const handleReject=()=>{
-        axiosInstance.get(`/reject-request?id=${id}`)
+    const handleReject=async()=>{
+        await axiosInstance.patch(`/reject-request?id=${id}`)
         .then((res)=>{
             setUserData(res.data.result)
         }).catch((error)=>{
@@ -61,9 +59,6 @@ const TutorReq = () => {
         })
         setShowModal(false)
     }
-
-
-
 
   return (
     <>
@@ -84,8 +79,8 @@ const TutorReq = () => {
         </thead>
         <tbody>
             {usersData.map((obj,index)=>{
-            return(
-            <tr key={obj._id}>
+                return(
+                    <tr key={obj._id}>
                 <td className="px-4 py-2 text-center">{obj.email}</td>
                 <td className="px-4 py-2 text-center">{obj.firstName+' '+obj.lastName}</td>
                 <td className="px-4 py-2 text-center">{obj.mobile}</td>
@@ -109,6 +104,7 @@ const TutorReq = () => {
             })}
         </tbody>
     </table>
+    {!usersData.length && <div className='text-center text-3xl mt-5'>No requests!</div>}
     </div>
     </div>
     { showModal ?

@@ -57,7 +57,7 @@ function Editcourse({editCourse,goBack,setLoading}) {
       const id=editCourse._id
       setLoading({id : id,spinner : true})
       goBack(false)
-      axiosInstance.post('/edit-course',formData,{
+      axiosInstance.patch('/courses',formData,{
       headers: {'Content-Type': 'multipart/form-data'},
     }).then((res)=>{
         toast.success(res.data.message)

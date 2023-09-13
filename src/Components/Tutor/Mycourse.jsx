@@ -24,7 +24,7 @@ const Mycourse = () => {
 
   useEffect(()=>{
     if(!mycourses){
-      axiosInstance.get(`/my-courses?id=${id}`).then((res)=>{
+      axiosInstance.get(`/courses?id=${id}`).then((res)=>{
         console.log(res.data.result);
         setMyCourses(res.data.result)
         dispatch(saveMyCourse(res.data.result))

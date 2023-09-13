@@ -13,7 +13,7 @@ const TutorProfile = () => {
   const [editAbout,setEditAbout] = useState(false)
 
   useEffect(()=>{
-      axiosInstance.get(`/tutor-profile?id=${id}`)
+      axiosInstance.get(`/profile?id=${id}`)
       .then((res)=>{
          setProfileData(res.data.tutor)
       }).catch((error)=>{
@@ -38,7 +38,7 @@ const TutorProfile = () => {
   };
 
   const updateImage=()=>{
-     axiosInstance.post('/update-image',{id,imgDataUrl})
+     axiosInstance.patch('/image',{id,imgDataUrl})
      .then((res)=>{
       setImgDataUrl('')
       toast.success('Updated successfully')
@@ -61,7 +61,7 @@ const TutorProfile = () => {
   }
 
   const handleAboutSave=()=>{
-    axiosInstance.post('/update-about',{id : id,about_me: tutorData.about_me,tutorData : tutorData})
+    axiosInstance.patch('/about',{id : id,about_me: tutorData.about_me,tutorData : tutorData})
     .then((res)=>{
      toast.success('Updated successfully')
     //  setProfileData(res.data.tutor)

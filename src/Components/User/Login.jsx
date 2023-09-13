@@ -14,7 +14,6 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const Login =()=>{
     const userCookie = Cookies.get('user');
-    console.log(userCookie);
     const axiosInstance = userAxios()
     const emailRef = useRef()
     const passwordRef = useRef()

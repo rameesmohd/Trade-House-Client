@@ -39,7 +39,7 @@ function Addcourse({setAddcourse,setLoading}) {
     setSplitParagraph(splitArray);
   };
 
-  const handleSubmit=(e)=>{
+  const handleSubmit=async(e)=>{
     e.preventDefault()
     if (!titleRef.current.value.trim()) {
       alert('Please enter a course title.');
@@ -88,7 +88,8 @@ function Addcourse({setAddcourse,setLoading}) {
         banner : 'loading'
       }))
       setLoading({id:'123456',spinner:true})
-      axiosInstance.post('/add-course',formData,{
+
+      await axiosInstance.post('/courses',formData,{
       headers: {'Content-Type': 'multipart/form-data'},
     }).then((res)=>{
         toast.success(res.data.message)

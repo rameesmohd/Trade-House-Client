@@ -1,6 +1,6 @@
+import  storage from 'redux-persist/lib/storage'
 import { configureStore } from '@reduxjs/toolkit'
 import {persistStore,persistReducer} from 'redux-persist'
-import  storage from 'redux-persist/lib/storage'
 import {ClientAuth} from './ClientAuth'
 import {AdminAuth} from './AdminAuth'
 import {TutorAuth} from './TutorAuth'

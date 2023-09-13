@@ -29,7 +29,7 @@ const Courses = () => {
   const activeToggleHandler=(id,state)=>{
         const updateData =  myCourses.map((obj)=>({...obj ,is_active:obj._id === id ? state : obj.is_active}))
         setMyCourses(updateData)
-        axiosInstance.get(`/toggle-activecourse?id=${id}&toggle=${state}`).then((res)=>{
+        axiosInstance.patch(`/toggle-activecourse?id=${id}&toggle=${state}`).then((res)=>{
             console.log(res);
         }).catch((error)=>{
             console.log(error);

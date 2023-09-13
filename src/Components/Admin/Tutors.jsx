@@ -31,8 +31,8 @@ const TutorReq = () => {
     }
 
     const handleApprove=()=>{
-         axiosInstance.get(`/toggle-block?id=${id}&blockToggle=${BlockToggle}`,
-        {headers : { Authorization : `admin ${token}`}})
+         axiosInstance.patch(`/toggle-block?id=${id}&blockToggle=${BlockToggle}`,
+            {headers : { Authorization : `admin ${token}`}})
         .then((res)=>{
           console.log(res.data);
           setTutersData(res.data.result)

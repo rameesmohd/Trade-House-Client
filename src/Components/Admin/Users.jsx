@@ -13,9 +13,10 @@ const Users=()=>{
     const [edit,setEdit] = useState(false)
     const searchRef = useRef()
     const [showModal, setShowModal] = useState(false);
+    const [toggle,setToggle] = useState(false)
     
     useEffect(()=>{
-        axiosInstance.get('/users-details')
+        axiosInstance.get('/users')
             .then((res)=>{
                 setUsersData(res.data.result)
             }).catch((error)=>{
@@ -49,36 +50,28 @@ const Users=()=>{
         setEdit(true)
     }  
 
-    const block=(id)=>{
-        axiosInstance.get(`block-user?id=${id}`).then((res)=>{
-            // SetBlockHandle(true)
-            setUsersData(prev =>{
-                const updated = prev.filter(user =>{
-                    if(user._id == id) user.is_blocked = true
-                    return user
-                })
-            return updated
+    const handleBlock=async(id,shouldBlock)=>{
+        const action = shouldBlock ? 'block' : 'unblock';
+        await axiosInstance
+            .patch(`${action}/${id}`)
+            .then((res) => {
+             toast.warning(res.data.message)
+             setUsersData((prev) => {
+                const updated = prev.map((user) => {
+                if (user._id === id) {
+                    return { ...user, is_blocked: shouldBlock };
+                }
+                return user;
+                });
+                return updated;
+            });
             })
-        }).catch((error)=>{
-            console.log(error);
-            toast.error(error.message)
-        })
+        .catch((error) => {
+        console.error(error);
+        toast.error(error.message);
+      });
     }
-    const unBlock=(id)=>{
-        axiosInstance.get(`unblock-user?id=${id}`).then((res)=>{
-            setUsersData(prev =>{
-                const updated = prev.filter(user =>{
-                    if(user._id == id) user.is_blocked = false
-                    return user
-                })
-            return updated
-            })
-        }).catch((error)=>{
-            console.log(error);
-            toast.error(error.message)
-        })
-    }
-
+    
     const handleModal=(id,state)=>{
         if(!state){
             toggle =()=>{
@@ -139,10 +132,7 @@ return (
             
                 <td className="px-4 py-2">
                     <button className='mx-5 text-blue-600' onClick={()=>editUser(obj)}>Edit</button>
-                    
-                    {obj?.is_blocked ? <button className="text-red-600" onClick={()=>handleModal(obj._id,true)}>Unblock</button>
-                    : <button className="text-red-600" onClick={()=>handleModal(obj._id,false)}>Block</button>
-                    }
+                    <button className='mx-5 text-red-600' onClick={()=>handleBlock(obj._id,!obj.is_blocked)}>{obj.is_blocked ? 'Unblock' : 'Block'}</button>
                 </td>
             </tr> )
             })}

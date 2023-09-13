@@ -21,17 +21,22 @@ const Dashboard = () => {
     if(!userEmail){
       navigate('/')
     }else{
-        axiosInstance.post('/t-verify',{userEmail}).then((res)=>{
-          console.log( res.data?.token);
-          const token = res.data?.token
-          const id = res.data?.id
-          if(token){
-            dispatch(tutorLogin({token : token,id : id}))
-          }
-        }).catch((error)=>{
-          navigate('/')
-          toast.error(error.response.data.message)
-        })
+      console.log(userEmail);
+      const verify =async()=>
+      { 
+       await axiosInstance.get('/verify', { params: { userEmail } })
+       .then((res)=>{
+         console.log( res.data?.token);
+         const token = res.data?.token
+         const id = res.data?.id
+         if(token){
+           dispatch(tutorLogin({token : token,id : id}))
+         }
+      }).catch((error)=>{
+         navigate('/')
+         toast.error(error.response.data.message)
+      })}
+      verify()
     }
   },[])
   

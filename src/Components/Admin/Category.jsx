@@ -9,10 +9,10 @@ import { useState } from 'react'
 const MarketCategory = () => {
   const axiosInstance = adminAxios()
   const newCatRef = useRef()
-  const editRef = useRef()
   const [categoryData ,setCategoryData] = useState([])
   const [temp,setTemp] = useState()
   const [inputValue, setInputValue] = useState('');
+  const [Error,setError] = useState('')
 
   useEffect(()=>{
     axiosInstance.get('/category').then((res)=>{
@@ -23,54 +23,90 @@ const MarketCategory = () => {
   },[])
 
   //ADD CATEGORY HANDLES---------------
-  const handleSaveNewCategory=()=>{
-    const filteredCategoryData = categoryData.filter((obj) => obj._id !== 'temp');
-    const newCategoryAdded = [...filteredCategoryData , {_id:'new',category : newCatRef.current.value}]  
-    setCategoryData(newCategoryAdded)
+  const handleSaveNewCategory=async()=>{
     const newCategory = newCatRef.current.value
-    axiosInstance.post('/add-category',{newCategory}).then((res)=>{
-        toast.success(res.data.message)
+    const alphabeticRegex = /^[a-zA-Z]+$/;
+    if (newCategory.trim()==='') {
+      setError('Category cannot be empty');
+    }else if (!alphabeticRegex.test(newCategory)) {
+      setError('Category can only contain alphabetic letters');
+    }else if (newCategory.length < 3) {
+      setError('Category must be at least 3 characters long');
+    } else {
+      setError('');
+      const filteredCategoryData = categoryData.filter((obj) => obj._id !== 'temp');
+      const newCategoryAdded = [...filteredCategoryData , {_id:'new',category : newCatRef.current.value}]  
+      setCategoryData(newCategoryAdded)
+      await axiosInstance.post('/category',{newCategory}).then((res)=>{
+      toast.success(res.data.message)
     }).catch((error)=>{
-        toast.error(error.message)
+      toast.error(error.message)
     })
   }
+  }
+
   const handleAddCategory=()=>{
     const filteredCategoryData = categoryData.filter((obj) => obj._id == 'temp');
     if(filteredCategoryData.length==0){
       const addCat = [...categoryData , {_id:'temp',category : ''}]  
       setCategoryData(addCat)
+      setError('');
     }
   }
+
   const handleCancelAddCategory = () => {
     const filteredCategoryData = categoryData.filter((obj) => obj._id !== 'temp');
     setCategoryData(filteredCategoryData);
+    setError('');
   };
 
   //EDIT HANDLES------------------------
   const handleEdit=(id,category)=>{
-      setTemp(id)
-      let newList = categoryData.map((obj)=>({...obj,_id:obj._id===id? 'edit' : obj._id}))
-      setInputValue(category)
-      setCategoryData(newList)
+    const already = categoryData.filter((obj)=>obj._id === 'edit')
+    console.log(already);
+      if(!already.length){
+        console.log(categoryData);
+        setTemp(id)
+        let newList = categoryData.map((obj)=>({...obj,_id:obj._id===id ? 'edit' : obj._id}))
+        setInputValue(category)
+        setCategoryData(newList)
+        setError('');
+      }else{
+        handleEditCancel()
+      }
   }
   
   const handleEditCancel=()=>{
     let newList = categoryData.map((obj)=>({...obj,_id: obj._id == 'edit' ? temp : obj._id}))
     setCategoryData(newList)
     setTemp(null)
+    setError('');
   }
 
-  const handleUpdateCategory=()=>{
+  const handleUpdateCategory=async()=>{
       const newCategory = inputValue
+      const alphabeticRegex = /^[a-zA-Z]+$/;
+      if (newCategory.trim() === '') {
+        setError('Category cannot be empty');
+      }else if (!alphabeticRegex.test(newCategory)) {
+        setError('Category can only contain alphabetic letters');
+      }else if (newCategory.length < 3) {
+        setError('Category must be at least 3 characters long');
+      } else {
       let newList = categoryData.map((obj)=>({...obj,_id: obj._id == 'edit' ? temp : obj._id,category : obj._id == 'edit' ? newCategory : obj.category}))
       setCategoryData(newList)
-      axiosInstance.post('/update-category',{id:temp,newCategory}).then((res)=>{
+      await axiosInstance.patch('/category',{id:temp,newCategory}).then((res)=>{
+        setError('');
+        setTemp(null)
         toast.success(res.data.message)
       }).catch((error)=>{
+          setError(''); 
           toast.error(error.message)
       })
+    }
   }
 
+  console.log(categoryData);
   return (
     <div className=' w-full h-full'>
       <div className='relative flex justify-start'>
@@ -101,16 +137,20 @@ const MarketCategory = () => {
                 categoryData.map((obj) => (
                   <tr key={obj._id} className="bg-white border-b">
                     <th scope="row">
-                        {obj._id == 'edit' && <div className='w-32 px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex justify-start'>
+                        {obj._id == 'edit' && <div className='relative w-32 px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex justify-start'>
                               <input className='rounded-md text-sm' onChange={(e)=>setInputValue(e.target.value)} type="text" value={inputValue}/>
+                              {Error && <div className="top-0 absolute text-red-500 text-xs">{Error}</div>}
                           </div> }
                         {obj._id !== 'temp' && obj._id !== 'edit' &&
                          <div className='w-32 px-6 py-4 font-medium text-gray-900 whitespace-nowrap'>{obj.category}</div>
                         }
                         { obj._id == 'temp' &&
-                          <div className='w-32 px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex justify-start'>
+                        <>
+                          <div className='relative w-32 px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex justify-start'>
                               <input className='rounded-md text-sm' ref={newCatRef} type="text" placeholder="Enter new category here" />
+                              {Error && <div className="top-0 absolute text-red-500 text-xs">{Error}</div>}
                           </div>
+                        </>
                         }
                       </th>
                     <td className="px-6 py-4"></td>

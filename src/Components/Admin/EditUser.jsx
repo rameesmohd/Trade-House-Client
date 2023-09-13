@@ -11,10 +11,10 @@ const EditUser = ({user,func}) => {
     const [mobile ,setMobile] = useState(user.mobile);
 
     const updateProfile=()=>{
-      axiosInstance.post("/update-user",{ id,name,email,mobile
+      axiosInstance.patch("/user",{ id,name,email,mobile
         }).then((res)=>{
             console.log(res);
-            toast.success(res.message)
+            toast.success('success')
             func(false)
         }).catch((error)=>{
           console.log(error.message);
