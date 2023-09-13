@@ -16,7 +16,7 @@ const Tutor = () => {
     <>
        <Routes>
             <Route path='/' element={<Dashboard/>}/>
-
+      
             <Route path='/overview' element={ <PrivateRoute element={<Dashboard/>}/>}/>
             <Route path='/profile' element={ <PrivateRoute element={<Profile/>} /> }/>  
             <Route path='/my-courses' element={ <PrivateRoute element={<Mycourses/>} /> }/>  

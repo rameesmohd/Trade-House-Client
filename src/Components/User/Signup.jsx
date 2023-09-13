@@ -79,7 +79,7 @@ const Signup = () => {
                 onCaptchaVerify()
                 const appVerifier = window.recaptchaVerifier
                 const formatPh = '+91'+formData.mobile
-                signInWithPhoneNumber(auth, formatPh, appVerifier)
+                signInWithPhoneNumber(auth, formatPh,appVerifier)
                     .then((confirmationResult) => {
                         window.confirmationResult = confirmationResult;
                         setFlag(false)

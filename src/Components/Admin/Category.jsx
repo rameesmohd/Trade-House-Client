@@ -12,6 +12,7 @@ const MarketCategory = () => {
   const editRef = useRef()
   const [categoryData ,setCategoryData] = useState([])
   const [temp,setTemp] = useState()
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(()=>{
     axiosInstance.get('/category').then((res)=>{
@@ -46,9 +47,10 @@ const MarketCategory = () => {
   };
 
   //EDIT HANDLES------------------------
-  const handleEdit=(id)=>{
+  const handleEdit=(id,category)=>{
       setTemp(id)
       let newList = categoryData.map((obj)=>({...obj,_id:obj._id===id? 'edit' : obj._id}))
+      setInputValue(category)
       setCategoryData(newList)
   }
   
@@ -59,7 +61,7 @@ const MarketCategory = () => {
   }
 
   const handleUpdateCategory=()=>{
-      const newCategory = editRef.current.value
+      const newCategory = inputValue
       let newList = categoryData.map((obj)=>({...obj,_id: obj._id == 'edit' ? temp : obj._id,category : obj._id == 'edit' ? newCategory : obj.category}))
       setCategoryData(newList)
       axiosInstance.post('/update-category',{id:temp,newCategory}).then((res)=>{
@@ -100,7 +102,7 @@ const MarketCategory = () => {
                   <tr key={obj._id} className="bg-white border-b">
                     <th scope="row">
                         {obj._id == 'edit' && <div className='w-32 px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex justify-start'>
-                              <input className='rounded-md text-sm' ref={editRef} type="text" placeholder={obj.category} />
+                              <input className='rounded-md text-sm' onChange={(e)=>setInputValue(e.target.value)} type="text" value={inputValue}/>
                           </div> }
                         {obj._id !== 'temp' && obj._id !== 'edit' &&
                          <div className='w-32 px-6 py-4 font-medium text-gray-900 whitespace-nowrap'>{obj.category}</div>
@@ -115,11 +117,11 @@ const MarketCategory = () => {
                     <td className="px-6 py-4">
                       { obj._id !== 'temp' && obj._id !== 'edit' &&
                         <>
-                          <a onClick={()=>handleEdit(obj._id)} className="font-medium text-blue-600 hover:underline mx-2">
+                          <a onClick={()=>handleEdit(obj._id,obj.category)} className="cursor-pointer font-medium text-blue-600 hover:underline mx-2">
                             Edit
                           </a>
-                          <a href="#" className="font-medium text-red-600 hover:underline mx-2">
-                            Flag
+                          <a className="font-medium text-red-600 hover:underline mx-2 cursor-pointer">
+                            active
                           </a>
                         </>
                       }
@@ -145,9 +147,7 @@ const MarketCategory = () => {
                       }
                       </td>
                     </tr>
-                  ))
-                }
-
+                  ))}
               </tbody>
             </table>
           </div>

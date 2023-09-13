@@ -26,9 +26,13 @@ export const ClientAuth = createSlice({
         },
         tutorReqSubmit(state,action){
             state.is_requested = true
+        },
+        updateTutorStates(state,action){
+            state.is_requested = action.payload.is_requested
+            state.is_tutor = action.payload.is_tutor
         }
     }
 })
 
-export const {clientLogin,clientLogout,tutorReqSubmit} = ClientAuth.actions
+export const {clientLogin,clientLogout,tutorReqSubmit,updateTutorStates} = ClientAuth.actions
 export default ClientAuth.reducer

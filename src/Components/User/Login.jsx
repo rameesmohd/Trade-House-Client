@@ -8,8 +8,13 @@ import { useDispatch } from 'react-redux'
 import { clientLogin } from '../../Redux/ClientAuth'
 import {BsFillShieldLockFill} from 'react-icons/bs'
 import OtpInput from "otp-input-react"
+import Cookies from 'js-cookie';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-const Login = () => {
+const Login =()=>{
+    const userCookie = Cookies.get('user');
+    console.log(userCookie);
     const axiosInstance = userAxios()
     const emailRef = useRef()
     const passwordRef = useRef()
@@ -25,8 +30,23 @@ const Login = () => {
     const [compareOTP,setCompareOtp] = useState('')
     const [seconds, setSeconds] = useState(60);
     const [isActive, setIsActive] = useState(false);
+    const [remeberMe,setRememberMe] = useState(false)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
+
+    useEffect(()=>{
+        if(userCookie) {
+            console.log(userCookie.email);
+            const userObject = JSON.parse(userCookie);
+            emailRef.current.value = userObject.email;
+        } 
+    },[])
+
 
     const handleSubmit=async(event)=>{
         event.preventDefault()
@@ -38,6 +58,18 @@ const Login = () => {
         }else if(!/\S+@\S+\.\S+/.test(email)){
             validationErrors.email = 'Invalid email format';
         }
+        if(!password){
+            validationErrors.password = 'Password is required';
+        }
+        if(remeberMe){
+            try {
+                const userObject = { email: email };
+                Cookies.set('user', JSON.stringify(userObject), { expires: 30 });
+                console.log('Cookie set successfully');
+            } catch (error) {
+                console.error('Error setting cookie:', error);
+            }
+        }  
         if(Object.keys(validationErrors).length === 0){
             setError(validationErrors)
             await axiosInstance.post('/login',{email,password}).then((res)=>{
@@ -49,7 +81,7 @@ const Login = () => {
                         name : result?.name,
                         is_requested : result?.is_requested,
                         is_tutor : result?.is_tutor
-                     }))
+                     }))  
                     navigate('/home')
                  }else{
                      toast.error(result.message)     
@@ -153,8 +185,6 @@ const Login = () => {
         setSeconds(30);
     };
 
-
-
  
     return (
         <div className='bg-grey-100 flex flex-col justify-center'>
@@ -169,15 +199,27 @@ const Login = () => {
                     <input ref={emailRef} type='text' className='border p-2' placeholder='Enter your email'/>
                     {error.email && <div className="error text-red-700">{error.email}</div>}
                 </div>
-                <div className='flex flex-col py-2'>
+                <div className='flex flex-col py-2 relative'>
                     <label>Password</label>
-                    <input ref={passwordRef} type='password' className='border p-2' placeholder='Password'/>
+                    <input  ref={passwordRef} type={showPassword ? 'text' : 'password'} className='border p-2 ' placeholder='Password'/>
+                    <button
+                        className="toggle-password absolute right-3 top-11"
+                        onClick={togglePasswordVisibility}
+                        type="button"
+                    >
+                        <FontAwesomeIcon
+                        icon={showPassword ? faEye : faEyeSlash}
+                        className="eye-icon"
+                        />
+                    </button>
                     {error.password && <div className="error text-red-700">{error.password}</div>}
                 </div>
                 <button type='submit' className='text-white border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-400'>Login</button>
                 {error.resError && <div className="error text-red-700">{error.resError}</div>}
                 <div className='flex justify-between '>
-                    <p className='flex items-center'><input className='mr-2' type="checkbox"/>Remember Me</p>
+                    <p className='flex items-center'>
+                        <input className='mr-2' type="checkbox" name='remember_me' id='remember_me' onChange={()=>setRememberMe(!remeberMe)} checked={remeberMe} />
+                        Remember Me</p>
                     <Link to={'/signup'}>Create an account</Link>
                 </div>
                 <Link onClick={()=>setForgot(true)} className='text-blue-500'>Forget password?</Link>

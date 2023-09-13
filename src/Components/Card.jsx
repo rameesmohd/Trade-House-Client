@@ -23,7 +23,7 @@ import {
         <CardBody>
           <div className="mb-2 flex items-center justify-between">
             <Typography color="blue-gray" className="text-gray-500 ">
-              By {coursedata?.tutor.firstName+' '+coursedata?.tutor.lastName}
+              By {coursedata?.tutor?.firstName+' '+coursedata?.tutor?.lastName}
             </Typography>
             <Typography color="blue-gray" className="font-medium">
              <Rating/>

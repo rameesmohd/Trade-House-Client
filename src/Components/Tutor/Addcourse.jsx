@@ -39,7 +39,7 @@ function Addcourse({setAddcourse,setLoading}) {
     setSplitParagraph(splitArray);
   };
 
-  const handleSubmit=async(e)=>{
+  const handleSubmit=(e)=>{
     e.preventDefault()
     if (!titleRef.current.value.trim()) {
       alert('Please enter a course title.');

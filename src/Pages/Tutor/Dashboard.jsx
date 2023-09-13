@@ -21,7 +21,6 @@ const Dashboard = () => {
     if(!userEmail){
       navigate('/')
     }else{
-      if(!tutorToken){
         axiosInstance.post('/t-verify',{userEmail}).then((res)=>{
           console.log( res.data?.token);
           const token = res.data?.token
@@ -31,12 +30,11 @@ const Dashboard = () => {
           }
         }).catch((error)=>{
           navigate('/')
-          toast.error('Unautherised access!!.Please contact admin!!')
+          toast.error(error.response.data.message)
         })
-      }
     }
   },[])
-    
+  
   return (
       <div className='pt-24 md:pl-64'>
           <Navbar/>

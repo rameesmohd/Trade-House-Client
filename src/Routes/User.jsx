@@ -20,9 +20,7 @@ const User = () => {
             <Route path='/' element={<Home/>}/>
             <Route path='/courses' element={<Courses/>}/>
             <Route path='/course-details' element={<CourseDetails/>}/>
-           
             <Route path='/home' element={<Home/>}/>
-            
             <Route path='/login' element={ userAuth ? <Navigate to={'/home'}/> : <LoginAndSignup props='login'/>}/> 
             <Route path='/signup' element={ userAuth ? <Navigate to={'/home'}/> : <LoginAndSignup props='register'/>}/>
 

@@ -3,9 +3,10 @@ import { useEffect } from 'react'
 import adminAxios from '../../Axios/AdminAxios'
 import { useSelector } from 'react-redux'
 import { BsDownload } from 'react-icons/bs';
-import { MdCheckCircle } from 'react-icons/md';
+import { MdCheckCircle,MdCancel } from 'react-icons/md';
 import Modal from '../modal';
 import { toast } from 'react-toastify';
+let action;
 
 const TutorReq = () => {
     const axiosInstance = adminAxios()
@@ -33,9 +34,12 @@ const TutorReq = () => {
         document.body.removeChild(anchor);
     };
 
-    const handleModal=(_id)=>{
+    
+    const handleModal=(_id,state)=>{
+        state ? action = handleApprove : action = handleReject
         setId(_id)
         setShowModal(true)
+        console.log(action);
     }
 
     const handleApprove=()=>{
@@ -43,11 +47,21 @@ const TutorReq = () => {
         .then((res)=>{
             setUserData(res.data.result)
         }).catch((error)=>{
-            console.log(error.message);
             toast.error(error.message);
         })
         setShowModal(false)
     }
+
+    const handleReject=()=>{
+        axiosInstance.get(`/reject-request?id=${id}`)
+        .then((res)=>{
+            setUserData(res.data.result)
+        }).catch((error)=>{
+            toast.error(error.message);
+        })
+        setShowModal(false)
+    }
+
 
 
 
@@ -80,10 +94,16 @@ const TutorReq = () => {
                 <td className="px-4 py-2 text-center">{obj.type_of_trader}</td>
                 <td className="px-4 py-2 flex justify-center"><BsDownload className=' text-lg cursor-pointer' onClick={()=>handleDownload(obj.CV,obj.firstName)}/></td>
                 <td className="px-4 py-2 text-center">
+                    <div className='flex'>
                     <button type="button" 
-                    className='btn-sm bg-green-500 rounded-md text-sm flex flex-row items-center text-white hover:bg-green-600' 
-                    onClick={()=>handleModal(obj._id)}>Approve<MdCheckCircle color="white"/>
+                    className='btn-sm mx-2 bg-green-500 rounded-md text-sm flex flex-row items-center text-white hover:bg-green-600' 
+                    onClick={()=>handleModal(obj._id,true)}>Approve<MdCheckCircle color="white"/>
                     </button>
+                    <button type="button" 
+                    className='btn-sm bg-red-500 rounded-md text-sm flex flex-row items-center text-white hover:bg-red-600' 
+                    onClick={()=>handleModal(obj._id,false)}>Reject<MdCancel color="white"/>
+                    </button>
+                    </div>
                 </td>
             </tr> )
             })}
@@ -94,7 +114,7 @@ const TutorReq = () => {
     { showModal ?
        <Modal 
        setShowModal={setShowModal} 
-       confirm={handleApprove} 
+       confirm={action} 
        message={'Are you sure?'} 
        description={'Please confirm to approve this user to become a tutor.'} />  
        : '' }

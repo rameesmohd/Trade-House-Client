@@ -139,7 +139,6 @@ const Mycourse = () => {
               </td>
               <td>
                 <h2 onClick={()=>navigate('/tutor/modules',{state:obj._id})} className='cursor-pointer underline text-blue-800'>Modules</h2>
-                <br />
               </td>
               <td>
                       {
