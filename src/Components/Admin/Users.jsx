@@ -13,7 +13,7 @@ const Users=()=>{
     const [edit,setEdit] = useState(false)
     const searchRef = useRef()
     const [showModal, setShowModal] = useState(false);
-    const [toggle,setToggle] = useState(false)
+    // const [toggle,setToggle] = useState(false)
     
     useEffect(()=>{
         axiosInstance.get('/users')

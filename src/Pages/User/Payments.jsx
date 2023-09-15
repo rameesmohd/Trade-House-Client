@@ -6,7 +6,7 @@ import Payment from '../../Components/User/Payment'
 const Payments = () => {
   return (
     <div>
-      <Navbar/>
+        <Navbar/>
         <Payment/>
         <Footer/>
     </div>

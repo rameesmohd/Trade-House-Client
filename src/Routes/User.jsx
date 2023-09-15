@@ -31,7 +31,6 @@ const User = () => {
             <Route path='/request-tutorship' element={ <PrivateRoute element={<Reqform/>}/> }/>
             <Route path='/payments' element={ <PrivateRoute element={<Payment/>}/> }/>
             <Route path='/payments/success' element={ <PrivateRoute element={<Success/>}/> }/>
-            
       </Routes>
     </>
   )

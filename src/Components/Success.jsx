@@ -1,6 +1,11 @@
 import React from 'react'
-
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { removeCourseData } from '../Redux/ClientSlice/CourseOnPayment'
 const Success = () => {
+    const dispatch = useDispatch()
+    // dispatch(removeCourseData())
+    const navigate = useNavigate()
   return (
     <div>
        <div class="bg-slate-100 my-32 transition-all duration-300 ease-in-out">
@@ -15,8 +20,8 @@ const Success = () => {
                 <p class="text-gray-600 my-2">Thank you for completing your secure online payment.</p>
                 <p> Have a great day! </p>
                 <div class="py-10 text-center">
-                    <a href="#" class="px-12 bg-indigo-600 hover:bg-indigo-600 text-white font-semibold py-3 transition-all duration-300 ease-in-out hover:shadow-lg">
-                        GO BACK
+                    <a onClick={()=>navigate('/courses')} class="px-12 bg-indigo-600 hover:bg-indigo-600 text-white font-semibold py-3 transition-all duration-300 ease-in-out hover:shadow-lg">
+                        GO BACK TO COURSES
                     </a>
                 </div>
             </div>

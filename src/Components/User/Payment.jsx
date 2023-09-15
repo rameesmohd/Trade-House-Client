@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import img from '../../assets/trading-1.jpg'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import stripIcon from '../../assets/1280px-Stripe_Logo,_revised_2016.svg.png'
 import cryptoIcon from '../../assets/100682_card_512x512.png'
@@ -12,29 +11,62 @@ import userAxios from '../../Axios/UserAxios'
 import { toast } from 'react-toastify'
 import { Spinner } from "@material-tailwind/react";
 import ModalScroll from '../ModalScrollable'
+import Failed from '../Failed'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCourseData ,removeCourseData} from '../../Redux/ClientSlice/CourseOnPayment'
+
 
 const Payment = () => {
+    let courseData 
     const axiosInstance = userAxios()
     const location = useLocation()
-    const courseData = location.state
+    const queryParams = new URLSearchParams(location.search);
+    const status = queryParams.get('status');
+    const dispatch = useDispatch()
+
     const [isChecked,setIsChecked] = useState(false)
     const [paymentMode,setPaymentMode] = useState('razorpay')
     const [loading,setLoading] = useState(false)
     const [modal,loadModal] = useState(false)
-    const handlePayment = ()=>{
+    
+    const handlePayment = async()=>{
+        dispatch(setCourseData(courseData))
         setLoading(true)
         const methord = paymentMode
-        axiosInstance.post(`/payment/${methord}`,courseData).then((res)=>{
-            setLoading(false)
-            window.location.href = res.data.url
-        }).catch((error)=>{
-            setLoading(false)
-            toast.error(error.message)
-        })
+        if(methord === 'strip'){
+            await axiosInstance.post(`/payments/${methord}`,courseData).then((res)=>{
+                setLoading(false)
+                window.location.href = res.data.url
+            }).catch((error)=>{
+                setLoading(false)
+                toast.error(error.message)
+            })
+        }else if(methord === 'bitpay'){
+            
+        }
     }
+
+    useEffect(()=>{
+        return ()=>{
+            dispatch(removeCourseData())
+        }
+    },[])
+
+    
+
+    if(status==='failed'){
+        courseData = useSelector((state)=>state.CourseOnPayment.courseData)
+        console.log(courseData);
+    }else{
+        courseData = location.state
+        console.log(courseData);
+    }
+
+
   return (
     <div className='h-auto w-full relative py-10 bg-gray-100'>
-        <body className="flex items-center h-full justify-center mt-24  text-gray-800 p-8">
+        {status==='failed' && <Failed/>}
+        <div className={`flex items-center h-full justify-center ${status==='failed'? '':'mt-24'} text-gray-800 p-8`}>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 w-full max-w-screen-lg">
                 <div className="lg:col-span-2">
                 <h2 className="text-sm font-medium">Payment Method</h2>
@@ -43,7 +75,7 @@ const Payment = () => {
                                     <img className='w-28' src={courseData?.banner} alt={noImg} /> 
                                 </div>
                                 <h2 className="text-sm font-medium">{courseData?.title}</h2>
-                                    <label className=" text-center text-sm font-medium ml-4">by {courseData?.tutor.name}</label>
+                                    <label className=" text-center text-sm font-medium ml-4">by {courseData?.tutor?.name}</label>
                                 <h2 className="text-sm font-medium">₹{courseData?.price}</h2>
                                 
                             </div>
@@ -87,13 +119,13 @@ const Payment = () => {
                         <div className="px-8 mt-4">
                             <div className="flex items-end justify-between">
                                 <span className="text-sm font-semibold">Total </span>
-                                <span className="text-sm text-gray-500 mb-px">₹{courseData.price}</span>
+                                <span className="text-sm text-gray-500 mb-px">₹{courseData?.price}</span>
                             </div>
                         </div>
                         <div className="px-8 mt-4 border-t pt-4">
                             <div className="flex items-end justify-between">
                                 <span className="font-semibold">Grand Total (INR)</span>
-                                <span className="font-semibold">₹{courseData.price}</span>
+                                <span className="font-semibold">₹{courseData?.price}</span>
                             </div>
                         </div>
                         <div className="flex items-center px-8 mt-8">
@@ -110,7 +142,7 @@ const Payment = () => {
                     </div>
                 </div>
             </div>
-        </body>
+        </div>
         { modal &&<ModalScroll showModel={loadModal}/>}
     </div>
   )
