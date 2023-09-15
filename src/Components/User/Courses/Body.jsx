@@ -27,11 +27,6 @@ const Body = () => {
                return <div className=' col-span-1'><Cards coursedata={obj}/></div>
             })
         }
-             <div className=' col-span-1'><Cards/></div>
-             <div className=' col-span-1'><Cards/></div>
-             <div className=' col-span-1'><Cards/></div>
-             <div className=' col-span-1'><Cards/></div>
-
         </div>
         {loading && <Loading/>}
     </>

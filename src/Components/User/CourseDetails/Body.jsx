@@ -2,10 +2,12 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import Rating from '../../RatingStar'
 import AdvRating from '../../AdvRating'
+import { useNavigate } from 'react-router-dom'
 
 const Body = () => {
     const location = useLocation()
     const courseData = location.state
+    const navigate = useNavigate()
   return (
     <div>
         {/* section one */}
@@ -21,7 +23,7 @@ const Body = () => {
                 <Rating/> <p className='ml-4'>{courseData?.user_ratings ? (courseData?.user_ratings.length+" ratings") : 'No reviews'}</p>
                 </div>
                 <br />
-                <button className='rounded-md text-white btn-sm w-28 bg-blue-600'>Start</button>
+                <button onClick={()=>navigate('/payments',{state:courseData})} className='rounded-md text-white btn-sm w-28 bg-blue-600'>Start</button>
             </div>
             <div className='md:col-span-1'>
             <video className="h-full w-full rounded-lg p-8 bg-white" controls autoPlay muted>

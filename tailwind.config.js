@@ -57,7 +57,7 @@ export default {
   plugins: [
     require("daisyui"),
     require('flowbite/plugin'),
-    require('tw-elements/dist/plugin.cjs'),
+    require("tw-elements-react/dist/plugin.cjs"),
     require('@tailwindcss/forms')
 ],
 }

@@ -5,7 +5,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import {GoogleClientId} from './Constants/API'
 import { Provider } from 'react-redux'
 import { store } from './Redux/Store'
-// import 'flowbite';
+import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
