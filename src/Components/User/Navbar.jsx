@@ -23,8 +23,8 @@ const Navbar = () => {
     <>
       <nav className="fixed top-0 left-0 z-20 w-full h-24 py-5 bg-black border-b border-black dark:bg-black dark:border-black" >
       <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
-        <Link to={'/'} className="flex items-center">
-          <img src={logo} className="h-10 mr-3" alt="Flowbite Logo" />
+        <Link to={'/'} className="flex items-center hover:scale-125 transition-transform">
+          <img src={logo} className="h-10 mr-1 " alt="Flowbite Logo" />
           <span className="self-center text-lg font-semibold md:text-2xl whitespace-nowrap dark:text-white ">TRADE HOUSE</span>
         </Link>
         <div className="flex md:order-2">
@@ -75,7 +75,7 @@ const Navbar = () => {
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-white bg-white rounded md:bg-transparent md:text-white md:p-0 md:dark:text-white"
+                className="block py-2 pl-3 pr-4 text-white bg-white rounded md:bg-transparent md:text-white md:p-0 md:hover:text-yellow-400 md:dark:text-white hover:scale-110 "
                 aria-current="page">
                 Home
               </a>
@@ -83,14 +83,14 @@ const Navbar = () => {
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent hover:scale-110 md:hover:text-yellow-400 md:p-0  dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                 Markets
               </a>
             </li>
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent hover:scale-110 md:hover:text-yellow-400 md:p-0  dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Mentors
               </a>
@@ -99,9 +99,9 @@ const Navbar = () => {
               <a
                 onClick={()=>navigate('/courses')}
                 className="block py-2 cursor-pointer pl-3 pr-4 text-gray-900 rounded 
-                hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0
-                 md:dark:hover:text-blue-500 dark:text-white 
-                 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-400 md:p-0
+                  dark:text-white 
+                 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 hover:scale-110">
                 Courses
               </a>
             </li>
@@ -109,9 +109,9 @@ const Navbar = () => {
               <a
                 onClick={()=>navigate('/tutor')}
                 className="font-bold outline-dashed outline-1 outline-red-700 outline-offset-4 block py-2 pl-3 pr-4 text-gray-900 rounded cursor-pointer
-                 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0
-                  md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700
-                   dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-400 md:p-0
+                   dark:text-white dark:hover:bg-gray-700
+                   dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 hover:scale-110" 
               >
                 Tutor Panel
               </a>

@@ -24,7 +24,7 @@ const Body = () => {
         <div className='grid md:grid-cols-3 gap-2 max-h-screen overflow-x-hidden overflow-y-scroll bg-slate-50'>
         {
             courseData.map((obj)=>{
-               return <div className=' col-span-1'><Cards coursedata={obj}/></div>
+               return <div className=' col-span-1 hover:scale-110'><Cards coursedata={obj}/></div>
             })
         }
         </div>

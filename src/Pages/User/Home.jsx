@@ -8,7 +8,7 @@ function HomePage() {
   return (
     <>
       <Navbar/>
-      <div className='lg:container mx-auto pt-24 lg:pt-0'>
+      <div className='lg:container mx-auto pt-24 lg:pt-5'>
       <Header/>
       <Home/>
       </div>

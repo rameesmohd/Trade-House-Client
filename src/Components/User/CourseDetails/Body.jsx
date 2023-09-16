@@ -35,9 +35,9 @@ const Body = () => {
         {/* section two */}
         <div className='w-11/12 mx-auto h-auto bg-yellow-50 mt-2 rounded-md'>
             <div className='w-11/12 mx-auto h-auto px-11 py-5'>
-                <div className='bg-amber-500 grid grid-cols-1 md:grid-cols-3 p-5 rounded-3xl gap-3 '>
+                <div className='bg-amber-500 grid grid-cols-1 md:grid-cols-3 p-5 rounded-3xl gap-3 hover:scale-105 transition'>
                 <div className=' md:col-span-1 py'>
-                    <img className='mx-auto mt-4 object-cover w-60 h-60 rounded-3xl shadow-md drop-shadow-2xl shadow-black' src={courseData?.tutor.image ? courseData?.tutor.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'} alt="" />
+                    <img className='mx-auto mt-4 object-cover transition-transform  w-60 h-60 rounded-3xl shadow-md drop-shadow-2xl shadow-black' src={courseData?.tutor.image ? courseData?.tutor.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'} alt="" />
                 </div>
                 <div className='md:col-span-2 py-8'>
                     <p className='text-white mb-2'>About the Trainer</p>

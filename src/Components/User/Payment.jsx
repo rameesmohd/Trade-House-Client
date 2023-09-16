@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import stripIcon from '../../assets/1280px-Stripe_Logo,_revised_2016.svg.png'
 import cryptoIcon from '../../assets/100682_card_512x512.png'
 import noImg from '../../assets/noImagePreview.jpg'
@@ -14,20 +14,37 @@ import ModalScroll from '../ModalScrollable'
 import Failed from '../Failed'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCourseData ,removeCourseData} from '../../Redux/ClientSlice/CourseOnPayment'
-
+import CryptoModal from '../CryptoPaymentModal'
 
 const Payment = () => {
-    let courseData 
     const axiosInstance = userAxios()
     const location = useLocation()
-    const queryParams = new URLSearchParams(location.search);
-    const status = queryParams.get('status');
     const dispatch = useDispatch()
-
+    const navigate = useNavigate()
     const [isChecked,setIsChecked] = useState(false)
     const [paymentMode,setPaymentMode] = useState('razorpay')
     const [loading,setLoading] = useState(false)
     const [modal,loadModal] = useState(false)
+    const [showCryptoModal,setShowCryptoModal] = useState(false)
+    
+    const [courseData ,setCourseDataState] = useState({})
+    const storeData= useSelector((state)=>state.CourseOnPayment.courseData)
+    const locationData = location.state
+    
+    const [status,setStatus] = useState('')
+    const queryParams = new URLSearchParams(location.search);
+    const statusParam = queryParams.get('status');
+
+    useEffect(()=>{
+        if(storeData){
+            setCourseDataState(storeData)
+        }else if(locationData){
+            setCourseDataState(locationData)
+        }
+        if(statusParam){
+            setStatus(statusParam)
+        }
+    },[])
     
     const handlePayment = async()=>{
         dispatch(setCourseData(courseData))
@@ -42,30 +59,65 @@ const Payment = () => {
                 toast.error(error.message)
             })
         }else if(methord === 'bitpay'){
-            
+            setLoading(false)
+            setShowCryptoModal(true)
+        }else if(methord === 'razorpay'){
+             await axiosInstance.post(`/payments/${methord}`,courseData).then((res)=>{
+                handleOpenRazorpay(res.data.data)
+                setLoading(false)
+             }).catch((error)=>{
+                toast.error(error.message)
+                setLoading(false)
+             })
+
         }
     }
 
-    useEffect(()=>{
-        return ()=>{
-            dispatch(removeCourseData())
+    const handleOpenRazorpay = (data) => {
+        dispatch(setCourseData(courseData))
+        const purchaseData={
+            course_id:courseData._id,
+            amount : courseData.price,
+            mode_of_payment : 'razorpay'
         }
-    },[])
-
-    
-
-    if(status==='failed'){
-        courseData = useSelector((state)=>state.CourseOnPayment.courseData)
-        console.log(courseData);
-    }else{
-        courseData = location.state
-        console.log(courseData);
-    }
-
+        const options = {
+          key: 'rzp_test_spbZFEW2Mx0LLp',
+          order_id: data.id,
+          amount: data.amount,
+          currency: data.currency,
+          name: 'Trade House',
+          description: `payment to trade house academy`,
+          handler: function (response) {
+            console.log(response, 'line 88');
+            if (response.razorpay_payment_id && response.razorpay_signature) {
+                axiosInstance.post('/verifyRazorpay', { response: response ,purchaseData})
+                .then((res) => {
+                    navigate('/payments/success')
+                    toast.success(res.data.message)
+                  }
+                )
+                .catch((error) => {
+                    setStatus('failed')
+                    toast.error('Error verifying transaction:', error);
+                })
+            } else if (response.error.code === Razorpay.Error.PAYMENT_CANCELLED) {
+                setStatus('failed')
+                toast.error('Transaction cancelled by the user');
+            } else {
+                setStatus('failed')
+                toast.error('Transaction failed:', response.error);
+            }
+          }
+        };
+        
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      };
 
   return (
     <div className='h-auto w-full relative py-10 bg-gray-100'>
         {status==='failed' && <Failed/>}
+        {showCryptoModal && <CryptoModal setShowModel={setShowCryptoModal}/>}
         <div className={`flex items-center h-full justify-center ${status==='failed'? '':'mt-24'} text-gray-800 p-8`}>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 w-full max-w-screen-lg">
                 <div className="lg:col-span-2">

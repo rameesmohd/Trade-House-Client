@@ -9,11 +9,11 @@ import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>  
     <GoogleOAuthProvider clientId={GoogleClientId}>
       <App/>
     </GoogleOAuthProvider>
     </Provider>
-   </React.StrictMode>
+  //  </React.StrictMode>
 )

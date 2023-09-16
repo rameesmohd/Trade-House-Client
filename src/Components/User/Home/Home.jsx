@@ -14,24 +14,41 @@ import Footer from '../Footer'
 
 
 function Home() {
+
+    const curr =()=>{
+        const options = {
+            method: 'GET',
+            headers: {
+              accept: 'application/json',
+              'Content-Type': 'application/json',
+              'X-Accept-Version': '2.0.0'
+            }
+          };
+          
+        fetch('https://test.bitpay.com/currencies', options)
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(err => console.error(err));
+    
+    }
   return (
     <>
     <div className='flex  flex-col'>
     {/* section-1 */}
-    <div className='bg-amber-400 lg:h-[500px]'>
+    <div className='bg-amber-400 lg:h-[500px] '>
     <div className='grid grid-cols-1 md:grid-cols-2 container mx-auto'>
         <div className='p-6 md:p-12 '>
-            <img className='object-cover rounded-md shadow-2xl' src={img3} alt="" />
+            <img className='object-cover rounded-md shadow-2xl animate-bounce-img' src={img3} alt="" />
         </div>
         <div className='p-6 md:p-12'>
             <h1 className='mb-8 lg:mb-16 font-semibold text-2xl lg:text-3xl'>Let us help you become a Successful Trader<br/> in financial markets</h1>
-            <p className='lg:pr-44'>Our tutors  will walk you through the different steps to
+            <p className='lg:pr-44 '>Our tutors  will walk you through the different steps to
             make a trade profitable.<br/> With each trade being different, you have to   </p>
             <p>understand how the market works</p>
             <p>to select a performing trade. This is exactly what you will </p>
             <p>learn with Trade House</p>
                 <div className='w-100 m-14 flex justify-start'>
-                <button className='w-28 h-12 bg-blue-800 text-slate-200 rounded-md hover:bg-gray-500 transition duration-300 btn-sm md:btn-md'>Get Started</button>
+                <button onClick={curr} className='w-28 h-12  bg-blue-800 text-slate-200 rounded-md hover:bg-blue-700 transition hover:scale-110 duration-300 btn-sm md:btn-md'>Get Started</button>
                 </div>
         </div>
     </div>
@@ -58,7 +75,7 @@ function Home() {
     
       <div className='w-auto h-auto grid grid-cols-1 sm:grid-cols-12 md:px-16'>
         <div className='col-span-3 p-4'>
-            <img className=' w-80 h-40 md:h-60 object-cover rounded-md ' src={img5} alt="" />
+            <img className=' w-80 h-40 md:h-60 object-cover rounded-md' src={img5} alt="" />
         </div>
         <div className='col-span-9 md:py-10 px-4 md:my-2 bg-slate-100 rounded-md shadow-sm'>
             <div className="container px-8 sm:px-8 lg:grid lg:grid-cols-2 lg:gap-x-12 ">
@@ -98,7 +115,7 @@ function Home() {
             <div className='h-full grid grid-cols-6 '>
                     <div className='h-96 m-10 bg-slate-50 grid grid-rows-4 col-span-1'>
                         <div className='col-span-1 h-20 w-20  border-red-300 border bg-white relative'>
-                                <img className='bg-white absolute w-full h-full' src={fxIcon} alt="" srcset="" />
+                                <img className='bg-white absolute w-full h-full ' src={fxIcon} alt="" srcset="" />
                         </div>
                         <div className='col-span-1 h-20 w-20 border-red-300 border relative'>
                             <img className='bg-white absolute w-full h-full' src={CommIcon} alt="" srcset="" />
@@ -125,13 +142,13 @@ function Home() {
                         <h4 className='mb-5'>MetaTrader 4</h4>
                         <p className='mb-5'>The world’s most popular trading 
                             <br />platform</p>
-                        <img src={meta4} alt="" />
+                        <img className='animate-bounce-img' src={meta4} alt="" />
                 </div>
                 <div className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5'>
                         <h4 className='mb-5'>MetaTrader 5</h4>
                         <p className='mb-5'>Multi-asset trading on one 
                             <br />powerful platform</p>
-                            <img src={meta5} alt="" />
+                            <img className='animate-bounce-img' src={meta5} alt="" />
                 </div>
                 <div className='col-span-1 mr-1'></div>
             </div>
