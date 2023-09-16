@@ -1,22 +1,20 @@
 import React from 'react'
 import logo from '../../assets/icon_line.png'
 import { useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
 import { clientLogout } from '../../Redux/ClientAuth'
-import { tutorLogout } from '../../Redux/TutorAuth'
 import { emptyMyCourse } from '../../Redux/TutorSlice/Courses'
 
 const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
   const clientAuth = useSelector((state)=>state.Client.Token)
-  const tutorAuth = useSelector((state)=>state.Client?.is_tutor)
 
   const logOut=()=>{
     dispatch(clientLogout())
     dispatch(emptyMyCourse())
-    dispatch(tutorLogout())
     navigate('/')
   }
   return (
@@ -75,7 +73,7 @@ const Navbar = () => {
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-white bg-white rounded md:bg-transparent md:text-white md:p-0 md:hover:text-yellow-400 md:dark:text-white hover:scale-110 "
+                className={`block py-2 pl-3 pr-4 text-white bg-white rounded md:bg-transparent md:p-0 ${location.pathname === '/' ? 'text-yellow-400' : ''}  md:hover:text-yellow-400  hover:scale-110`}
                 aria-current="page">
                 Home
               </a>
@@ -83,14 +81,14 @@ const Navbar = () => {
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent hover:scale-110 md:hover:text-yellow-400 md:p-0  dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent hover:scale-110 md:hover:text-yellow-400 md:p-0  dark:text-white dark:hover:bg-gray-700  md:dark:hover:bg-transparent dark:border-gray-700">
                 Markets
               </a>
             </li>
             <li>
               <a
                 href="#"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent hover:scale-110 md:hover:text-yellow-400 md:p-0  dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent hover:scale-110 md:hover:text-yellow-400 md:p-0  dark:text-white dark:hover:bg-gray-700  md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Mentors
               </a>
@@ -98,24 +96,11 @@ const Navbar = () => {
             <li>
               <a
                 onClick={()=>navigate('/courses')}
-                className="block py-2 cursor-pointer pl-3 pr-4 text-gray-900 rounded 
-                hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-400 md:p-0
-                  dark:text-white 
-                 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 hover:scale-110">
+                className={`cursor-pointer block py-2 pl-3 pr-4 text-white bg-white rounded md:bg-transparent md:p-0 ${location.pathname === '/courses' ? 'text-yellow-400 bg-yellow-400' : ''}  md:hover:text-yellow-400  hover:scale-110`}>
                 Courses
               </a>
             </li>
-            {tutorAuth && <li>
-              <a
-                onClick={()=>navigate('/tutor')}
-                className="font-bold outline-dashed outline-1 outline-red-700 outline-offset-4 block py-2 pl-3 pr-4 text-gray-900 rounded cursor-pointer
-                 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-yellow-400 md:p-0
-                   dark:text-white dark:hover:bg-gray-700
-                   dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 hover:scale-110" 
-              >
-                Tutor Panel
-              </a>
-            </li>}
+     
           </ul>
         </div>
       </div>

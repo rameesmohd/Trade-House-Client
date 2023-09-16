@@ -5,7 +5,7 @@ import Sidebar from '../../Components/Tutor/Sidebar'
 const Students = () => {
   return (
     <>
-    <Navbar/>
+    {/* <Navbar/> */}
     <Sidebar/>
     
     </>

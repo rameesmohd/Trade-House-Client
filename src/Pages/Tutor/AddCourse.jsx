@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../../Components/User/Navbar'
+import Navbar from '../../Components/Tutor/Navbar'
 import Sidebar from '../../Components/Tutor/Sidebar'
 import Addcourse from '../../Components/Tutor/Addcourse'
 

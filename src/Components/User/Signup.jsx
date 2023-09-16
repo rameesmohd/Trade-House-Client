@@ -59,16 +59,6 @@ const Signup = () => {
             setFormData({name,email,password,mobile})
             console.log(formData);
             handleOTP()
-            // setError(validationErrors);
-            // console.log('Form values:', { name, email, mobile, password });
-            // userAxios.post('/signup',{name,email,mobile,password}).then((res)=>{
-            //     if(res.data.status){
-            //         navigate('/login')} 
-            //     else{
-            //         validationErrors.resError = 'Something went wrong!!'
-            //         setError(validationErrors)
-            //     }
-            // })
         }else{
             setError(validationErrors);}
     }

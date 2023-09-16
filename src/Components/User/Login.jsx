@@ -1,5 +1,6 @@
 import React, { useRef, useState ,useEffect} from 'react'
 import userAxios from '../../Axios/UserAxios'
+import tutorAxios from '../../Axios/TutorAxios'
 import { Link, useNavigate } from 'react-router-dom'
 import {CgSpinner} from 'react-icons/cg'
 import { toast } from 'react-toastify'
@@ -11,10 +12,12 @@ import OtpInput from "otp-input-react"
 import Cookies from 'js-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { tutorLogin } from '../../Redux/TutorAuth'
 
 const Login =()=>{
     const userCookie = Cookies.get('user');
     const axiosInstance = userAxios()
+    const tutorAxiosInstance = tutorAxios()
     const emailRef = useRef()
     const passwordRef = useRef()
     const newPassRef = useRef()
@@ -33,6 +36,7 @@ const Login =()=>{
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [showPassword, setShowPassword] = useState(false);
+
 
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword);
@@ -72,7 +76,7 @@ const Login =()=>{
         if(Object.keys(validationErrors).length === 0){
             setError(validationErrors)
             await axiosInstance.post('/login',{email,password}).then((res)=>{
-                const result = res.data.response
+                    const result = res.data.response
                  if(result.status){   
                     dispatch(clientLogin({
                         token : result?.token,
@@ -85,10 +89,11 @@ const Login =()=>{
                  }else{
                      toast.error(result.message)     
                  }
-            }).catch((error)=>{
-                console.log(error);
-                toast.error(error.response.data?.response?.message) 
-            })
+                }).catch((error)=>{
+                    console.log(error);
+                    toast.error(error.response.data?.response?.message) 
+                })
+            
         }else{
             setError(validationErrors)
         }
@@ -221,7 +226,12 @@ const Login =()=>{
                         Remember Me</p>
                     <Link to={'/signup'}>Create an account</Link>
                 </div>
+                <div className='flex justify-between'>
                 <Link onClick={()=>setForgot(true)} className='text-blue-500'>Forget password?</Link>
+                <label class="relative inline-flex items-center mb-5 cursor-pointer">
+                    <span onClick={()=>navigate('/tutor/login')} class="ml-3 text-sm font-medium text-gray-500 underline">Login as Instructor</span>
+                </label>
+                </div>
             </form> :
             ( !userExist ?
             ( !otpFieldShow ? <form onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-4 border '>

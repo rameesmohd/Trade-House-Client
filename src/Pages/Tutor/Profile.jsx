@@ -6,7 +6,7 @@ import TutorProfile from '../../Components/Tutor/Profile'
 const Profile = () => {
   return (
     <div className='pt-24 md:pt-0 md:pl-64'>
-    <Navbar/>
+    {/* <Navbar/> */}
     <Sidebar/>
     <TutorProfile/>
     </div>

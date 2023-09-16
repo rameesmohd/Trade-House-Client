@@ -14,17 +14,20 @@ import Loading from '../Loading'
 
 const Tutorform = () => {
     const axiosInstance = userAxios()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const email =  useSelector((state)=>state.Client.email)
     const is_requested =  useSelector((state)=>state.Client.is_requested)
     const is_tutor =  useSelector((state)=>state.Client.is_tutor)
+
     const categoryRef = useRef()
     const experienceRef = useRef()
     const qualificationRef = useRef()
     const typeRef = useRef()
     const firstNameRef = useRef()
     const lastNameRef = useRef()
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+
     const [pdfDataUrl, setPdfDataUrl] = useState({})
     const [loading,setLoading] = useState(false)
     const [reqStatus,setReqStatus]=useState('')
@@ -78,25 +81,8 @@ const Tutorform = () => {
         if (selectedFile && selectedFile.type === 'application/pdf') {
             // pdfConverter(selectedFile);
             setPdfDataUrl(selectedFile);
-
         }
     };
-    // const pdfConverter = (pdfFile) => {
-            // let reader = new FileReader();
-            // reader.readAsDataURL(pdfFile);
-            // reader.onload = () => {
-            // setPdfDataUrl(reader.result);
-            // setPdfDataUrl(pdfFile);
-
-    //   };
-    // };
-    // const imageConverter = (event) => {
-    //         const imageFile = event.target.files[0]
-    //         let reader = new FileReader();
-    //         reader.readAsDataURL(imageFile);
-    //         reader.onload = () => {
-    //         setImgDataUrl(reader.result);
-    //     }}   
   
   return (
     <>
@@ -241,7 +227,7 @@ const Tutorform = () => {
                 <p className='text-green'>Your Tutorship request approved!</p>
                 <a
                   class="cursor-pointer inline-flex items-center px-4 py-2 text-black bg-green-500 border border-green-600 rounded hover:bg-green-700 focus:outline-none focus:ring">
-                  <span onClick={()=>navigate('/tutor')} class="text-sm text-white font-medium">
+                  <span onClick={()=>navigate('/tutor/login')} class="text-sm text-white font-medium">
                     Go to Tutor Panel
                   </span>
                 <svg xmlns="http://www.w3.org/2000/svg" className="text-white font-bold w-3 h-3 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

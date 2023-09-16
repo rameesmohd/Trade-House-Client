@@ -11,7 +11,9 @@ import meta4 from '../../../assets/meta4.jpeg'
 import meta5 from '../../../assets/meta5.jpeg'
 import img6 from '../../../assets/faa2b801f1a2a58d3458bd13983842d3.jpeg'
 import Footer from '../Footer'
-
+import MarketOverview from '../markets/MarketOverview'
+import Charts from '../markets/Charts'
+import CryptoWidget from '../markets/CryptoWidget'
 
 function Home() {
 
@@ -31,9 +33,11 @@ function Home() {
             .catch(err => console.error(err));
     
     }
+
   return (
     <>
     <div className='flex  flex-col'>
+        <CryptoWidget/>
     {/* section-1 */}
     <div className='bg-amber-400 lg:h-[500px] '>
     <div className='grid grid-cols-1 md:grid-cols-2 container mx-auto'>
@@ -138,23 +142,27 @@ function Home() {
      <div className='container h-[400px] mx-auto '>
             <div className='grid grid-cols-1 md:grid-cols-4 h-full gap-5 mt-2'>
                 <div className='col-span-1 mr-1'></div>
-                <div className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5'> 
+                <div className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5 hover:scale-110 transition'> 
                         <h4 className='mb-5'>MetaTrader 4</h4>
                         <p className='mb-5'>The world’s most popular trading 
                             <br />platform</p>
-                        <img className='animate-bounce-img' src={meta4} alt="" />
+                        <img className='' src={meta4} alt="" />
                 </div>
-                <div className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5'>
+                <div className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5 hover:scale-110 transition'>
                         <h4 className='mb-5'>MetaTrader 5</h4>
                         <p className='mb-5'>Multi-asset trading on one 
                             <br />powerful platform</p>
-                            <img className='animate-bounce-img' src={meta5} alt="" />
+                            <img className='' src={meta5} alt="" />
                 </div>
                 <div className='col-span-1 mr-1'></div>
             </div>
-     </div>
+        </div>
 
-     {/* section-5 */}
+        {/* section-5 */}
+        <MarketOverview/>
+        <Charts/>
+   
+        {/* section-6 */}
         <div className='container  mx-auto h-[280px]  mt-1'>  
             <div className='w-full h-14 text-center p-10'>
                     <h1 className='text-4xl'>Real Students, Real Progress</h1>
@@ -187,10 +195,9 @@ function Home() {
                 </div>
             </div>         
         </div>
-        {/* section-6 */}
-        <div className='h-auto min-w-full' >
+        {/* <div className='h-auto min-w-full' >
                 <img className='object-cover' src={img6} alt="" srcset="" />
-        </div> 
+        </div>  */}
         <Footer/>
         </div>
     </>

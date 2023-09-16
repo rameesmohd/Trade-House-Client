@@ -5,7 +5,7 @@ import img2 from '../../../assets/55e84af7c61c5ef6a6f15c2c7f7a8578.png'
 const Header = () => {
   return (
     <>
-    <div className='flex justify-center w-full '> 
+    <div className='flex justify-center w-full lg:mt-10'> 
       <header id="header" className="text-center header py-10 md:pt-25 lg:text-left xl:pt-20 md:pb-0">
         <div className="container px-4 sm:px-8 lg:grid lg:grid-cols-2 lg:gap-x-8">
           <div className="mb-16 lg:mt-32 xl:mt-40 xl:mr-12">
