@@ -32,12 +32,22 @@ const Navbar = () => {
             className="px-4 py-2 mr-3 text-sm font-medium text-center text-white bg-transparent border border-red-600 rounded-lg hover:bg-red-700 focus:ring-red-4 focus:outline-none focus:ring-red-300 md:mr-0 "
           >
             Login
-          </button> : <button
-            type="button"
-            onClick={logOut}
-            className="px-4 py-2 mr-3 text-sm font-medium text-center text-white bg-transparent border border-red-600 rounded-lg hover:bg-red-700 focus:ring-red-4 focus:outline-none focus:ring-red-300 md:mr-0">
-            LogOut
-          </button>}
+          </button> : (
+            <>
+            <button
+              type="button"
+              onClick={()=>navigate('/userpanel')}
+              className="px-4 py-2 text-sm font-medium text-center text-white bg-transparent border border-green-700 rounded-lg hover:bg-green-700 focus:ring-red-4 focus:outline-none focus:ring-red-300 md:mr-0">
+              User
+          </button>
+          <button
+              type="button"
+              onClick={logOut}
+              className="px-4 py-2 mx-3 text-sm font-medium text-center text-white bg-transparent border border-red-600 rounded-lg hover:bg-red-700 focus:ring-red-4 focus:outline-none focus:ring-red-300 md:mr-0">
+              LogOut
+          </button>
+            </>
+          )}
 
           {!clientAuth ? <button
             type="button"

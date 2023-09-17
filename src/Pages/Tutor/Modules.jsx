@@ -1,12 +1,12 @@
 import React from 'react'
-import Navbar from '../../Components/User/Navbar'
+import Navbar from '../../Components/Tutor/Navbar'
 import Sidebar from '../../Components/Tutor/Sidebar'
 import ModulesList from '../../Components/Tutor/ModulesList'
 
 const Modules = () => {
   return (
     <div className='pt-24 md:pt-0 md:pl-64'>
-    {/* <Navbar/> */}
+    <Navbar/>
     <Sidebar/>
     <ModulesList/>
     </div>

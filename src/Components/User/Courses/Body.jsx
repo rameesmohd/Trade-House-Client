@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import userAxios from '../../../Axios/UserAxios'
 import { toast } from 'react-hot-toast'
 import Loading from '../../Loading'
-
 import {
     Card,
     CardHeader,
@@ -12,23 +11,37 @@ import {
     CardFooter,
     Button,
   } from "@material-tailwind/react";
+import { useDispatch, useSelector } from 'react-redux'
+import { setCoursesLoad ,setPurchsedCourses} from '../../../Redux/ClientSlice/CoursesLoad'
 
 
 const Body = () => {
+    const CourseDataRedux= useSelector((store)=>store.CoursesLoad.courseData)
+    const purchasedCourses= useSelector((store)=>store.CoursesLoad.purchasedCourses)
+    console.log(purchasedCourses,'1111111');
+    console.log(CourseDataRedux,222222222);
+
     const axiosInstance = userAxios()
+    const dispatch = useDispatch()
     const [courseData,setCourseData] = useState([])
-    const [loading,setLoading] = useState(true)
+    const [loading,setLoading] = useState(false)
     useEffect(()=>{
-        setLoading(true)
-        axiosInstance.get('/all-courses')
-        .then((res)=>{
+        if(!CourseDataRedux){
+            setLoading(true)
+            axiosInstance.get('/all-courses')
+            .then((res)=>{
             setCourseData(res.data.result)
+            dispatch(setCoursesLoad(res.data.result))
+            dispatch(setPurchsedCourses(res.data.purchased))
         }).catch((error)=>{
             error.code === 'ECONNABORTED' ? console.log('Request canceled due to timeout') 
             : toast.error(error.message)
         }).finally(()=>{
             setLoading(false)
         })
+    }else{
+        setCourseData(CourseDataRedux)
+    }
     },[])
     
     return (

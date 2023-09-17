@@ -36,11 +36,14 @@ const Payment = () => {
     const statusParam = queryParams.get('status');
 
     useEffect(()=>{
-        if(storeData){
-            setCourseDataState(storeData)
-        }else if(locationData){
+        if(locationData){
             setCourseDataState(locationData)
+        }else if(storeData){
+            setCourseDataState(storeData)
+        }else{
+            navigate('/courses')
         }
+
         if(statusParam){
             setStatus(statusParam)
         }
@@ -69,7 +72,6 @@ const Payment = () => {
                 toast.error(error.message)
                 setLoading(false)
              })
-
         }
     }
 

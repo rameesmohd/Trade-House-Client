@@ -3,11 +3,21 @@ import { useLocation } from 'react-router-dom'
 import Rating from '../../RatingStar'
 import AdvRating from '../../AdvRating'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 const Body = () => {
     const location = useLocation()
+    const purchasedCourses= useSelector((store)=>store.CoursesLoad.purchasedCourses)
     const courseData = location.state
     const navigate = useNavigate()
+    const [isPurchased,setIsPurchased] = useState(false)
+    useEffect(()=>{
+        const purchased = purchasedCourses.filter((value)=>value==courseData._id)
+        purchased.length ? setIsPurchased(true) : setIsPurchased(false)
+    },[])
+
   return (
     <div>
         {/* section one */}
@@ -23,7 +33,10 @@ const Body = () => {
                 <Rating/> <p className='ml-4'>{courseData?.user_ratings ? (courseData?.user_ratings.length+" ratings") : 'No reviews'}</p>
                 </div>
                 <br />
-                <button onClick={()=>navigate('/payments',{state:courseData})} className='rounded-md text-white btn-sm w-28 bg-blue-600'>Start</button>
+                {
+                    isPurchased ? <button className='rounded-md text-white btn-sm w-28 bg-blue-600'>Start</button> 
+                    : <button onClick={()=>navigate('/payments',{state:courseData})} className='rounded-md text-white btn-sm w-28 bg-blue-600'>Purchase</button>
+                }
             </div>
             <div className='md:col-span-1'>
             <video className="h-full w-full rounded-lg p-8 bg-white" controls autoPlay muted>

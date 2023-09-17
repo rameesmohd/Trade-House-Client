@@ -11,9 +11,9 @@ import meta4 from '../../../assets/meta4.jpeg'
 import meta5 from '../../../assets/meta5.jpeg'
 import img6 from '../../../assets/faa2b801f1a2a58d3458bd13983842d3.jpeg'
 import Footer from '../Footer'
-import MarketOverview from '../markets/MarketOverview'
-import Charts from '../markets/Charts'
-import CryptoWidget from '../markets/CryptoWidget'
+import MarketOverview from '../Markets/MarketOverview'
+import Charts from '../Markets/Charts'
+import CryptoWidget from '../Markets/CryptoWidget'
 
 function Home() {
 
@@ -39,7 +39,14 @@ function Home() {
     <div className='flex  flex-col'>
         <CryptoWidget/>
     {/* section-1 */}
-    <div className='bg-amber-400 lg:h-[500px] '>
+    <div className=' lg:h-[500px]   
+    w-full
+    h-screen
+    bg-gradient-to-r
+    from-yellow-300
+    via-yellow-400
+    to-yellow-300   
+    background-animate'>
     <div className='grid grid-cols-1 md:grid-cols-2 container mx-auto'>
         <div className='p-6 md:p-12 '>
             <img className='object-cover rounded-md shadow-2xl animate-bounce-img' src={img3} alt="" />

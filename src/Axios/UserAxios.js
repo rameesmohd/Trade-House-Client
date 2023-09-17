@@ -6,7 +6,7 @@ const userAxios=()=>{
     const token = useSelector((store)=>store.Client.Token)
     const userAxiosInstance = axios.create({
         baseURL: userAPI,
-        timeout: 3000
+        timeout: 5000
     })
 
 

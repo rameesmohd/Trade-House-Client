@@ -6,6 +6,7 @@ import {AdminAuth} from './AdminAuth'
 import {TutorAuth} from './TutorAuth'
 import {Courses} from './TutorSlice/Courses'
 import {CourseOnPayment} from './ClientSlice/CourseOnPayment' 
+import {CoursesLoad} from './ClientSlice/CoursesLoad'
 
 const persistConfig = { key : 'Client',storage,version : 1}
 const userPersistReducer = persistReducer(persistConfig,ClientAuth.reducer)
@@ -22,10 +23,13 @@ const CourseOnPaymentReducer = persistReducer(CourseOnPaymentpersistConfig,Cours
 export const store = configureStore({
     reducer : {
         Client : userPersistReducer,
+        CourseOnPayment : CourseOnPaymentReducer,
+        CoursesLoad : CoursesLoad.reducer,
+
         Admin : adminPersistorReducer,
+
         Tutor : tutorPersistorReducer,
         Courses : Courses.reducer,
-        CourseOnPayment : CourseOnPaymentReducer
     }
 })
 

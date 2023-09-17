@@ -1,11 +1,11 @@
 import React from 'react'
-import Navbar from '../../Components/User/Navbar'
+import Navbar from '../../Components/Tutor/Navbar'
 import Sidebar from '../../Components/Tutor/Sidebar'
 
 const Students = () => {
   return (
     <>
-    {/* <Navbar/> */}
+    <Navbar/>
     <Sidebar/>
     
     </>
