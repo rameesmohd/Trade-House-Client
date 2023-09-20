@@ -45,15 +45,18 @@ import {
         </div>
         <CardFooter className="pt-0 flex justify-between items-center">
             <h1>₹{ coursedata?.price ? coursedata.price : '0.00' }</h1>
-          <Button
+          <div
             ripple={false}
             fullWidth={true}
             onClick={()=>navigate('/course-details',{state : coursedata})}
-            className="text-right underline text-blue-800 bg-blue-gray-900/10  
+            className="text-right underline font-poppins cursor-pointer text-blue-800 bg-blue-gray-900/10 flex items-center  
                 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none
                 active:scale-100">
-           View Details {">>"}
-          </Button>
+           View Details 
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
         </CardFooter>
       </Card>
     );

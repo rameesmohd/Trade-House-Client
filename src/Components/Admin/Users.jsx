@@ -2,7 +2,7 @@ import React,{ useState,useEffect, useRef }from 'react'
 import adminAxios from '../../Axios/AdminAxios'
 import { toast } from 'react-toastify'
 import EditUser from './EditUser'
-import Modal from '../modal'
+import Modal from '../ConfirmModal'
 let toggle;
 
 const Users=()=>{

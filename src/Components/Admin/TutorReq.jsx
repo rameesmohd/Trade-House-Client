@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import adminAxios from '../../Axios/AdminAxios'
 import { BsDownload } from 'react-icons/bs';
 import { MdCheckCircle,MdCancel } from 'react-icons/md';
-import Modal from '../modal';
+import Modal from '../ConfirmModal';
 import { toast } from 'react-toastify';
 let action;
 

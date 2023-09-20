@@ -9,6 +9,7 @@ import CourseDetails from '../Pages/User/CourseDetails'
 import Payment from '../Pages/User/Payments'
 import Success from '../Pages/User/Success'
 import Userpanel from '../Pages/User/Userpanel'
+import LearningRoom from '../Pages/User/LearningRoom'
 
 const User = () => {
   const userAuth = useSelector((state)=>state.Client.Token)
@@ -32,6 +33,7 @@ const User = () => {
             <Route path='/payments' element={ <PrivateRoute element={<Payment/>}/> }/>
             <Route path='/payments/success' element={ <PrivateRoute element={<Success/>}/> }/>
             <Route path='/userpanel' element={ <PrivateRoute element={<Userpanel/>}/> }/>
+            <Route path='/userpanel/watch' element={ <PrivateRoute element={<LearningRoom/>}/> }/>
       </Routes>
     </>
   )

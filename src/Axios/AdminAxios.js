@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux'
 const adminAxios =()=>{
     const token = useSelector((store)=>store.Admin.Token)
     const adminAxiosInstance = axios.create({
-        baseURL: adminAPI
+        baseURL: adminAPI,
+        timeout: 5000
     })
     adminAxiosInstance.interceptors.request.use((config)=>{
         if(token){

@@ -154,7 +154,8 @@ const Payment = () => {
                             <div className="flex items-center justify-between px-8 py-5">
                                 <div>
                                 <input className={`appearance-none w-4 h-4 rounded-full border-2 border-white ring-2 ring-blue-600 ring-opacity-100`} checked={paymentMode === 'bitpay'} onChange={()=>setPaymentMode('bitpay')} type="radio"/>
-                                <label className="text-sm font-medium ml-4">Crypto</label>
+                                <label className="text-sm font-medium ml-4">Crypto </label>
+                                <label className="text-sm opacity-80 text-red-600 ml-2">Coming soon!!</label>
                                 </div>
                                 <img className='w-20' src={cryptoIcon} alt="" />
                             </div>

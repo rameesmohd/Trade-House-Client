@@ -27,11 +27,11 @@ const Signup = () => {
     const [otp,setOtp] = useState()
     const [loading ,setLoading] = useState(false)
     const [showOTP,setShowOTP] = useState(false)
-    // const [ph,setPh] = useState('')
 
     const navigate = useNavigate()
 
     const formValidation =()=>{
+        setLoading(true)
         const name = nameRef.current.value
         const email = emailRef.current.value
         const mobile = mobileRef.current.value
@@ -40,27 +40,29 @@ const Signup = () => {
         const validationErrors = {};
 
         if (!name){ 
-            validationErrors.name = 'Name is required';
+            validationErrors.name = 'Name is required'
             }else if(name.trim() === ''){ 
                 validationErrors.name = 'Invalid name'}
         if (!email){
             validationErrors.email = 'Email is required'
         }else if (!/\S+@\S+\.\S+/.test(email)){
-            validationErrors.email = 'Invalid email format';
+            validationErrors.email = 'Invalid email format'
         }
-        if (!mobile) {validationErrors.mobile = 'Mobile is required';}
+        if (!mobile) {validationErrors.mobile = 'Mobile is required'}
         else if(!/^\d{10}$/.test(mobile)) {validationErrors.mobile = 'Mobile must be a 10-digit number';}
 
-        if (!password){validationErrors.password = 'Password is required';}
+        if (!password){validationErrors.password = 'Password is required'}
+        else if(password.length<6){validationErrors.password = 'password should have min 6 charactors'}
 
         if(conf != password){validationErrors.nomatch = 'Password entered not matching'}
 
         if(Object.keys(validationErrors).length === 0) {
             setFormData({name,email,password,mobile})
-            console.log(formData);
             handleOTP()
         }else{
-            setError(validationErrors);}
+            setError(validationErrors)
+            setLoading(false)
+        }
     }
 
     const handleOTP =async ()=>{
@@ -71,6 +73,7 @@ const Signup = () => {
                 const formatPh = '+91'+formData.mobile
                 signInWithPhoneNumber(auth, formatPh,appVerifier)
                     .then((confirmationResult) => {
+                        setLoading(false)
                         window.confirmationResult = confirmationResult;
                         setFlag(false)
                         setLoading(false)
@@ -155,37 +158,42 @@ const Signup = () => {
       { flag ? 
         <div className='bg-grey-100 '>
             <form className='max-w-[400px] w-full mx-auto bg-white p-4'>
-                <h2 className='text-4xl font-bold text-center py-6'>Sign Up</h2>
+                <h2 className='text-4xl font-bold text-center py-6 font-poppins'>Sign Up</h2>
                 <div className='flex flex-col py-2'>
-                <label>Username</label>
-                <input ref={nameRef} type='text' className='border p-2' required/>
-                    {error.name && <div className="error">{error.name}</div>}
+                <label className='font-poppins text-sm'>Username</label>
+                <input ref={nameRef} type='text' className='border p-2 rounded ' required/>
+                    {error.name && <div className="error  text-sm text-red-700">{error.name}</div>}
                     </div>
                 <div className='flex flex-col py-2'>
-                    <label>Email</label>
-                    <input ref={emailRef} type='email' className='border p-2' required/>
-                    {error.email && <div className="error text-red-700">{error.email}</div>}
+                    <label className='font-poppins text-sm'>Email</label>
+                    <input ref={emailRef} type='email' className='border p-2 rounded' required/>
+                    {error.email && <div className="error text-sm text-red-700">{error.email}</div>}
                 </div> 
                 <div className='flex flex-col py-2'>
-                    <label>Mobile</label>
-                    <input ref={mobileRef} type='number' className='border p-2' required/>
-                    {error.mobile && <div className="error text-red-700">{error.mobile}</div>}
+                    <label className='font-poppins text-sm'>Mobile</label>
+                    <input ref={mobileRef} type='number' className='border p-2 rounded' required/>
+                    {error.mobile && <div className="error text-sm text-red-700">{error.mobile}</div>}
                 </div>   
                 <div className='flex flex-col py-2'>
-                    <label>Password</label>
-                    <input ref={passRef} type='password' className='border p-2' required/>
-                    {error.password && <div className="error text-red-700">{error.password}</div>}
+                    <label className='font-poppins text-sm'>Password</label>
+                    <input ref={passRef} type='password' className='border p-2 rounded' required/>
+                    {error.password && <div className="error text-sm text-red-700">{error.password}</div>}
                 </div>
                 <div className='flex flex-col py-2'>
-                    <label>Confirm Password</label>
-                    <input ref={confRef} type='password' className='border p-2' required/>
-                    {error.nomatch && <div className="error text-red-700">{error.nomatch}</div>}
+                    <label className='font-poppins text-sm'>Confirm Password</label>
+                    <input ref={confRef} type='password' className='border p-2 rounded' required/>
+                    {error.nomatch && <div className="error text-sm text-red-700">{error.nomatch}</div>}
                 </div>
-                    <button type='button' onClick={formValidation} className='text-white border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-400'>Sign Up</button>
+                    <button type='button' onClick={formValidation} className='text-white border w-full my-5 py-2 flex justify-center bg-indigo-600 hover:bg-indigo-400 rounded'>
+                    { 
+                        loading && <CgSpinner size={20} className='mt-1 animate-spin mr-2' />
+                    }
+                        <span>Sign Up</span>
+                        </button>
                     {error.resError && <div className="error text-red-700">{error.resError}</div>}
                 <div className='flex justify-between '>
-                    <p className='flex items-center'><input className='mr-2' type="checkbox"/>Remember Me</p>
-                    <Link to={'/login'}>Already have account</Link>
+                    <p className='flex items-center'></p>
+                    <Link className='underline font-poppins font-semibold' to={'/login'}>Already have account</Link>
                 </div>
             </form>
         </div>  : 
@@ -215,6 +223,7 @@ const Signup = () => {
                     }
                     <span>Verify OTP</span>
                 </button>
+                <div onClick={()=>navigate('/')} className='text-right underline font-poppins font-extralight text-sm cursor-pointer '>Cancel</div>
             </form>     
             </> 
             } 

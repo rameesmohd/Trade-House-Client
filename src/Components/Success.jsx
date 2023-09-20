@@ -20,8 +20,8 @@ const Success = () => {
                 <p class="text-gray-600 my-2">Thank you for completing your secure online payment.</p>
                 <p> Have a great day! </p>
                 <div class="py-10 text-center">
-                    <a onClick={()=>navigate('/courses')} class="cursor-pointer rounded px-12 bg-indigo-600 hover:bg-indigo-600 text-white font-semibold py-3 transition-all duration-300 ease-in-out hover:shadow-lg">
-                        Enroll Courses
+                    <a onClick={()=>navigate('/userpanel')} class="cursor-pointer rounded px-12 bg-indigo-600 hover:bg-indigo-600 text-white font-semibold py-3 transition-all duration-300 ease-in-out hover:shadow-lg">
+                        Start learning
                     </a>
                 </div>
             </div>

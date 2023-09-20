@@ -1,6 +1,5 @@
 import React, { useRef, useState ,useEffect} from 'react'
 import userAxios from '../../Axios/UserAxios'
-import tutorAxios from '../../Axios/TutorAxios'
 import { Link, useNavigate } from 'react-router-dom'
 import {CgSpinner} from 'react-icons/cg'
 import { toast } from 'react-toastify'
@@ -12,12 +11,10 @@ import OtpInput from "otp-input-react"
 import Cookies from 'js-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { tutorLogin } from '../../Redux/TutorAuth'
 
 const Login =()=>{
     const userCookie = Cookies.get('user');
     const axiosInstance = userAxios()
-    const tutorAxiosInstance = tutorAxios()
     const emailRef = useRef()
     const passwordRef = useRef()
     const newPassRef = useRef()

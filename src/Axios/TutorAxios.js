@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 const tutorAxios=()=>{
         const token = useSelector((store)=>store.Tutor.Token)
         const tutorAxiosInstance = axios.create({
-                baseURL : tutorAPI
+                baseURL : tutorAPI,
+              
         })
         tutorAxiosInstance.interceptors.request.use((config)=>{
                 if(token) {

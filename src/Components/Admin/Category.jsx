@@ -33,15 +33,20 @@ const MarketCategory = () => {
     }else if (newCategory.length < 3) {
       setError('Category must be at least 3 characters long');
     } else {
-      setError('');
-      const filteredCategoryData = categoryData.filter((obj) => obj._id !== 'temp');
-      const newCategoryAdded = [...filteredCategoryData , {_id:'new',category : newCatRef.current.value}]  
-      setCategoryData(newCategoryAdded)
-      await axiosInstance.post('/category',{newCategory}).then((res)=>{
-      toast.success(res.data.message)
-    }).catch((error)=>{
-      toast.error(error.message)
-    })
+      const duplicate = categoryData.filter((obj)=>obj.category==newCategory.toUpperCase())
+      if(duplicate.length){
+        setError('Category must be unique')
+      }else{
+        setError('');
+        const filteredCategoryData = categoryData.filter((obj) => obj._id !== 'temp');
+        const newCategoryAdded = [...filteredCategoryData , {_id:'new',category : newCategory.toUpperCase()}]  
+        setCategoryData(newCategoryAdded)
+        await axiosInstance.post('/category',{newCategory}).then((res)=>{
+          toast.success(res.data.message)
+        }).catch((error)=>{
+          toast.error(error.message)
+        })
+      }
   }
   }
 
@@ -106,12 +111,11 @@ const MarketCategory = () => {
     }
   }
 
-  console.log(categoryData);
   return (
     <div className=' w-full h-full'>
       <div className='relative flex justify-start'>
      
-        <div className='absolute m-12 w-1/2'>
+        <div className='absolute m-12 md:w-1/2'>
         <div className='h-12 w-full bg-gray-100 rounded-lg mb-3 flex justify-end'>
           { !temp && <div className='bg-slate-900 rounded-md w-28 h-auto text-center flex justify-center items-center m-2 text-white hover:bg-slate-600 cursor-pointer' onClick={()=>handleAddCategory()}>Add Category</div>
             }

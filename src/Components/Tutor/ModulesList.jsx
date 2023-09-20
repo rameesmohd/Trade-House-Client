@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import tutorAxios from '../../Axios/TutorAxios'
 import { toast } from 'react-toastify'
-import Modal from './../Modal'
+import Modal from '../ConfirmModal'
 import { Spinner } from "@material-tailwind/react";
 import Loading from '../Loading'
 let deleteId;
@@ -134,10 +134,10 @@ const ModulesList = () => {
         const moduleData = res.data.result 
         setModuleData(moduleData)
         toast.success(res.data.message)
-        setSpinner(false)
       }).catch((error)=>{
         console.log(error);
         toast.error(error.message)
+      }).finally(()=>{
         setSpinner(false)
       })
     }

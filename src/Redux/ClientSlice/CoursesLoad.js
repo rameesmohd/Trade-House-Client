@@ -4,7 +4,7 @@ export const CoursesLoad = createSlice({
     name : 'CourseLoad',
     initialState: {
         courseData : null,
-        purchasedCourses : []
+        purchasedCourses : null
     },
     reducers:{
         setCoursesLoad(state,action){

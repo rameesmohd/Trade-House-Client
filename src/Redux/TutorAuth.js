@@ -5,6 +5,7 @@ export const TutorAuth = createSlice({
     initialState: {
         Token : null,
         id : null,
+        isBlocked : {}
     },
     reducers:{
         tutorLogin(state,action){
@@ -14,9 +15,12 @@ export const TutorAuth = createSlice({
         tutorLogout(state,action){
             state.Token = null
             state.id = null
+        },
+        setBlocker(state,action){
+            state.isBlocked= action.payload
         }
     }
 })
 
-export const {tutorLogin,tutorLogout} = TutorAuth.actions
+export const {tutorLogin,tutorLogout,setBlocker} = TutorAuth.actions
 export default TutorAuth.reducer

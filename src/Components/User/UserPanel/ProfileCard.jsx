@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import userAxios from '../../../Axios/UserAxios'
-import toast from 'react-hot-toast'
+import {toast} from 'react-toastify'
 
 const Card = ({userData,setUserData}) => {
   const inputRef =  useRef()
@@ -24,9 +24,8 @@ const Card = ({userData,setUserData}) => {
 
   imageUrlData ? updateImage() : ''
 
-  function updateImage(){
-    console.log(imageUrlData);
-    axiosInstance.patch('/image',{id:userData._id,imageUrlData})
+  async function updateImage(){
+    await axiosInstance.patch('/image',{id:userData._id,imageUrlData})
     .then((res)=>{
      toast.success(res.message)
    }).catch((error)=>{

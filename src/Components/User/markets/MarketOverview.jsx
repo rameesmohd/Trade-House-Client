@@ -116,7 +116,6 @@ const MarketOverview = () => {
 
   return (
     <>
-     <div className=''>
       <body className=''>
         <h1 className='text-center text-white text-2xl'>Market Overview</h1>
         <div className="tradingview-widget-container">
@@ -152,7 +151,6 @@ const MarketOverview = () => {
           {/* Add more Crypto widgets here */}
         </div>
       </body>
-    </div>
     </>
   );
 };

@@ -3,20 +3,43 @@ import { useLocation } from 'react-router-dom'
 import Rating from '../../RatingStar'
 import AdvRating from '../../AdvRating'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import userAxios from '../../../Axios/UserAxios'
+import { toast } from 'react-toastify'
+import { setPurchsedCourses} from '../../../Redux/ClientSlice/CoursesLoad'
 
 const Body = () => {
-    const location = useLocation()
     const purchasedCourses= useSelector((store)=>store.CoursesLoad.purchasedCourses)
-    const courseData = location.state
+    const token = useSelector((store)=>store.Client.Token)
+    const dispatch = useDispatch()
     const navigate = useNavigate()
+    const axiosInstance = userAxios()
+    const location = useLocation()
+    const courseData = location.state
     const [isPurchased,setIsPurchased] = useState(false)
+    
     useEffect(()=>{
-        const purchased = purchasedCourses.filter((value)=>value==courseData._id)
-        purchased.length ? setIsPurchased(true) : setIsPurchased(false)
+        const loadPurchasedCourses=async()=>{
+            await axiosInstance.get('/purchased-courses').then((res)=>{
+                dispatch(setPurchsedCourses(res.data.result))
+            }).catch((error)=>{
+                toast.error(error.message)
+                console.log(error);
+            })
+        }
+        if(token){
+            loadPurchasedCourses()
+        }
     },[])
+
+    useEffect(()=>{
+        if(Array.isArray(purchasedCourses)){
+            const purchased = purchasedCourses.filter((value)=>value === courseData._id)
+            purchased.length !== 0 ? setIsPurchased(true) : setIsPurchased(false)
+        }
+    })
 
   return (
     <div>
@@ -34,7 +57,7 @@ const Body = () => {
                 </div>
                 <br />
                 {
-                    isPurchased ? <button className='rounded-md text-white btn-sm w-28 bg-blue-600'>Start</button> 
+                    isPurchased ? <button onClick={()=>navigate('/userpanel')} className='rounded-md text-white btn-sm w-28 bg-blue-600'>Start</button> 
                     : <button onClick={()=>navigate('/payments',{state:courseData})} className='rounded-md text-white btn-sm w-28 bg-blue-600'>Purchase</button>
                 }
             </div>

@@ -8,6 +8,9 @@ import { saveMyCourse } from '../../Redux/TutorSlice/Courses'
 import Editcourse from './Editcourse'
 import { Spinner } from '@material-tailwind/react'
 import Addcourse from './Addcourse'
+import { tutorLogout } from '../../Redux/TutorAuth'
+import { emptyMyCourse } from '../../Redux/TutorSlice/Courses'
+
 
 const Mycourse = () => {
   const axiosInstance = tutorAxios()
@@ -21,16 +24,24 @@ const Mycourse = () => {
   const[addCourse,setAddcourse] = useState(false)
   const [loading,setLoading]= useState({})
 
+  const logOut=()=>{
+    dispatch(emptyMyCourse())
+    dispatch(tutorLogout())
+    navigate('/tutor/login')
+  }
 
   useEffect(()=>{
     if(!mycourses){
       axiosInstance.get(`/courses?id=${id}`).then((res)=>{
-        console.log(res.data.result);
         setMyCourses(res.data.result)
         dispatch(saveMyCourse(res.data.result))
       }).catch((error)=>{
         toast.error(error.message)
+        toast.error(error.response?.data?.message)
         console.log(error);
+        if(error.response.status == 403){
+          logOut()
+        }
       })
     }else{
       setMyCourses(mycourses)

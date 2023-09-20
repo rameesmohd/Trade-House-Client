@@ -8,6 +8,7 @@ import TutorRequests from '../Pages/Admin/TutorRequests'
 import Tutors from '../Pages/Admin/Tutors'
 import Categories from '../Pages/Admin/Categories'
 import Allcourses from '../Pages/Admin/AllCourses'
+import TutorDetails from '../Pages/Admin/TutorDetails'
 
 
 const Admin = () => {
@@ -29,6 +30,8 @@ const Admin = () => {
       <Route path="/users" element={<PrivateRoute element={<Users />}/>}/>
       <Route path="/category" element={<PrivateRoute element={<Categories/>}/>}/>
       <Route path="/courses" element={<PrivateRoute element={<Allcourses/>}/>}/>
+      <Route path="/tutors/tutor-details" element={<PrivateRoute element={<TutorDetails/>}/>}/>
+
     </Routes>
   );
 }
