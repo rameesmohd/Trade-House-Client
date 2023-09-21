@@ -6,7 +6,7 @@ import Overview from '../../Components/Tutor/Overview'
 
 const Dashboard = () => {
   return (
-      <div className='pt-24 md:pl-64'>
+      <div className='pt-24 md:pt-0 md:pl-64'>
           <Navbar/>
           <Sidebar/>
           <Overview/>

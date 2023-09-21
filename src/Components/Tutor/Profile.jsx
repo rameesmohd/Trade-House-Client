@@ -73,7 +73,7 @@ const TutorProfile = () => {
   }
 
   return(
-  <div className="bg-gray-100">
+  <div className="bg-black">
     <div className="container mx-auto py-8">
       <div className="grid grid-cols-4 md:grid-cols-12 gap-6 px-4">
         <div className="col-span-4 sm:col-span-3">
@@ -81,7 +81,7 @@ const TutorProfile = () => {
             <div className="flex flex-col items-center">
               <img
                 src={tutorData?.image ? tutorData.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'}
-                className="bg-gray-300 rounded-md mb-4 shrink-0"
+                className="bg-gray-300 w-44 rounded-md mb-4 shrink-0"
                 alt="User"
               />
                 <div className=" flex justify-end">
@@ -121,7 +121,7 @@ const TutorProfile = () => {
             <h2 className="text-xl font-bold mb-4">About Me</h2>
              {
               !editAbout ? 
-                  <p className='resize w-full h-28 rounded-md whitespace-normal break-words'>{tutorData?.about_me || ''}</p>
+                  <p className='resize w-full  rounded-md whitespace-normal break-words'>{tutorData?.about_me || ''}</p>
               : 
               <textarea className="resize w-full h-28 rounded-md" 
                 placeholder='Please enter here' 

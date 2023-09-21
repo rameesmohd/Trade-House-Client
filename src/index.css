@@ -9,9 +9,52 @@
     @apply !w-full py-6 !text-base;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
+/* .scrollbar-hide::-webkit-scrollbar {
     display: none; 
-  }
+  } */
+
+  /* Hide scrollbar for webkit (Chrome, Safari, Edge) */
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0.4rem; /* Adjust the width as needed */
+}
+
+/* Track (the background of the scrollbar) */
+.scrollbar-hide::-webkit-scrollbar-track {
+  background: transparent; /* or any background color you prefer */
+}
+
+/* Handle (the draggable part of the scrollbar) */
+.scrollbar-hide::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3); /* or any color you prefer */
+  border-radius: 0.2rem; /* Adjust the border radius as needed */
+}
+
+/* Handle on hover */
+.scrollbar-hide::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5); /* or any color you prefer */
+}
+
+
+::-webkit-scrollbar {
+  width: 5px; /* Set your desired width */
+  height: 4px; /* Set your desired height */
+}
+
+/* Add a scrollbar track with the desired background color */
+::-webkit-scrollbar-track {
+  background-color: #ece9e9;
+}
+
+/* Add a scrollbar thumb with the desired color */
+::-webkit-scrollbar-thumb {
+  background-color:rgb(82, 82, 82) ; /* Set your desired thumb color */
+  border-radius: 6px; /* Optional: Round the corners of the thumb */
+}
+
+/* Optional: Change the appearance of the scrollbar when hovering over it */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(49, 49, 49); /* Set your desired hover color */
+}
 
   @keyframes bounce {
     0%, 100% {

@@ -31,7 +31,7 @@ const Navbar = () => {
       <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
         <Link to={'/tutor/'} className="flex items-center hover:scale-125 transition-transform">
           <img src={logo} className="h-10 mr-1 " alt="Flowbite Logo" />
-          <span className="self-center text-lg font-semibold md:text-2xl whitespace-nowrap dark:text-white ">TRADE HOUSE</span>
+          <span className="self-center text-lg font-semibold md:text-2xl whitespace-nowrap dark:text-white flex items-center">TRADE HOUSE <p className='mx-2 text-sm '>Tutor Panel</p></span>
         </Link>
         <div className="flex md:order-2">
             <button

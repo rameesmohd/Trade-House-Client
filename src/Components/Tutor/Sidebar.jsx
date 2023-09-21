@@ -17,21 +17,21 @@ const Sidebar = () => {
                 <div className="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-black dark:border-gray-700">
                 <ul className="space-y-2">
                     <li>
-                    <Link className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" >
+                    <Link to={'/tutor/'} className={`flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group ${location.pathname === '/tutor/' ? 'bg-gray-700' : ''} dark:text-white dark:hover:bg-gray-700`} >
                             <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" d="M2 4a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4zm2 0h14v2H4V4zm0 4h5v2H4V8zm0 4h8v2H4v-2z" clipRule="evenodd"></path>
                             </svg>
                             <span className="flex-1 ml-3 text-left whitespace-nowrap">Overview</span>
                         </Link>
                     </li>
-                    <li>
+                    {/* <li>
                         <Link className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                             <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                    <path fillRule="evenodd" d="M2 4a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4zm2 0h14v2H4V4zm0 4h14v2H4V8zm0 4h10v2H4v-2z" clipRule="evenodd"></path>
                             </svg>
                             <span className="flex-1 ml-3 text-left whitespace-nowrap">To-Do</span>
                         </Link>
-                    </li>
+                    </li> */}
                     <li>
                         <Link to={'/tutor/my-courses'} className={`flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group ${location.pathname === '/tutor/my-courses' ? 'bg-gray-700' : ''} dark:text-white dark:hover:bg-gray-700`}>
                         <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -41,32 +41,13 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <Link to={'/tutor/students'} className={`flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group ${location.pathname === '/tutor/students' ? 'bg-gray-700' : ''} dark:text-white dark:hover:bg-gray-700`}>
                         <svg aria-hidden="true" className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2H5zm-2 2a2 2 0 012-2h10a2 2 0 012 2v2H3V4zm0 4v8h14V8H3zm3 2a1 1 0 100 2h8a1 1 0 100-2H6zm-1 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H6a1 1 0 01-1-1v-2z" clipRule="evenodd"></path>
                         </svg>
-                            <span className="flex-1 ml-3 text-left whitespace-nowrap">My Students</span>
+                            <span  className="flex-1 ml-3 text-left whitespace-nowrap">My Students</span>
                         </Link>
                     </li>
-       
-                    {/* <li>
-                        <Link to={''} className={`flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group ${location.pathname === '/tutor/add-course' ? 'bg-gray-700' : ''} dark:text-white dark:hover:bg-gray-700`} >
-                            <svg
-                                aria-hidden="true"
-                                className="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
-                                >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-9a1 1 0 00-1-1H7a1 1 0 100 2h3v3a1 1 0 102 0v-3h3a1 1 0 100-2h-3V8z"
-                                    clipRule="evenodd"
-                                ></path>
-                                </svg>
-                            <span  className="flex-1 ml-3 text-left whitespace-nowrap">Add Course</span>
-                        </Link>
-                    </li> */}
                 </ul>
                 <ul className="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
                     <li>
