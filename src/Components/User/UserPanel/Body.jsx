@@ -48,9 +48,10 @@ const MainBody = () => {
                 purchaseDatas.length ? (
                 purchaseDatas.filter((obj)=>obj.status!=='refunded').map((purchase)=>{
                 const modules = moduleDatas.filter((obj)=>obj.courseId === purchase?.course_id._id)
+                console.log(purchase);
                 return (
                     <div key={purchase?._id} className="col-span-4 sm:col-span-3">
-                        <List courseData={purchase?.course_id} moduleData={modules} user_id={userDatas._id}/>
+                        <List progressData={purchase.learning_progress} order_id={purchase._id} courseData={purchase?.course_id} moduleData={modules} user_id={userDatas._id}/>
                     </div>
                 )})
                 ):(

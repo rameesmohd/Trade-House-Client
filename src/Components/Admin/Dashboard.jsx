@@ -1,5 +1,5 @@
 import React from 'react'
-import Table from '../Table'
+import Table from './SalesTable'
 import ReactApexChart from 'react-apexcharts';
 
 
@@ -32,7 +32,6 @@ const Dashboard = () => {
         <div className=' bg-yellow-100 p-3 rounded-2xl font-poppins text-base font-semibold text-gray-600'>
               Today's sales
         </div>
-        
         
         <div className=' bg-green-200 p-3 rounded-2xl font-poppins text-base font-semibold text-gray-600'>
               Monthly sales

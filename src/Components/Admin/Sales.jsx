@@ -10,25 +10,30 @@ import {
     Progress,
   } from "@material-tailwind/react";
 
-  const authorsTableData = [
-    {
-      img: "/img/team-2.jpeg",
-      name: "John Michael",
-      email: "john@creative-tim.com",
-      job: ["Manager", "Organization"],
-      online: true,
-      date: "23/04/18",
-    },
-   
-  ];
 
-const Table = () => {
+const Sales = () => {
+    const authorsTableData = [
+        {
+          img: "/img/team-2.jpeg",
+          name: "John Michael",
+          email: "john@creative-tim.com",
+          job: ["Manager", "Organization"],
+          online: true,
+          date: "23/04/18",
+        },
+       
+      ];
   return (
-    <div className="mt-12 mb-8 flex flex-col gap-12">
+    <>
+    <div className='w-full h-auto p-5 '>
+    <div className='w-full h-16 bg-slate-200 rounded-3xl'>
+
+    </div>
+    <div className="mt-2 mb-8 flex flex-col gap-12">
       <Card>
         <CardHeader variant="gradient" color="blue" className="black bg-slate-200 text-center p-2">
           <Typography variant="h6" color="black">
-            Recent Sales
+            Recent Transactions 
           </Typography>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
@@ -39,7 +44,7 @@ const Table = () => {
                   <th
                     key={el}
                     className="border-b border-blue-gray-50 py-3 px-5 text-left"
-                  >
+                    >
                     <Typography
                       variant="small"
                       className="text-[11px] font-bold uppercase text-blue-gray-400"
@@ -69,7 +74,7 @@ const Table = () => {
                               variant="small"
                               color="blue-gray"
                               className="font-semibold"
-                            >
+                              >
                               {name}
                             </Typography>
                             <Typography className="text-xs font-normal text-blue-gray-500">
@@ -117,7 +122,9 @@ const Table = () => {
         </CardBody>
       </Card>
 </div>
+     </div>
+</>
   )
 }
 
-export default Table
+export default Sales

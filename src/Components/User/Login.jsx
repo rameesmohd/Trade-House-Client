@@ -74,11 +74,13 @@ const Login =()=>{
             setError(validationErrors)
             await axiosInstance.post('/login',{email,password}).then((res)=>{
                     const result = res.data.response
+                    console.log(result);
                  if(result.status){   
                     dispatch(clientLogin({
                         token : result?.token,
                         email : result?.email,
                         name : result?.name,
+                        user_id : result?.user_id,
                         is_requested : result?.is_requested,
                         is_tutor : result?.is_tutor
                      }))  
@@ -300,6 +302,8 @@ const Login =()=>{
                     <Link onClick={()=>{setForgot(false),setUserExist(false)}} className='text-right'>Back to login</Link>
                 </div>
             </form> )}
+
+      
         </div>
   )
 }

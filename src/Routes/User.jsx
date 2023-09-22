@@ -10,6 +10,7 @@ import Payment from '../Pages/User/Payments'
 import Success from '../Pages/User/Success'
 import Userpanel from '../Pages/User/Userpanel'
 import LearningRoom from '../Pages/User/LearningRoom'
+import Markets from '../Pages/User/Markets'
 
 const User = () => {
   const userAuth = useSelector((state)=>state.Client.Token)
@@ -24,6 +25,7 @@ const User = () => {
             <Route path='/' element={<Home/>}/>
             <Route path='/courses' element={<Courses/>}/>
             <Route path='/course-details' element={<CourseDetails/>}/>
+            <Route path='/markets' element={<Markets/>}/>
             <Route path='/home' element={<Home/>}/>
             <Route path='/login' element={ userAuth ? <Navigate to={'/home'}/> : <LoginAndSignup props='login'/>}/> 
             <Route path='/signup' element={ userAuth ? <Navigate to={'/home'}/> : <LoginAndSignup props='register'/>}/>

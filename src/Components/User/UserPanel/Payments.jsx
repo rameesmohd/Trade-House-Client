@@ -65,16 +65,16 @@ function PaymentHistory({orderData,wallet,updateData,setUpdateData}) {
                 <td className="px-6 py-4">
                 ₹{order?.amount}
                 </td>
-                <td className={`flex px-6 py-4 font-semibold cursor-pointer ${order?.status === 'success' ? 'text-green-500' : 'text-red-700'}`}>
+                <td className={` px-6 py-4 font-semibold  cursor-pointer ${order?.status === 'success' ? 'text-green-500' : 'text-red-700'}`}>
                   {order?.status}
                   {
                     order?.is_refundable &&
                     <p onClick={()=>{setRefundModalShow(true),setOrder_id(order._id),setCourseTitle(order?.course_id.title)}} className={'style-none mx-1 font-normal text-red-700'}>
-                    Cancel
+                    cancel purchase
                   </p> 
                   }
                 </td>
-            </tr> )
+            </tr>)
             }): 
             <tr className='h-24 '>
                 <td></td>

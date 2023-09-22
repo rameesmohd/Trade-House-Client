@@ -1,36 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import successIcom from '../../../assets/icons8-success-64.png'
+import userAxios from '../../../Axios/UserAxios'
 
 
-const Trial = ({courseData,moduleData,user_id}) => {
+const Trial = ({progressData,order_id,courseData,moduleData,user_id}) => {
    const [dropDown,setDropDown] = useState(true)
    const [progress,setProgress] = useState(0)
-   const [resumState,setResumeState] = useState()
+   const [resumeState,setResumeState] = useState()
    const navigate = useNavigate()
+   const axiosInstance = userAxios()
    let next_module_id;
 
-   let resume;
-   let index;
-   const handleProgress = () => {
+  //  let resume;
+  //  let index;
+  //  let resumeTitle;
+   const handleProgress = async() => {
       let completedModuleCount = 0 
-      resume = []
-      index=[]
+      let resume = []
+      let index=[]
+      let resumeTitle=[]
+
       moduleData.map((module,i) =>{
         if(module.completed_users.includes(user_id)){
-          completedModuleCount++}
+          completedModuleCount++ }
           else{
             resume.push(module._id) 
             index.push(i)
+            resumeTitle.push(module.title)
           }
         })  
-        setResumeState({state:resume[0],index:index[0]}) 
-      if(completedModuleCount > 0){
-        setProgress((completedModuleCount / moduleData.length) * 100)
-      }
+        setResumeState({state:resume[0],index:index[0],resumeTitle:resumeTitle[0]}) 
+        if (completedModuleCount > 0) {
+          const value = (completedModuleCount / moduleData.length) * 100;
+          setProgress(Math.floor(value)); 
+          if (Math.floor(value) !== progressData) { 
+            await axiosInstance.patch('/update-progress', { order_id, progress: Math.floor(value) }); 
+          }
+        }
     }
-
-  
 
   useEffect(()=>{
     handleProgress()
@@ -87,7 +95,6 @@ const Trial = ({courseData,moduleData,user_id}) => {
                 {
                  moduleData.map((module, index) => {
                   next_module_id = index+1 > moduleData.length-1 ? 'completed' : moduleData[index+1]._id
-  
                    return (<ul key={module._id} >
                       <li>
                         <div className="flex justify-between border p-2 w-full my-1 bg-slate-200 rounded-lg">
@@ -130,10 +137,19 @@ const Trial = ({courseData,moduleData,user_id}) => {
                 <div className="bg-green-500 h-2.5 rounded-full" style={{width: `${progress}%`}}></div>
             </div>
             <div className='flex justify-between py-3 px-4'>
-                <div className='text-md font-semibold'>MODULE-1 :{'testestest'}</div>
+              { typeof(resumeState?.state)!=='undefined' ? 
+                <div className='text-md font-semibold text-red-700 flex'>MODULE-{resumeState.index} :{resumeState?.resumeTitle ? <p className='text-black'>{resumeState.resumeTitle}</p>: ''}</div>
+              : 
+              <div className='text-lg font-bold text-green-500' >Congratulations!</div> }
             <div className='w-3/6 h-full flex justify-end '>
-                <div onClick={()=>navigate('/userpanel/watch',{state :{...resumState,next_module_id : next_module_id}})} className='p-2 rounded px-3 cursor-pointer hover:bg-green-600 bg-green-500 text-white'>Resume Learning</div>
-            </div>
+            { typeof(resumeState?.state)!=='undefined' ? 
+                <div onClick={()=>navigate('/userpanel/watch',{state :{
+                  ...resumeState,
+                  next_module_id : next_module_id}})} className='p-2 rounded px-3 cursor-pointer hover:bg-green-600 bg-green-500 text-white'>Resume Learning</div>
+            : 
+            <div className='p-2 rounded px-3 cursor-pointer hover:bg-green-600 bg-green-500 text-white'>Completed</div>
+              }
+           </div>
         </div>
     </div>
     </>

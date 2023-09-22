@@ -102,9 +102,9 @@ const Students = () => {
                           href="#"
                           className="text-xs font-semibold text-blue-gray-600 mx-1"
                           >
-                          {students.learning_progress ? students.learning_progress: 10}
+                          {students.learning_progress ? students.learning_progress+'%' : '1%'}
                         </Typography>
-                          <Progress value={students.learning_progress ? students.learning_progress : 10} color="green" />
+                          <Progress value={students.learning_progress ? students.learning_progress : 1} color="green" />
                             </div>
                       </td>
 
@@ -115,7 +115,7 @@ const Students = () => {
                           value={"online"}
                           className="py-0.5 px-2 text-[11px] font-medium"
                         />
-                        {students._id}
+                        {students._id && students._id.slice(0, Math.floor(students._id.length / 2))}
                       </td>
                     </tr>
                   )
@@ -141,9 +141,7 @@ const Students = () => {
                   <td className={className}>
                     <div className="text-xs font-semibold text-blue-gray-600 h-8 w-56 bg-gray-300">
                     </div>
-
                   </td>
-               
                   <td className={className}>
                     <div className="text-xs font-semibold text-blue-gray-600 h-8 w-56 bg-gray-300">
                     </div>

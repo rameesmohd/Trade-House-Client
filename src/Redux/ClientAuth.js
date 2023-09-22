@@ -6,6 +6,7 @@ export const ClientAuth = createSlice({
         Token : null,
         email: "",
         name : "",
+        user_id: '',
         is_requested : false,
         is_tutor : false
     },
@@ -14,13 +15,16 @@ export const ClientAuth = createSlice({
             state.Token = action.payload.token
             state.name = action.payload.name
             state.email = action.payload.email
+            state.user_id = action.payload.user_id
             state.is_requested = action.payload.is_requested
             state.is_tutor = action.payload.is_tutor
+
         },
         clientLogout(state, action){
             state.Token = ""
             state.name = {}
             state.email = ""
+            state.user_id = ""
             state.is_requested=false
             state.is_tutor=false
         },

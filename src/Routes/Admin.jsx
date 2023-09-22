@@ -9,6 +9,7 @@ import Tutors from '../Pages/Admin/Tutors'
 import Categories from '../Pages/Admin/Categories'
 import Allcourses from '../Pages/Admin/AllCourses'
 import TutorDetails from '../Pages/Admin/TutorDetails'
+import SalesPage from '../Pages/Admin/SalesPage'
 
 
 const Admin = () => {
@@ -31,7 +32,7 @@ const Admin = () => {
       <Route path="/category" element={<PrivateRoute element={<Categories/>}/>}/>
       <Route path="/courses" element={<PrivateRoute element={<Allcourses/>}/>}/>
       <Route path="/tutors/tutor-details" element={<PrivateRoute element={<TutorDetails/>}/>}/>
-
+      <Route path="/sales" element={<PrivateRoute element={<SalesPage/>}/>}/>
     </Routes>
   );
 }

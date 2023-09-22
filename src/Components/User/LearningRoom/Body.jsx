@@ -3,8 +3,10 @@ import { redirect, useLocation, useNavigate } from 'react-router-dom'
 import userAxios from '../../../Axios/UserAxios'
 import {toast} from 'react-toastify'
 import Videoplayer from '../Videoplayer'
+import { useSelector } from 'react-redux'
 
 const Body = () => {
+    const user_id = useSelector((store)=>store.Client.user_id)
     const axiosInstance = userAxios()
     const location =  useLocation()
     const navigate = useNavigate()
@@ -13,20 +15,27 @@ const Body = () => {
     const [moduleData,setModuleData] = useState({})
     const [currVideo,setCurrVideo] = useState('')
     const [index,incrementIndex] = useState(0)
+    const [isAlreadyCompleted,setIsAlreadyCompleted] = useState(false)
 
 
+    const loadModules=async()=>{
+        await axiosInstance.get(`/loadmodule/${module_id}`).then((res)=>{
+            setModuleData(res.data.moduleData)
+            setCurrVideo(res.data.moduleData.chapters[0].video) 
+        }).catch((error)=>{
+            toast.error(error.message)
+            navigate(-1)
+        })
+    }
+
+    console.log(user_id);
     useEffect(()=>{
-        const loadModules=async()=>{
-            await axiosInstance.get(`/loadmodule/${module_id}`).then((res)=>{
-                setModuleData(res.data.moduleData)
-                setCurrVideo(res.data.moduleData.chapters[0].video) 
-            }).catch((error)=>{
-                toast.error(error.message)
-                navigate(-1)
-            })
-        }
         loadModules()
     },[])
+
+
+    console.log(moduleData,'bbbbbbbbbb');
+
 
     useEffect(()=>{
         if(Object.keys(moduleData)!==0){
@@ -34,19 +43,27 @@ const Body = () => {
                 setCurrVideo(moduleData.chapters[index].video) 
             } 
         }
+        console.log(moduleData,'aaaa');
     },[index])
     
+    console.log(module_index);
+
     const increamant=async()=>{
         if(index !== moduleData.chapters.length-1){
             incrementIndex(index+1)
         }
         if(index === moduleData.chapters.length-1){
+            const alreadyCompleted = moduleData.completed_users.filter((value)=>value===user_id)
+            if(!alreadyCompleted.length){ 
                 await axiosInstance.patch('/module-completed',{module_id,module_index}).then((res)=>{
                     toast.success(res.data.message)
                     navigate('/userpanel')  
                 }).catch((error)=>{
                     toast.error(error.message)
                 })
+            }else{
+                navigate('/userpanel')  
+            }
         }
     }
 
@@ -55,7 +72,7 @@ const Body = () => {
             incrementIndex(index-1)
         }
     }
-    console.log(moduleData);
+    
   return (
     <div className='lg:container mx-auto  pt-24'>
     
