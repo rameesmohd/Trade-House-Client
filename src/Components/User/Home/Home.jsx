@@ -146,7 +146,7 @@ function Home() {
         </div>
      </div>
      {/* section-4 */}
-     <div className='container h-[400px] mx-auto '>
+     <div className='container md:h-[400px] mx-auto '>
             <div className='grid grid-cols-1 md:grid-cols-4 h-full gap-5 mt-2'>
                 <div className='col-span-1 mr-1'></div>
                 <div className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5 hover:scale-110 transition'> 
@@ -166,13 +166,17 @@ function Home() {
         </div>
 
         {/* section-5 */}
-        <MarketOverview/>
+        <div className='md:h-[400px] '>
+            <MarketOverview/>
+        </div>
         <Charts/>
    
         {/* section-6 */}
-        <div className='container  mx-auto h-[280px]  mt-1'>  
-            <div className='w-full h-14 text-center p-10'>
-                    <h1 className='text-4xl'>Real Students, Real Progress</h1>
+        <div className='h-full min-w-full relative my-3'>
+            <img className='object-cover absolute h-full w-full -z-20 overflow-hidden opacity-50' src={img6} alt="" srcset="" />
+        <div className='container  mx-auto md:h-[280px]  mt-1'>  
+            <div className='w-full md:h-14 text-center md:p-10'>
+                    <h1 className='text-3xl text-black font-bold'>Real Students, Real Progress</h1>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-5 gap-4 m-6'>
                 <div className='md:col-start-2 col-span-1 shadow-md rounded-3xl h-36 bg-violet-600 text-center'>
@@ -186,7 +190,8 @@ function Home() {
                 </div>
             </div>         
         </div>
-        <div className='container  mx-auto h-[200px] '>  
+        
+        <div className='container  mx-auto md:h-[200px] '>  
             <div className='grid grid-cols-1 md:grid-cols-10 gap-4 m-6'>
                 <div className='md:col-start-2 col-span-2 shadow-md rounded-3xl h-36 bg-violet-600 text-center'>
                     hhdgvchjchchvch
@@ -202,10 +207,10 @@ function Home() {
                 </div>
             </div>         
         </div>
-        {/* <div className='h-auto min-w-full' >
-                <img className='object-cover' src={img6} alt="" srcset="" />
-        </div>  */}
+        </div> 
+       <div className='h-auto'>
         <Footer/>
+       </div>
         </div>
     </>
   )

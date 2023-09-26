@@ -229,13 +229,14 @@ const Overview = () => {
                 ₹{order.amount}
                 </td>
                 {seeMore &&
-                <td scope="row" className="px-1 py-1 font-medium text-gray-900 whitespace-nowrap">
+                <td scope="row" className="px-1 w-5xl py-1 font-medium text-gray-900 whitespace-nowrap">
                   {order.status==='refunded' 
                   &&
-                  <>
-                  <textarea max-rows="2" disabled cols={15} value={order.user_message} 
-                  className="block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder=""></textarea>
-                  </>
+                  // <>
+                  // <textarea max-rows="2" disabled cols={15} value={order.user_message} 
+                  // className="block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder=""></textarea>
+                  // </>
+                  <p>"{order.user_message}"</p>
                   }
                 </td>}
                 <td className="px-6 py-4">

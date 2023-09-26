@@ -116,7 +116,7 @@ const MarketOverview = () => {
 
   return (
     <>
-      <body className=''>
+      <body className='w-full h-auto'>
         <h1 className='text-center text-white text-2xl'>Market Overview</h1>
         <div className="tradingview-widget-container">
         <h2 className='text-white'> Market Indexes </h2>
