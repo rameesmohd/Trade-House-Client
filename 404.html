@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+
+    <style>
+        *,
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            min-width: 100vw;
+            background-color: #f5f5f5;
+            padding: 4rem 2rem;
+            color: #515151;
+            font-weight: 300;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 8rem;
+            max-width: 960px;
+            align-items: center;
+        }
+
+        main>div {
+            display: grid;
+            grid-gap: 2rem;
+            align-items: start;
+            justify-items: start;
+        }
+
+        main>div span {
+            color: white;
+            background-color: #9ca9f5;
+            padding: 0.4rem 1rem;
+            border-radius: 5px;
+        }
+
+        main>div h1 {
+            font-weight: 400;
+            color: black;
+        }
+
+        main>div>p {
+            font-size: 1.25rem;
+        }
+
+        main>div>div a {
+            display: flex;
+            align-items: center;
+            grid-gap: 0.5rem;
+            color: #5e72e4;
+            text-decoration: none;
+            margin-bottom: 0.25rem;
+        }
+
+        main>div>div a svg {
+            transform: rotate(180deg);
+        }
+
+        .go-back {
+            display: flex;
+            align-items: center;
+            grid-gap: 0.5rem;
+            color: white;
+            background-color: #5e72e4;
+            text-decoration: none;
+            margin-bottom: 0.25rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 5px;
+        }
+
+        img {
+            margin: 0 auto;
+            max-width: 320px;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+                grid-gap: 2rem;
+                max-width: 100%;
+            }
+
+            img {
+                margin: inherit;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div>
+            <span>404 error</span>
+            <h1>Page not found</h1>
+            <p>Sorry the page you are looking for does not exist or has been moved. Here are some useful links:</p>
+  
+            <a class="go-back" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="m10.875 19.3l-6.6-6.6q-.15-.15-.213-.325T4 12q0-.2.063-.375t.212-.325l6.6-6.6q.275-.275.688-.287t.712.287q.3.275.313.688T12.3 6.1L7.4 11h11.175q.425 0 .713.288t.287.712q0 .425-.287.713t-.713.287H7.4l4.9 4.9q.275.275.288.7t-.288.7q-.275.3-.7.3t-.725-.3Z" />
+                </svg> GO BACK</a>
+        </div>
+        <div>
+            <img src="https://tradermade.com/static/imgs/404.png" alt="">
+        </div>
+    </main>
+</body>
+
+</html>

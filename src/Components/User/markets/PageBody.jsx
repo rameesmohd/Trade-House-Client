@@ -31,6 +31,11 @@ const PageBody = () => {
   const [todayDate,setTodayDate]= useState()
   const [activeSlide, setActiveSlide] = useState(1);
   const [modifiedQuotesData,setModifiedData] = useState([])
+  const [apiLoadings,setApiLoading] = useState({
+    majorCurr : true,
+    ecnomicCalender : true,
+    cryptoPrice : true
+  })
 
 const goToPreviousSlide = () => {
   setActiveSlide(activeSlide === 1 ? 4 : activeSlide - 1);
@@ -63,6 +68,7 @@ const fetchcalenderData=async()=>{
     try {
       const response = await axiosInstance.request(options);
       setEconomicCalender(response.data)
+      setApiLoading(prevState => ({ ...prevState, ecnomicCalender: false }));
     } catch (error) {
       console.error(error);
     }
@@ -132,6 +138,7 @@ const fetchCryptoData=async()=>{
       const response = await axiosInstance.request(options);
       setCryptoData(response.data.data.coins)
       setCoinStates(response.data.data.stats)
+      setApiLoading(prevState => ({ ...prevState, cryptoPrice: false }));
     } catch (error) {
       console.error(error);
   }
@@ -190,6 +197,7 @@ const fetchLiveCurrencyData=async()=>{
           }
         }
         setModifiedData(modifiedData)
+        setApiLoading(prevState => ({ ...prevState, majorCurr: false }));
       })
       .catch(error => {
         console.error(error);
@@ -203,6 +211,8 @@ const fetchLiveCurrencyData=async()=>{
     const day = currentDate.getDate().toString().padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
     setTodayDate(formattedDate);
+
+    window.scroll(0,0)
   }, []);
 
   useEffect(() => {
@@ -210,8 +220,8 @@ const fetchLiveCurrencyData=async()=>{
   }, [base, quote]);
 
   useEffect(()=>{
-    // fetchcalenderData()
-    // fetchCryptoData()
+  //   fetchcalenderData()
+  //   fetchCryptoData()
   //  fetchLiveCurrencyData()
   },[])
 
@@ -277,8 +287,9 @@ const fetchLiveCurrencyData=async()=>{
                         </th>
                     </tr>
                 </thead>
+                {!apiLoadings.majorCurr && 
                 <tbody>
-                {modifiedQuotesData.map((row, index) => (
+                  {modifiedQuotesData.map((row, index) => (
                     <tr key={index}>
                       {row.map((item, subIndex) => (
                         <React.Fragment key={subIndex}>
@@ -288,8 +299,9 @@ const fetchLiveCurrencyData=async()=>{
                       ))}
                     </tr>
                   ))}
-                </tbody>
+                </tbody>}
             </table>
+              {apiLoadings.majorCurr && <div className='w-full flex justify-center p-10'><Spinner/></div>} 
         </div>
       </div>
 
@@ -466,7 +478,7 @@ const fetchLiveCurrencyData=async()=>{
                     </tr>
                 </thead>
                 <tbody>
-                {
+                { !apiLoadings.ecnomicCalender &&
                   economicCalender.map((value)=>{
                     return <tr class="bg-white border-b">
                         <td class="px-6 py-4">
@@ -495,11 +507,12 @@ const fetchLiveCurrencyData=async()=>{
                 }
                 </tbody>
             </table>
+            {apiLoadings.ecnomicCalender && <div className='w-full flex justify-center p-10'><Spinner/></div>} 
         </div>
     </div>
 
     {/* Chart */}
-    <div className=' h-10 text-xs md:text-3xl text-center my-4 font-semibold text-blue-800'>Charts</div>
+    <div className=' h-10 text-xl md:text-3xl text-center my-4 font-semibold text-blue-800'>Charts</div>
     <div className='w-full my-10'>
           <Chart/>
     </div>
@@ -535,7 +548,8 @@ const fetchLiveCurrencyData=async()=>{
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.slice(cryptoPagination,(cryptoPagination+5)).map(
+            {!apiLoadings.cryptoPrice &&
+            TABLE_ROWS.slice(cryptoPagination,(cryptoPagination+5)).map(
               ({ img, symbol, name, price, change, marketCap, rank ,dayVolume,sparkline}, index) => {
                 
                 const isLast = index === TABLE_ROWS.length - 1;
@@ -615,6 +629,7 @@ const fetchLiveCurrencyData=async()=>{
             )}
           </tbody>
         </table>
+        {apiLoadings.cryptoPrice && <div className='w-full flex justify-center p-10'><Spinner/></div>} 
       </CardBody>
       <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
         <Typography variant="small" color="blue-gray" className="font-normal">

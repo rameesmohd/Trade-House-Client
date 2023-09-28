@@ -14,8 +14,12 @@ import Footer from '../Footer'
 import MarketOverview from '../Markets/MarketOverview'
 import Charts from '../Markets/Charts'
 import CryptoWidget from '../Markets/CryptoWidget'
+import { useNavigate } from 'react-router-dom'
+import Map from './Map'
+
 
 function Home() {
+    const navigate = useNavigate()
 
     const curr =()=>{
         const options = {
@@ -170,7 +174,7 @@ function Home() {
             <MarketOverview/>
         </div>
         <Charts/>
-   
+        <div onClick={()=>navigate('/markets')} className='w-full h-24 text-2xl text-center flex items-center justify-center animate-bounce'>Enroll Markets <button className='btn btn-circle btn-sm mx-2'>❯</button></div>
         {/* section-6 */}
         <div className='h-full min-w-full relative my-3'>
             <img className='object-cover absolute h-full w-full -z-20 overflow-hidden opacity-50' src={img6} alt="" srcset="" />
@@ -208,8 +212,117 @@ function Home() {
             </div>         
         </div>
         </div> 
+        <div className='md:grid md:grid-cols-6 p-10'>
+
+
+        <section className="bg-white col-span-2">
+            <div className="py-4 lg:py-5 px-4 mx-auto max-w-screen-md">
+                <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 font-poppins">Contact Us</h2>
+                <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl font-poppins">Got a technical issue? Want to send feedback about our services? Need details about our Business plan? Let us know.</p>
+                <form action="#" className="space-y-8">
+                    <div>
+                        <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your email</label>
+                        <input type="email" id="email" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5  " placeholder="name@flowbite.com" required/>
+                    </div>
+                    <div>
+                        <label for="subject" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Subject</label>
+                        <input type="text" id="subject" className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm  " placeholder="Let us know how we can help you" required/>
+                    </div>
+                    <div className="sm:col-span-2">
+                        <label for="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Your message</label>
+                        <textarea id="message" rows="6" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300  " placeholder="Leave a comment..."></textarea>
+                    </div>
+                    <button type="submit" className="py-2 px-3 text-sm font-medium text-center bg-blue-600 rounded-lg sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 text-white">Send message</button>
+                </form>
+            </div>
+        </section>
+
+        <section className='col-span-4 col-start-3'>
+            <div className="container my-24 mx-auto md:px-6">
+                <div className="mb-32">
+                    <div className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <div className="flex flex-wrap items-center bg-black rounded-lg">
+                        <div className="block w-full shrink-0 grow-0 basis-auto lg:flex lg:w-4/6 xl:w-8/12 bg-white">
+                            <div className="h-full md:h-[500px] w-full">
+                                    <Map/>
+                            </div>
+                        </div>
+                        <div className="w-full lg:w-2/6 xl:w-4/12 p-6 md:p-0 ">
+                            <div className='w-full flex justify-center items-center'>
+                            <div class="mx-auto mb-5 text-center text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" class="mx-auto mb-6 h-8 w-8 text-white ">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                </svg>
+                                <p>office @ address</p>
+                                <h6 class="font-medium">city tower,baby hospital,<br />Calicut, 94126</h6>
+                            </div>
+                            </div>
+                            <div className="mb-12 w-full shrink-0 grow-0 basis-auto px-3 md:w-6/12 md:px-6 lg:w-full xl:w-6/12 xl:px-12">   
+                            <div className="flex items-start">
+                                <div className="shrink-0">
+                                <div className="inline-block rounded-md bg-primary-100 p-4 text-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" className="h-6 w-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M14.25 9.75v-4.5m0 4.5h4.5m-4.5 0l6-6m-3 18c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 014.5 2.25h1.372c.516 0 .966.351 1.091.852l1.106 4.423c.11.44-.054.902-.417 1.173l-1.293.97a1.062 1.062 0 00-.38 1.21 12.035 12.035 0 007.143 7.143c.441.162.928-.004 1.21-.38l.97-1.293a1.125 1.125 0 011.173-.417l4.423 1.106c.5.125.852.575.852 1.091V19.5a2.25 2.25 0 01-2.25 2.25h-2.25z" />
+                                    </svg>
+                                </div>
+                                </div>
+                                <div className="ml-6 grow">
+                                <p className="mb-2 font-bold dark:text-white">
+                                    Technical support
+                                </p>
+                                <p className="text-neutral-500 dark:text-neutral-200">
+                                    support@example.com
+                                </p>
+                                <p className="text-neutral-500 dark:text-neutral-200">
+                                    +1 234-567-89
+                                </p>
+                                </div>
+                            </div>
+                            </div>
+                            <div className="mb-12 w-full shrink-0 grow-0 basis-auto px-3 md:w-6/12 md:px-6 lg:w-full xl:mb-0 xl:w-6/12 xl:px-12">
+                                <div className="align-start flex">
+                                    <div className="shrink-0">
+                                    <div className="inline-block rounded-md bg-primary-100 p-4 text-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor" className="h-6 w-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+                                        </svg>
+                                    </div>
+                                    </div>
+                                    <div className="ml-6 grow">
+                                    <p className="mb-2 font-bold dark:text-white">
+                                        Sales questions
+                                    </p>
+                                    <p className="text-neutral-500 dark:text-neutral-200">
+                                        sales@example.com
+                                    </p>
+                                    <p className="text-neutral-500 dark:text-neutral-200">
+                                        +1 234-567-89
+                                    </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        </div>
+        <hr />
+        <br />
        <div className='h-auto'>
-        <Footer/>
+            <Footer/>
+       </div>
+       <div>
+      
        </div>
         </div>
     </>

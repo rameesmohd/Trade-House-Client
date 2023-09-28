@@ -5,7 +5,7 @@ import PageBody from '../../Components/User/Markets/PageBody'
 
 const Markets = () => {
   return (
-    <div>
+    <div className='lg:container mx-auto'>
         <Navbar/>
         <PageBody/>
         <Footer/>
