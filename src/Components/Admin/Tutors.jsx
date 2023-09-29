@@ -77,12 +77,10 @@ const Tutors = () => {
             return(
             <tr key={obj._id}>
             <td className=''>
-                  <div className="h-[180px]">
                     { !obj.image ? 
                       <div className='h-full w-full bg-slate-100 flex justify-center items-center'><h1>No Image</h1></div>
-                      : <img className='max-w-[250px] h-full  bg-slate-50 mx-auto' src={obj?.image} alt="" /> 
+                      : <img className='max-w-[150px] h-24 bg-slate-50 mx-auto' src={obj?.image} alt="" /> 
                     }
-                  </div>
               </td>
                 <td className="px-4 py-2 text-center">{obj.email}</td>
                 <td className="px-4 py-2 text-center">{obj.firstName+' '+obj.lastName}</td>

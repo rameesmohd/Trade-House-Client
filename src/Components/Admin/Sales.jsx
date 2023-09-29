@@ -6,7 +6,11 @@ import {
   } from "@material-tailwind/react";
 import adminAxios from '../../Axios/AdminAxios'
 import {  toast } from 'react-toastify';
-import {HiSearch} from 'react-icons/hi'
+import { HiSearch } from 'react-icons/hi'
+import {CiWallet} from 'react-icons/ci'
+
+
+
 
 const Sales = () => {
   const axiosInstance = adminAxios()
@@ -25,9 +29,9 @@ const Sales = () => {
       toast.error(error.message)
     })
   }
-
+  
   useEffect(()=>{
-    fetchData()
+     fetchData()
   },[selectedFilter])
 
   const handleFilterClick=(filter)=>{
@@ -141,26 +145,28 @@ const Sales = () => {
               <button className='border border-gray-300 p-1 md:p-3 rounded-lg mx-2 my-2 md:my-0' onClick={handleSearch}><HiSearch/></button>
           </div>
         </div>
-            <div className="dropdown mt-3">
-                <label tabIndex={0} 
-                className={`${statusFilter==='all' ? 'bg-slate-400' : statusFilter==='success' ? 
-                  'bg-green-400' : statusFilter==='pending' ? 'bg-yellow-400' : statusFilter==='refunded' ? 'bg-red-600 ' : ''} 
-                  m-1 font-poppins rounded-md p-1 flex items-center`}>Filter 
-                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg></label>
-                <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow  rounded-box w-52 bg-white">
-                  <li onClick={()=>handleStatusFilter('all')} className='bg-slate-200 cursor-pointer font-poppins p-1 rounded-md my-1'>All</li>
-                  <li onClick={()=>handleStatusFilter('success')} className='bg-green-400 cursor-pointer font-poppins p-1 rounded-md my-1'>Success</li>
-                  <li onClick={()=>handleStatusFilter('pending')} className='bg-yellow-400 cursor-pointer font-poppins p-1 rounded-md my-1'>Pending</li>
-                  <li onClick={()=>handleStatusFilter('refunded')} className='bg-red-600 cursor-pointer font-poppins p-1 rounded-md my-1'>Refunded </li>
-                </ul>
-              </div>
+        <div className="dropdown mt-3 flex">
+            <label tabIndex={0} 
+            className={`${statusFilter==='all' ? 'bg-slate-400' : statusFilter==='success' ? 
+              'bg-green-400' : statusFilter==='pending' ? 'bg-yellow-400' : statusFilter==='refunded' ? 'bg-red-600 ' : ''} 
+              m-1 font-poppins rounded-md p-1 flex items-center`}>Filter 
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow  rounded-box w-52 bg-white">
+              <li onClick={()=>handleStatusFilter('all')} className='bg-slate-200 cursor-pointer font-poppins p-1 rounded-md my-1'>All</li>
+              <li onClick={()=>handleStatusFilter('success')} className='bg-green-400 cursor-pointer font-poppins p-1 rounded-md my-1'>Success</li>
+              <li onClick={()=>handleStatusFilter('pending')} className='bg-yellow-400 cursor-pointer font-poppins p-1 rounded-md my-1'>Pending</li>
+              <li onClick={()=>handleStatusFilter('refunded')} className='bg-red-600 cursor-pointer font-poppins p-1 rounded-md my-1'>Refunded </li>
+            </ul>
+            {/* <div className='flex items-center'><CiWallet className='w-10 h-full'/><p className='mx-1 text-sm' >0.00</p></div> */}
+          </div>
           <button
                 className="text-black border hidden md:block border-gray-100 p-1 rounded-md mx-2"
                 onClick={handlePrint}>
                🖨️ Print
           </button>
+
         </div>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
           <table id="sales-table" className="w-full min-w-[640px] table-auto ">

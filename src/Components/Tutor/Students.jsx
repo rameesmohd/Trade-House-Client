@@ -97,17 +97,19 @@ const Students = () => {
                       </td>
                       <td className={className}>
                         <div className='flex items-center'>
+                        { students.status === 'refunded' ? <p className='font-poppins text-red-400 text-xs'>Purchase Withdrawn</p>: 
+                        <>
                         <Typography
                           as="a"
                           href="#"
                           className="text-xs font-semibold text-blue-gray-600 mx-1"
                           >
                           {students.learning_progress ? students.learning_progress+'%' : '1%'}
-                        </Typography>
+                          </Typography>
                           <Progress value={students.learning_progress ? students.learning_progress : 1} color="green" />
-                            </div>
+                        </>}
+                        </div>
                       </td>
-
                          <td className={className}>
                         <Chip
                           variant="gradient"

@@ -9,11 +9,17 @@
     @apply !w-full py-6 !text-base;
 }
 
-/* .scrollbar-hide::-webkit-scrollbar {
-    display: none; 
-  } */
+:root {
+  --font: 'poppins';
+}
 
-  /* Hide scrollbar for webkit (Chrome, Safari, Edge) */
+
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; 
+  }
+
+/* Hide scrollbar for webkit (Chrome, Safari, Edge) */
 .scrollbar-hide::-webkit-scrollbar {
   width: 0.4rem; /* Adjust the width as needed */
 }

@@ -4,21 +4,27 @@ import ReactApexChart from 'react-apexcharts';
 import tutorAxios from '../../Axios/TutorAxios'
 import { toast } from 'react-toastify';
 import { HiSearch } from 'react-icons/hi';
+import PopoverDes from '../PopoverDes';
 
 const Overview = () => {
   const axiosInstance = tutorAxios()
-  const [loading,setLoading] = useState(false)
   const [seeMore,setSeeMore] = useState(false)
-  const [walletTransData,setWalletTransData] = useState({})
   const [recentSales,setRecentSales] = useState([]) 
   const [selectedFilter, setSelectedFilter] = useState('All');
-  const [statusFilter,setStatusFilter] = useState('all')
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+
+  const [walletTransData,setWalletTransData] = useState()
+  const [visibleTransactions,setVisibleTransactions]=useState([])
+  const [walletDataSeeMore,setWalletDataSeeMore] = useState(false)
 
   const handleFilterClick = (filter) => {
     setSelectedFilter(filter);
   };
+  
+  const expandSalesList=()=>{
+    setSeeMore(!seeMore); 
+  }
 
   const fetchData=async(expand,from,to)=>{
     await axiosInstance.get(`/overview?expand=${expand}&filter=${selectedFilter}&${from&to ? `from=${from}&to=${to}` : ''}`)
@@ -30,15 +36,29 @@ const Overview = () => {
       toast.error(error.message)
     })
   }
-  
+
+  const walletTransactionVisibleHandle=()=>{
+    const transaction = walletTransData.b_wallet_transaction
+    console.log(transaction);
+    const visible = walletDataSeeMore
+      ? transaction.slice().reverse()
+      : transaction
+          .slice()
+          .reverse()
+          .slice(0, 3);
+    setVisibleTransactions(visible)
+  }
+
   useEffect(()=>{
     fetchData(seeMore)
   },[seeMore,selectedFilter])
 
-  const expandSalesList=()=>{
-    setSeeMore(!seeMore); 
-  }
 
+  useEffect(()=>{
+    if(walletTransData){
+      walletTransactionVisibleHandle()
+    }
+  },[walletTransData,walletDataSeeMore])
 
   const chartData = {
     options: {
@@ -75,6 +95,8 @@ const Overview = () => {
       },
     ],
   };
+
+  console.log(visibleTransactions);
 
   const handlePrint = () => {
     const printContents = document.getElementById('sales-table').outerHTML;
@@ -174,7 +196,7 @@ const handleToDateChange = (event) => {
         <div className='w-full bg-slate-100 h-14 flex justify-end rounded-md'>
           <div className='w-2/6 h-full flex justify-center items-center'>
             <img className='h-10' src={walletIcon} alt="" /> 
-            <span className='text-sm font-bold opacity-70 ml-3'>₹.{walletTransData.b_wallet_balance}</span>
+            <span className='text-sm font-bold opacity-70 ml-3'>₹.{walletTransData?.b_wallet_balance}</span>
           </div>
         </div>
         <div className="overflow-x-scroll overflow-y-scroll scrollbar-hide max-h-[22rem]">
@@ -183,6 +205,9 @@ const handleToDateChange = (event) => {
               <tr>
               <th scope="col" className="px-6 py-3">
                   Order
+                </th>
+                <th>
+                  Date
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Transactions
@@ -194,10 +219,13 @@ const handleToDateChange = (event) => {
             </thead>
             <tbody className=''>
           { walletTransData?.b_wallet_transaction && 
-            walletTransData?.b_wallet_transaction.map((transaction)=>{
+            visibleTransactions.map((transaction)=>{
             return <tr key={transaction._id} className="bg-white border-b">
                   <td scope="row" className="px-6 py-4 font-medium whitespace-nowrap ">
                   {transaction?.order_id && transaction?.order_id.slice(0, Math.floor(transaction.order_id.length / 2))} 
+                </td>
+                <td scope="row" className="px-6 py-4 font-medium whitespace-nowrap ">
+                  {transaction.date && transaction.date.split('T')[0]}
                 </td>
                 <td scope="row" className="px-6 py-4 font-medium whitespace-nowrap ">
                   {transaction?.transaction_type}
@@ -206,23 +234,34 @@ const handleToDateChange = (event) => {
                   +{transaction?.amount}
                 </td>
               </tr>
-              })}
+              }) }
             </tbody>
           </table>
+            {!walletDataSeeMore && (
+              <div onClick={()=>setWalletDataSeeMore(!walletDataSeeMore)} className="text-blue-500 hover:underline focus:outline-none text-center cursor-pointer">
+                See More
+              </div>
+            )}
+            {walletDataSeeMore && (
+              <div onClick={()=>setWalletDataSeeMore(!walletDataSeeMore)} className="text-blue-500 hover:underline focus:outline-none text-center cursor-pointer">
+                See Less
+              </div>
+            )}
         </div>
       </div>
       </> }
       {/* table-2 */}
       <div className="relative my-2 h-1/3 bg-white">
-      <div className='w-full bg-slate-100 my-1 flex items-center justify-around rounded-md'>
-          <span className='text-lg font-bold opacity-70 ml-3'>{seeMore? 'All' :'Recent'} Sales</span>
+      <div className={`w-full bg-slate-100 my-1 md:flex items-center justify-between rounded-md`}>
+          <span className='text-lg font-bold opacity-70 ml-3 w-56'>{seeMore? selectedFilter :'Recent'} Sales</span>
+
          {!seeMore ? <p onClick={()=>expandSalesList()} className='mr-3 text-sm font-poppins font-bold cursor-pointer border border-double border-black px-1 border-blue rounded-lg bg-white-800 text-black flex items-center'>
           <img className='h-4 bg-white ' src="https://static.thenounproject.com/png/5014978-200.png" alt="" />
             View All
           </p> :
           <>
-           <div>
-          <button
+           <div className='text-black flex md:flex-none my-2 md:my-0 py-2'>
+            <button
               className={`bg-slate-50 w-16 p-1 border ${selectedFilter === 'All' ? 'bg-slate-900 text-white' : ''}`}
               onClick={() => handleFilterClick('All')}
             >
@@ -247,7 +286,8 @@ const handleToDateChange = (event) => {
               Yearly
             </button>
           </div>
-          <div className='flex'> 
+
+          <div className='md:flex'> 
           <div date-rangepicker class="md:flex items-center">
               <div className='flex md:items-center my-2 md:my-0'>
                 <div class="relative">
@@ -256,7 +296,7 @@ const handleToDateChange = (event) => {
                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                       </svg>
                 </div>
-                  <input name="start" value={fromDate} type="date" onChange={handleFromDateChange} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start"/>
+                  <input name="start" value={fromDate} type="date" onChange={handleFromDateChange} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block md:w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start"/>
                 </div>
                 <span class="mx-4 text-gray-500">to</span>
                 <div class="relative">
@@ -271,18 +311,20 @@ const handleToDateChange = (event) => {
               <button className='border border-gray-300 p-1 md:p-3 rounded-lg mx-2 my-2 md:my-0' onClick={handleSearch}><HiSearch/></button>
           </div>
         </div>
-          <button
+        <button
               className="text-black border hidden md:block border-gray-100 p-1 rounded-md mx-2"
               onClick={handlePrint}>
               🖨️ Print
           </button>
-          <div onClick={()=>setSeeMore(!seeMore)} className='mr-3   cursor-pointer border border-double border-black px-1 border-blue rounded-lg bg-white-800 text-black flex items-center'>
+          <div className='flex justify-end'>
+        <div onClick={()=>setSeeMore(!seeMore)} className='mr-3 cursor-pointer border border-double border-black px-1 border-blue rounded-lg bg-white-800 text-black flex items-center'>
           <img className='h-4 bg-white mx-1' src="https://cdn.iconscout.com/icon/premium/png-256-thumb/minimize-button-567898.png" alt="" />
            <p className='text-xs md:text-sm font-poppins overflow-hidden m-1'> min</p>
+        </div>
           </div>
           </>
           }
-        </div>
+      </div>
 
         <div className="overflow-x-scroll overflow-y-hidden">
           <table id='sales-table' className="w-full max-h-44 text-sm text-left text-gray-500 ">
@@ -344,12 +386,14 @@ const handleToDateChange = (event) => {
                 </td>}
                 <td className="px-6 py-4">
                   {order.status === 'success' && !order.is_refundable && <p className='text-green-500 font-semibold'>Success</p>}
-                  {order.status === 'success' && order.is_refundable && <p className='text-orange-400'>Pending</p>}
-                  {order.status === 'refunded' && !order.is_refundable && <p className='text-red-600 font-semibold'>Refunded</p>}
+                  {order.status === 'success' && order.is_refundable && 
+                  <div className='flex'><p className='text-orange-400'>Payment on Hold</p>
+                  <PopoverDes Description={"Your wallet will be credited with the payment once the user has successfully finished the first module of the course."}/>
+                  </div>}
+                  {order.status === 'refunded' && !order.is_refundable && <p className='text-red-600 font-semibold'>Canceled</p>}
                 </td>
               </tr>
              })}
-              {/* Add more rows here */}
             </tbody>
           </table>
         </div>
