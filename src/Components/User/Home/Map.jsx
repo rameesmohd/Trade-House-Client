@@ -13,7 +13,6 @@ function ViewMap() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          // Set the user's location in the state
           setStartLatitude(parseFloat(pos.coords.latitude));
           setStartLongitude(parseFloat(pos.coords.longitude));
         },
@@ -26,13 +25,12 @@ function ViewMap() {
     }
   }, []);
 
-  console.log(startLatitude, startLongitude, 'startttttttttt');
-  console.log(endLatitude, endLongitude, 'endtttttttttttt');
-
   const mapContainerRef = useRef(null);
 
-    //3----------------------
+    //2----------------------
     useEffect(() => {
+   
+
     mapboxgl.accessToken = 'pk.eyJ1IjoicmFtZWVzbW9oZCIsImEiOiJjbG4xZ281djIwMHJ1MnFvaHBuZDV5ZWVzIn0.B39GohhPOcIvsb33_BDXGA';
     const map = new mapboxgl.Map({
             container: mapContainerRef.current,
@@ -41,6 +39,7 @@ function ViewMap() {
             zoom: 10,
         });
 
+  
     let selectedRouteIndex = 0; 
     let routes = []; 
 
@@ -154,6 +153,7 @@ function ViewMap() {
 
     // Event listener for map click
     map.on('click', (e) => {
+       e.preventDefault();
       const clickedPoint = e.lngLat;
 
       // Find the closest route to the clicked point
@@ -186,8 +186,14 @@ function ViewMap() {
     });
 
     // Clean up the map instance when the component unmounts
-    return () => map.remove();
+    return () => {
+      map.remove();
+    }
   }, [startLongitude, startLatitude]);
+  
+  useEffect(() => {
+    window.scroll(0, 0);
+  },[startLongitude, startLatitude])
 
   return <div className='overflow-hidden md:h-full sm:h-56 h-40 rounded-lg shadow-md w-full' ref={mapContainerRef} />;
 }

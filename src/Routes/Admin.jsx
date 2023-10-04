@@ -1,15 +1,16 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import Dashboard from '../Pages/Admin/Dashboard'
 import Users from '../Pages/Admin/Users'
 import Login from '../Components/Admin/login'
-import { useSelector } from 'react-redux'
 import TutorRequests from '../Pages/Admin/TutorRequests'
 import Tutors from '../Pages/Admin/Tutors'
 import Categories from '../Pages/Admin/Categories'
 import Allcourses from '../Pages/Admin/AllCourses'
 import TutorDetails from '../Pages/Admin/TutorDetails'
 import SalesPage from '../Pages/Admin/SalesPage'
+import ContactInbox from '../Pages/Admin/ContactInbox'
 
 
 const Admin = () => {
@@ -33,6 +34,7 @@ const Admin = () => {
       <Route path="/courses" element={<PrivateRoute element={<Allcourses/>}/>}/>
       <Route path="/tutors/tutor-details" element={<PrivateRoute element={<TutorDetails/>}/>}/>
       <Route path="/sales" element={<PrivateRoute element={<SalesPage/>}/>}/>
+      <Route path="/contact-inbox" element={<PrivateRoute element={<ContactInbox/>}/>}/>
     </Routes>
   );
 }

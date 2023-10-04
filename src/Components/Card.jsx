@@ -4,7 +4,6 @@ import {
     CardBody,
     CardFooter,
     Typography,
-    Button,
   } from "@material-tailwind/react";
   import Rating from './RatingStar'
   import { useNavigate } from "react-router-dom";

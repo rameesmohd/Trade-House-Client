@@ -2,9 +2,12 @@ import React from 'react'
 import Navbar from '../../Components/User/Navbar'
 import Header from '../../Components/User/Home/Header'
 import Home from '../../Components/User/Home/Home'
+import { useEffect } from 'react'
 
 
 function HomePage() {
+
+
   return (
     <>
       <Navbar/>

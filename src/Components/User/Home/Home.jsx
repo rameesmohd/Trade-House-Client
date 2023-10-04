@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import img3 from '../../../assets/fa5efcff953089b225cbdb8a122d116a.png'
 import img4 from '../../../assets/ed1bbf2c34d28bb5646b27c11e7cf54c.png'
 import img5 from '../../../assets/b88d216fac1c7c82d38e983045849906.png'
@@ -16,30 +16,43 @@ import Charts from '../Markets/Charts'
 import CryptoWidget from '../Markets/CryptoWidget'
 import { useNavigate } from 'react-router-dom'
 import Map from './Map'
-
+import ScrollToTopButton from '../../ScrollToTopButton'
+import { toast } from 'react-toastify'
+import userAxios from '../../../Axios/UserAxios'
+import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 function Home() {
     const navigate = useNavigate()
+    const token = useSelector((state)=>state.Client.Token)
+    const emailRef = useRef()
+    const subjetRef = useRef()
+    const commentRef = useRef()
+    const axiosInstance = userAxios()
+    const [contactUsSubmited,setContactUsSubmited] = useState(false)
 
-    const curr =()=>{
-        const options = {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              'Content-Type': 'application/json',
-              'X-Accept-Version': '2.0.0'
-            }
-          };
-          
-        fetch('https://test.bitpay.com/currencies', options)
-            .then(response => response.json())
-            .then(response => console.log(response))
-            .catch(err => console.error(err));
-    
+    const handleContactUsSubmit=async(e)=>{
+        e.preventDefault()
+        if(!token) return navigate('/login')
+        const data = {
+            email : emailRef.current.value,
+            subject : subjetRef.current.value,
+            comment : commentRef.current.value
+        }
+        if(data.email.trim() !== '' && data.subject.trim() !== '' && data.comment.trim() !== ''){
+            await axiosInstance.post('/contact',{data})
+            .then((res)=>{
+                setContactUsSubmited(true)
+            }).catch((error)=>{
+                console.log(error);
+                toast.error(error.message)
+            })
+        }else{
+            toast.error('Invalid inputs')
+        }
     }
 
   return (
-    <>
     <div className='flex  flex-col'>
         <CryptoWidget/>
     {/* section-1 */}
@@ -49,7 +62,7 @@ function Home() {
     bg-gradient-to-r
     from-yellow-300
     via-yellow-400
-    to-yellow-300   
+    to-yellow-300 
     background-animate'>
     <div className='grid grid-cols-1 md:grid-cols-2 container mx-auto'>
         <div className='p-6 md:p-12 '>
@@ -63,7 +76,7 @@ function Home() {
             <p>to select a performing trade. This is exactly what you will </p>
             <p>learn with Trade House</p>
                 <div className='w-100 m-14 flex justify-start'>
-                <button onClick={curr} className='w-28 h-12  bg-blue-800 text-slate-200 rounded-md hover:bg-blue-700 transition hover:scale-110 duration-300 btn-sm md:btn-md'>Get Started</button>
+                <button className='w-28 h-12  bg-blue-800 text-slate-200 rounded-md hover:bg-blue-700 transition hover:scale-110 duration-300 btn-sm md:btn-md'>Get Started</button>
                 </div>
         </div>
     </div>
@@ -214,28 +227,39 @@ function Home() {
         </div> 
         <div className='md:grid md:grid-cols-6 p-10'>
 
-
         <section className="bg-white col-span-2">
-            <div className="py-4 lg:py-5 px-4 mx-auto max-w-screen-md">
+          <div className="py-4 lg:py-5 px-4 mx-auto max-w-screen-md">
                 <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 font-poppins">Contact Us</h2>
                 <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl font-poppins">Got a technical issue? Want to send feedback about our services? Need details about our Business plan? Let us know.</p>
-                <form action="#" className="space-y-8">
+                { !contactUsSubmited ?  <form  className="space-y-8">
                     <div>
                         <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your email</label>
-                        <input type="email" id="email" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5  " placeholder="name@flowbite.com" required/>
+                        <input ref={emailRef} type="email" id="email" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5  " placeholder="name@gmail.com" required/>
                     </div>
                     <div>
                         <label for="subject" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Subject</label>
-                        <input type="text" id="subject" className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm  " placeholder="Let us know how we can help you" required/>
+                        <input ref={subjetRef} type="text" id="subject" className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm  " placeholder="Let us know how we can help you" required/>
                     </div>
                     <div className="sm:col-span-2">
                         <label for="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Your message</label>
-                        <textarea id="message" rows="6" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300  " placeholder="Leave a comment..."></textarea>
+                        <textarea id="message" ref={commentRef} rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300  " placeholder="Leave a comment..."></textarea>
                     </div>
-                    <button type="submit" className="py-2 px-3 text-sm font-medium text-center bg-blue-600 rounded-lg sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 text-white">Send message</button>
-                </form>
-            </div>
+                    <button type='submit' onClick={(e)=>handleContactUsSubmit(e)} className="py-2 px-3 text-sm font-medium text-center bg-blue-600 rounded-lg sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 text-white">Send message</button>
+                </form>:
+                <div class="flex items-center justify-center  space-y-8">
+                <div>
+                    <div class="flex flex-col items-center space-y-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-green-600 w-28 h-28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h1 class="text-4xl font-bold">Thank You !</h1>
+                    <p>Thank you for your interest! We will contact you back soon.</p>
+                    </div>
+                </div>
+            </div> }
+            </div> 
         </section>
+
 
         <section className='col-span-4 col-start-3'>
             <div className="container my-24 mx-auto md:px-6">
@@ -314,18 +338,17 @@ function Home() {
                 </div>
             </div>
         </section>
-
-        </div>
+       </div>
         <hr />
         <br />
        <div className='h-auto'>
             <Footer/>
        </div>
        <div>
-      
-       </div>
-        </div>
-    </>
+    </div>
+        <ScrollToTopButton/>
+    </div>
+    
   )
 }
 

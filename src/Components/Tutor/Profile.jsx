@@ -12,13 +12,16 @@ const TutorProfile = () => {
   const [imgDataUrl, setImgDataUrl] = useState('');
   const [editAbout,setEditAbout] = useState(false)
 
+  const fetchData =async()=>{
+    await axiosInstance.get(`/profile?id=${id}`)
+    .then((res)=>{
+       setProfileData(res.data.tutor)
+    }).catch((error)=>{
+      toast.error(error.message)
+    })
+  }
   useEffect(()=>{
-      axiosInstance.get(`/profile?id=${id}`)
-      .then((res)=>{
-         setProfileData(res.data.tutor)
-      }).catch((error)=>{
-        toast.error(error.message)
-      })
+    fetchData()
   },[])
 
   const handleFileClick = () => {
@@ -28,7 +31,7 @@ const TutorProfile = () => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      setProfileData({...tutorData,image :URL.createObjectURL(selectedFile)})
+      setProfileData(prev=>({...prev,image :URL.createObjectURL(selectedFile)}))
       let reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onload = () => {
@@ -37,12 +40,11 @@ const TutorProfile = () => {
     }
   };
 
-  const updateImage=()=>{
-     axiosInstance.patch('/image',{id,imgDataUrl})
+  const updateImage=async()=>{
+     await axiosInstance.patch('/image',{id,imgDataUrl})
      .then((res)=>{
       setImgDataUrl('')
       toast.success('Updated successfully')
-      setProfileData(res.data.tutor)
     }).catch((error)=>{
       console.log(error);
       toast.error(error.message)
@@ -60,11 +62,10 @@ const TutorProfile = () => {
     })() : setEditAbout(true);
   }
 
-  const handleAboutSave=()=>{
-    axiosInstance.patch('/about',{id : id,about_me: tutorData.about_me,tutorData : tutorData})
+  const handleAboutSave=async()=>{
+    await axiosInstance.patch('/about',{id : id,about_me: tutorData.about_me,tutorData : tutorData})
     .then((res)=>{
      toast.success('Updated successfully')
-    //  setProfileData(res.data.tutor)
     }).catch((error)=>{
      console.log(error);
      toast.error(error.message)
@@ -73,19 +74,26 @@ const TutorProfile = () => {
   }
 
   return(
-  <div className="bg-black">
-    <div className="container mx-auto py-8">
-      <div className="grid grid-cols-4 md:grid-cols-12 gap-6 px-4">
-        <div className="col-span-4 sm:col-span-3">
-          <div className="bg-white shadow rounded-lg p-6">
-            <div className="flex flex-col items-center">
-              <img
-                src={tutorData?.image ? tutorData.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'}
-                className="bg-gray-300 w-44 rounded-md mb-4 shrink-0"
-                alt="User"
-              />
-                <div className=" flex justify-end">
-                  <div  className='cursor-pointer hover:text-red-600 underline'
+  <div className="p-16">
+    <div className="p-8 bg-slate-100 shadow mt-24 rounded-xl">  
+    <div className="grid grid-cols-1 md:grid-cols-3">    
+    <div className="grid grid-cols-3 text-center order-last md:order-first mt-20 md:mt-0">      
+    <div>               
+       </div>          
+          </div>    
+          <div className="relative">      
+          <div className="w-48 h-48 bg-indigo-100 mx-auto rounded-full shadow-2xl absolute inset-x-0 top-0 -mt-24 flex items-center justify-center text-indigo-500">
+          <img
+              src={tutorData?.image ? tutorData.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'}
+              className="w-48 h-48 rounded-full"
+              alt="User"
+             />
+            </div>    
+            </div>    
+        
+              </div>  
+              <div className="mt-12 md:mt-24 text-center border-b pb-12">    
+             <div  className='cursor-pointer hover:text-red-600 underline'
                   onClick={handleFileClick} >
                       Change
                   </div>
@@ -95,31 +103,12 @@ const TutorProfile = () => {
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
                     ref={fileInputRef} />
-              </div>
-              <h1 className="text-xl font-bold">{tutorData?.firstName+' '+tutorData?.lastName}</h1>
-              <p className="text-gray-600">{tutorData?.type_of_trader}</p>
-            </div>
-            <hr className="my-6 border-t border-gray-300" />
-            <div className='flex justify-between'>
-            <div className="flex flex-col">
-              <span className="text-gray-600 tracking-wider mb-2">Category</span>
-              <p>
-              {tutorData?.category}
-              </p>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-gray-600 tracking-wider mb-2">Experience</span>
-              <p>
-              {tutorData?.experience}+ years
-              </p>
-            </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-span-4 sm:col-span-9 ">
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-4">About Me</h2>
-             {
+              <h1 className="text-4xl font-medium text-gray-700">{tutorData?.firstName+' '+tutorData?.lastName}</h1>    
+              <p className="font-light text-gray-600 mt-3">{tutorData?.category}</p>    
+              <p className="mt-8 text-gray-500">{tutorData?.experience}+ years</p>    
+              <p className="mt-2 text-gray-500">{tutorData?.type_of_trader}</p>  </div>  
+              <div className="mt-12 px-10 justify-center text-center">    
+              {
               !editAbout ? 
                   <p className='resize w-full  rounded-md whitespace-normal break-words'>{tutorData?.about_me || ''}</p>
               : 
@@ -129,7 +118,7 @@ const TutorProfile = () => {
                 onChange={(e) => setProfileData({ ...tutorData, about_me: e.target.value })}>
               </textarea>
             }
-          <div className=" flex justify-end">
+            <div className=" flex justify-end">
             {
               !editAbout ? 
               <div className='cursor-pointer hover:text-red-600 underline' onClick={()=>handleAboutEdit()}>
@@ -139,27 +128,12 @@ const TutorProfile = () => {
                   Save
               </div>
               }
-          </div>
-          </div>
-        </div>
+            </div>
+            </div>
       </div>
-    </div>
-  </div>)
+      </div>
+  )
 };
 
-
-
-const ExperienceItem = ({ title, company, date, description }) => (
-  <div className="mb-6">
-    <div className="flex justify-between">
-      <span className="text-gray-600 font-bold">{title}</span>
-      <p>
-        <span className="text-gray-600 mr-2">{`at ${company}`}</span>
-        <span className="text-gray-600">{date}</span>
-      </p>
-    </div>
-    <p className="mt-2">{description}</p>
-  </div>
-);
 
 export default TutorProfile;

@@ -7,6 +7,7 @@ import userAxios from '../../../Axios/UserAxios'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import walletIcon from '../../../assets/pngwing.com.png'
+import ChatList from '../../ChatList'
 
 
 const MainBody = () => {
@@ -16,6 +17,22 @@ const MainBody = () => {
     const [moduleDatas,setModuleData] = useState([])
     const [updateData,setUpdateData] = useState(false)
 
+    const [inboxData,setInboxData] = useState([])
+    const [loading,setLoading] = useState()
+ 
+   const inboxDatafetch =async()=>{
+     setLoading(true)
+     await axiosInstance.get('/chat?user_role=user').then((res)=>{
+       setInboxData(res.data.result)
+       setLoading(false)
+     }).catch((error)=>{
+       console.log(error)
+       toast.error(error.message)
+     })
+    }
+    useEffect(()=>{
+        inboxDatafetch()
+    },[])
 
     const fetchData=async()=>{
         await axiosInstance.get('/userpanel').then((res)=>{
@@ -31,6 +48,19 @@ const MainBody = () => {
     fetchData()
    },[updateData])
 
+//    const inboxData = [
+//     {
+//       subject: 'Sample Subject 1',
+//       email: 'sample@email.com',
+//       time: '23m ago',
+//     },
+//     {
+//       subject: 'Sample Subject 2',
+//       email: 'sample@email.com',
+//       time: '1h ago',
+//     },
+//   ];
+
   return (
     <>
     <div className='mt-24 md:container mx-auto bg-slate-100'>
@@ -42,8 +72,8 @@ const MainBody = () => {
             </div>
         </div>
             <hr/>
-        <div className='w-full h-auto grid  md:grid-cols-4 p-2'>
-            <div  className='w-full p-10 md:col-span-3 flex-row'>  
+        <div className='w-full md:h-auto md:grid  md:grid-cols-4 p-2'>
+            <div  className='w-full p-10 md:col-span-3 md:flex-row'>  
             { 
                 purchaseDatas.length ? (
                 purchaseDatas.filter((obj)=>obj.status!=='refunded').map((purchase)=>{
@@ -69,9 +99,23 @@ const MainBody = () => {
                 )
             }
             </div> 
-            <div className='col-span-1 h-[500px] flex w-full justify-center items-center'>
-                <Card userData={userDatas} setUserData={setUserData}/>
+            <div className='md:col-span-1 bg-black'>
+                <div className="flex w-full justify-center items-center">
+                    <Card userData={userDatas} setUserData={setUserData}/>
+                </div>
+                <div className="flex-1 flex h-full ">
+                    <div className="main flex-1 flex flex-col">
+                        <div className=" heading flex-2">
+                            <h1 className="text-3xl text-gray-700 mb-4">Chat</h1>
+                        </div>
+                        <div>
+                                {/* <ChatList inboxData={inboxData} width={'full'}/> */}
+                                <ChatList inboxData={inboxData} width={'full'} hidden={'hidden md:block'} dataToListRole={'tutor'}/>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
         </div>
         </div>
         <div className='md:container mx-auto my-5'>

@@ -1,4 +1,4 @@
-import React, { useRef,useState} from 'react'
+import React, { useEffect, useRef,useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import userAxios from '../../Axios/UserAxios'
 import {BsFillShieldLockFill, BsTelephoneFill} from 'react-icons/bs'
@@ -8,9 +8,6 @@ import 'react-phone-input-2/lib/style.css'
 import {auth} from '../../config/firbase.config'
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import {  toast } from 'react-toastify'
-// import PhoneInput from 'react-phone-input-2'
-// import loginImg from '../../assets/stock-exchange-trading-floor.jpg'
-
 
 const Signup = () => {
     const axiosInstance = userAxios()
@@ -21,7 +18,7 @@ const Signup = () => {
     const confRef = useRef()
 
     const [flag,setFlag] = useState(true)
-    const [formData,setFormData] = useState()
+    const [formData,setFormData] = useState({})
     const [error,setError] = useState({})
 
     const [otp,setOtp] = useState()
@@ -29,51 +26,52 @@ const Signup = () => {
     const [showOTP,setShowOTP] = useState(false)
 
     const navigate = useNavigate()
-
-    const formValidation =()=>{
-        setLoading(true)
-        const name = nameRef.current.value
-        const email = emailRef.current.value
-        const mobile = mobileRef.current.value
-        const password = passRef.current.value
-        const conf = confRef.current.value
+    const formValidation = () => {
+        const name = nameRef.current.value;
+        const email = emailRef.current.value;
+        const mobile = mobileRef.current.value;
+        const password = passRef.current.value;
+        const conf = confRef.current.value;
+    
         const validationErrors = {};
-
-        if (!name){ 
-            validationErrors.name = 'Name is required'
-            }else if(name.trim() === ''){ 
-                validationErrors.name = 'Invalid name'}
-        if (!email){
-            validationErrors.email = 'Email is required'
-        }else if (!/\S+@\S+\.\S+/.test(email)){
-            validationErrors.email = 'Invalid email format'
+    
+        if (!name || name.trim() === '') {
+            validationErrors.name = 'Name is required or invalid';
         }
-        if (!mobile) {validationErrors.mobile = 'Mobile is required'}
-        else if(!/^\d{10}$/.test(mobile)) {validationErrors.mobile = 'Mobile must be a 10-digit number';}
-
-        if (!password){validationErrors.password = 'Password is required'}
-        else if(password.length<6){validationErrors.password = 'password should have min 6 charactors'}
-
-        if(conf != password){validationErrors.nomatch = 'Password entered not matching'}
-
-        if(Object.keys(validationErrors).length === 0) {
-            setFormData({name,email,password,mobile})
-            handleOTP()
-        }else{
-            setError(validationErrors)
-            setLoading(false)
+        if (!email || !/\S+@\S+\.\S+/.test(email)) {
+            validationErrors.email = 'Email is required or in an invalid format';
         }
-    }
+        if (!mobile || !/^\d{10}$/.test(mobile)) {
+            validationErrors.mobile = 'Mobile is required and must be a 10-digit number';
+        }
+        if (!password || password.length < 6) {
+            validationErrors.password = 'Password is required and should have at least 6 characters';
+        }
+        if (conf !== password) {
+            validationErrors.nomatch = 'Password entered does not match';
+        }
+        if (Object.keys(validationErrors).length === 0) {
+            setFormData({ name, email, password, mobile });
+        } else {
+            setError(validationErrors);
+            setLoading(false);
+        }
+    };
+    
+
+    useEffect(()=>{
+        handleOTP()
+    },[formData])
 
     const handleOTP =async ()=>{
         try {
-            if(Object.keys(formData).length != 0){
+            if(Object.keys(formData).length > 0){
+                setLoading(true)
                 onCaptchaVerify()
                 const appVerifier = window.recaptchaVerifier
-                const formatPh = '+91'+formData.mobile
+                const formatPh = '+91' + formData.mobile
                 signInWithPhoneNumber(auth, formatPh,appVerifier)
                     .then((confirmationResult) => {
-                        setLoading(false)
                         window.confirmationResult = confirmationResult;
                         setFlag(false)
                         setLoading(false)
@@ -111,39 +109,38 @@ const Signup = () => {
                     "expired-callback": () => {
                         toast.error("TimeOut");
                     }
-                    },auth
-                    )}
+                },auth
+                )}
     }catch(err){
             console.log(err);
         }
     }
 
-    const verifyOtp = ()=>{
-          if (otp) {
-          window.confirmationResult.confirm(otp)
-              .then(async () =>{
-                handleSubmit()
-              })
-              .catch(() => {
-                setError("Enter a valid OTP");
-                toast.error('Enter a valid OTP')
-              });
-          } else {
-          setError("Enter OTP");
-          toast.error('Enter OTP')
+    const verifyOtp = () => {
+        if (otp) {
+            window.confirmationResult
+                .confirm(otp)
+                .then(async () => {
+                    setError(""); 
+                    handleSubmit();
+                })
+                .catch(() => {
+                    setError("Enter a valid OTP");
+                    toast.error('Enter a valid OTP');
+                });
+        } else {
+            setError("Enter OTP");
+            toast.error('Enter OTP');
         }
-    }
-
+    };
+    
     const handleSubmit =async()=>{
         try {
             setLoading(true)
             await axiosInstance.post('/signup',formData).then((res)=>{
-                if(res.status == 200){
-                    toast.success(res?.data?.msg)
-                    navigate('/login')} 
-                else{
-                    toast.error('Something went wrong in route!!')
-                }
+                toast.success(res?.data?.msg)
+                setLoading(false)
+                navigate('/login')
             }).catch((error)=>{
                 toast.error(error)
             })    

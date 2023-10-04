@@ -13,37 +13,24 @@ const Users=()=>{
     const [edit,setEdit] = useState(false)
     const searchRef = useRef()
     const [showModal, setShowModal] = useState(false);
-    // const [toggle,setToggle] = useState(false)
+    const [toggle,setToggle] = useState(false)
     
-    useEffect(()=>{
-        axiosInstance.get('/users')
+    const fetchUserData =async()=>{
+       await axiosInstance.get('/users')
             .then((res)=>{
                 setUsersData(res.data.result)
             }).catch((error)=>{
                 console.log(error);
                 toast.error(error.message)
             })
+    }
+
+    useEffect(()=>{
+        fetchUserData()
     },[edit]);
 
     const search=()=>{
         setSearchInput(searchRef.current.value);
-        // if(searchInput == ''){
-        //     setData(usersData)
-        // }else{
-        //     let Data = usersData.filter(user => {
-        //         const lowerSearchInput = searchInput.toLowerCase();
-        //         let emailMatch = user.email.toLowerCase().includes(lowerSearchInput);
-        //         let nameMatch = user.name.toLowerCase().includes(lowerSearchInput);
-        //         let mobileMatch = false; 
-        
-        //         if (!isNaN(searchInput)) {
-        //           const mobileString = String(user.mobile); 
-        //           mobileMatch = mobileString.includes(searchInput);
-        //         }
-              
-        //         return emailMatch || nameMatch || mobileMatch;})
-        //     setData(Data)
-        //     }   
         }
     const editUser =(user)=>{
         setUser(user)
@@ -72,19 +59,19 @@ const Users=()=>{
       });
     }
     
-    const handleModal=(id,state)=>{
-        if(!state){
-            toggle =()=>{
-                block(id)
-                setShowModal(false)}
-        }else{
-            toggle =()=>{
-                unBlock(id)
-                setShowModal(false)
-            }
-        }
-        setShowModal(true)
-    }
+    // const handleModal=(id,state)=>{
+    //     if(!state){
+    //         toggle =()=>{
+    //             block(id)
+    //             setShowModal(false)}
+    //     }else{
+    //         toggle =()=>{
+    //             unBlock(id)
+    //             setShowModal(false)
+    //         }
+    //     }
+    //     setShowModal(true)
+    // }
 return (
     <>
     {!edit ? 
@@ -140,8 +127,7 @@ return (
     </table>
     </div>
     </div> : (
-    <EditUser user={userDetails} func={setEdit}/>
-    )}
+    <EditUser user={userDetails} func={setEdit}/>)}
     { showModal ?
        <Modal 
        setShowModal={setShowModal} 
@@ -149,7 +135,7 @@ return (
        message={'Are you sure?'} 
        description={'Please confirm to proceed this action?'} />  
        : '' }
-</>
+    </>
 )}
 
 export default Users

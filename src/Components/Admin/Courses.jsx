@@ -1,59 +1,83 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { MdCheckCircle,MdCancel  } from 'react-icons/md'
 import adminAxios from '../../Axios/AdminAxios'
 import people from '../../assets/people.svg'
 import Rating from '../RatingStar'
 import Modal from '../ConfirmModal'
+import DropDown from '../DropDown'
+import { debounce } from 'lodash';
+import { Spinner } from '@material-tailwind/react'
 let toggle;
 
 const Courses = () => {
   const axiosInstance = adminAxios()
+  const [originalData, setOriginalData] = useState([]);
   const [myCourses,setMyCourses] = useState([])
   const [showModal,setShowModal] = useState(false)
-  const [loading,setLoading] = useState(false)
+  const [loading,setLoading] = useState(true)
+  const [loadingSpinner,setLoadingSpinner] = useState(true)
   const [hasMoreData, setHasMoreData] = useState(true); 
+  const [category,setCategory] = useState([])
+  const searchRef = useRef()
   const threshold = 50;
 
-  const fetchMyCourses = async() => {
+  const handleSearch = async () => {
+    const searchValue = searchRef.current.value;
+    setLoading(true); 
+    try {
+      if (searchValue !== '') {
+        const response = await axiosInstance.get(`/courses?search=${searchValue}`);
+        setMyCourses(response.data.result);
+        setOriginalData(response.data.result);
+      } else {
+        setMyCourses([]);
+        setHasMoreData(true);
+        fetchMyCourses('zero');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
+  const fetchMyCourses = async (zero) => {
     setLoading(true);
-    await axiosInstance
-      .get(`/all-courses?count=${myCourses.length}`)
-      .then((res) => {
-        if (res.data.result.length < 4) {
-          setHasMoreData(false);
-        }
-        setLoading(false);
-        setMyCourses([...myCourses,...res.data.result]);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-        console.error(error);
-      });
+    try {
+      const response = await axiosInstance.get(`/courses?count=${zero === 'zero' ? 0 : myCourses.length}`);
+      const newData = zero === 'zero' ? response.data.result : [...myCourses, ...response.data.result];
+      setMyCourses(newData);
+      setOriginalData(newData);
+      if (response.data.result.length < 5) {
+        setHasMoreData(false);
+      }
+      fetchCategory();
+    } catch (error) {
+      toast.error(error.message);
+      console.error(error);
+    } finally {
+      setLoading(false);
+      setLoadingSpinner(false);
+    }
   };
 
-  useEffect(()=>{
-    fetchMyCourses();
-  },[])
-
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!loading && hasMoreData && window.innerHeight + window.scrollY >= document.body.offsetHeight - threshold) {
-        fetchMyCourses();
-      }
+  const fetchCategory =async()=>{
+    if(category.length==0){
+      await axiosInstance.get('/category').then((res)=>{
+        setCategory(res.data.result)
+      }).catch((error)=>{
+        console.log(error);
+      })
     }
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    }
-  },[loading]);
+  }
 
-
-  const activeToggleHandler=(id,state)=>{
+  const activeToggleHandler=async(id,state)=>{
         const updateData =  myCourses.map((obj)=>({...obj ,is_active:obj._id === id ? state : obj.is_active}))
         setMyCourses(updateData)
-        axiosInstance.patch(`/toggle-activecourse?id=${id}&toggle=${state}`).then((res)=>{
+        await axiosInstance.patch(`/toggle-activecourse?id=${id}&toggle=${state}`).then((res)=>{
             console.log(res);
         }).catch((error)=>{
             console.log(error);
@@ -75,29 +99,79 @@ const Courses = () => {
         setShowModal(true)
   }
 
+  const handleSort = (option) => {
+    if (option === 'Price Low To High') {
+      const sortedData = myCourses.slice().sort((a, b) => a.price - b.price);
+      setMyCourses(sortedData);
+    } else if (option === 'Price High To Low') {
+      const sortedData = myCourses.slice().sort((a, b) => b.price - a.price);
+      setMyCourses(sortedData);
+    }
+  };
+
+  const handleFilter=(option)=>{
+    if(option==='ALL'){
+      setMyCourses(originalData)
+    }else{
+      const filteredData = originalData.filter((course)=>course?.category?.category.toLowerCase() === option.toLowerCase())
+      setMyCourses(filteredData)
+    }
+  }
+
+  useEffect(() => {
+    fetchMyCourses('zero');
+  }, []);
+  
+  useEffect(() => {
+    const handleScroll = debounce(() => {
+      if (!loading && hasMoreData && window.innerHeight + window.scrollY >= document.body.offsetHeight - threshold) {
+        fetchMyCourses();
+      }
+    }, 500);
+    hasMoreData ? setLoadingSpinner(true) : setLoadingSpinner(false)
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [loading, hasMoreData]);
+  
+  
   return (
     <>
     <div className='mx-5 py-5 w-full'>
-      <table className="table overflow-x-scroll">
+      <div className='w-full h-14 bg-slate-200 my-2 rounded-lg flex items-center justify-end p-2'>
+      <DropDown key={1} role={'Filter by'} options={['ALL',...category.map((value)=>value.category)]} handle={handleFilter}/>
+      <DropDown key={2} role={'Sort by'} options={['Price High To Low','Price Low To High']} handle={handleSort}/>
+      <form className="flex items-start md:flex-row md:items-end" role="search">
+        <input
+            className="w-full px-2 py-1 border rounded-md form-input md:mr-2 md:w-auto focus:outline-none focus:ring focus:border-blue-300"
+            type=""
+            ref={searchRef}
+            placeholder="Search"
+            aria-label="Search"
+        />
+        <button onClick={()=>handleSearch()} className="p-1 bg-gray-400 border rounded-lg" type='button' >Search</button>
+        </form>
+        <div>
+        
+        </div>
+      </div>
+  
+      <div className='w-screen md:w-full overflow-x-scroll overflow-y-hidden md:overflow-hidden'>
+      <table className="table">
         {/* head */}
-        <thead className='bg-slate-300'>
+        <thead className='bg-slate-300 sticky top-0'>
           <tr>
-            <th className='text-sm'>Banner</th>
-            <th className='text-sm'>Tutor</th>
-            <th className='text-sm'>Title</th>
-            <th className='text-sm'></th>
-            <th className='text-sm flex justify-center'><img src={people} className='w-8 h-8' alt="" /></th>
-            <th className='text-sm '>Rating</th>
-            <th className='text-sm'></th>
-            <th className='text-sm'>Status</th>
-            <th></th>
-          </tr>
+          {['Banner', 'Tutor', 'Title', '', <img src={people} className='w-8 h-8' alt="" />, 'Rating', '', 'Status', '']
+          .map((header, index) => 
+            <th key={index} className='text-sm'>{header}</th>
+          )}
+        </tr>
         </thead>
         <tbody>
           {  
-            myCourses.map((obj,index)=>{
-              return(
-              <tr key={obj._id}>
+            myCourses?.map((obj,index)=>
+            <tr key={obj._id}>
               <td>
                 <div className="">
                   <div className="h-[180px]">
@@ -156,12 +230,12 @@ const Courses = () => {
                    : <div onClick={()=>toggleHandle(obj._id,true)} className='text-lg flex items-center cursor-pointer'><MdCancel color='red'/>inactive</div>
                 }
               </td>
-            </tr>)
-            })
-        }
+            </tr>
+            )
+          }
         {
-          loading && [1,2,3,4,5].map((value,i)=>{
-             return <tr key={999+value}>
+          loading && [...Array(5)].map((value,i)=>{
+             return <tr key={i}>
               <td>
                 <div className="animate-pulse">
                   <div className="h-[180px]">
@@ -208,11 +282,12 @@ const Courses = () => {
                 <div class="h-2 bg-gray-200 rounded-full animate-pulse max-w-[440px] mb-2.5"></div>
               </td>
               </tr>
-
           })
         }
         </tbody>
       </table>
+        {loadingSpinner && <div className="spinner flex h-20 w-full justify-center font-poppins text-lg"><Spinner className='mx-3'/>Loading...</div>}
+      </div>
     </div>
     {showModal && <Modal setShowModal={setShowModal} confirm={toggle} message={'Please confirm'} description={'Do you want to procced?'}/> }
     </>

@@ -11,7 +11,6 @@ import Addcourse from './Addcourse'
 import { tutorLogout } from '../../Redux/TutorAuth'
 import { emptyMyCourse } from '../../Redux/TutorSlice/Courses'
 
-
 const Mycourse = () => {
   const axiosInstance = tutorAxios()
   const id = useSelector((state)=>state.Tutor.id)
@@ -30,19 +29,23 @@ const Mycourse = () => {
     navigate('/tutor/login')
   }
 
+  const fetchData=async()=>{
+   await axiosInstance.get(`/courses?id=${id}`).then((res)=>{
+      setMyCourses(res.data.result)
+      dispatch(saveMyCourse(res.data.result))
+    }).catch((error)=>{
+      toast.error(error.message)
+      toast.error(error.response?.data?.message)
+      console.log(error);
+      if(error.response.status == 403){
+        logOut()
+      }
+    })
+  }
+
   useEffect(()=>{
     if(!mycourses){
-      axiosInstance.get(`/courses?id=${id}`).then((res)=>{
-        setMyCourses(res.data.result)
-        dispatch(saveMyCourse(res.data.result))
-      }).catch((error)=>{
-        toast.error(error.message)
-        toast.error(error.response?.data?.message)
-        console.log(error);
-        if(error.response.status == 403){
-          logOut()
-        }
-      })
+      fetchData()
     }else{
       setMyCourses(mycourses)
     }
@@ -70,20 +73,14 @@ const Mycourse = () => {
         {/* head */}
         <thead className='bg-slate-300'>
           <tr>
-            <th className='text-sm'>Banner</th>
-            <th className='text-sm'>Preview video</th>
-            <th className='text-sm'>Title</th>
-            <th className='text-sm'>Price</th>
-            <th className='text-sm'>Description</th>
-            <th className='text-sm'>Modules</th>
-            <th className='text-sm'>Edit</th>
-            <th className='text-sm'>Status</th>
-            <th></th>
+          {['Banner','Preview video','Title','Price','Description','Modules','Edit','Status',''].map((head)=>
+            <th className='text-sm'>{head}</th>
+          )}  
           </tr>
         </thead>
         <tbody>
           {  
-            myCourses.map((obj,index)=>{
+            myCourses.map((obj)=>{
               return(
               <tr key={obj._id}>
               <td>

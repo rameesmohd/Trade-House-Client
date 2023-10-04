@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Cards } from '../../Card'
-import { useEffect } from 'react'
-import userAxios from '../../../Axios/UserAxios'
-import { toast } from 'react-toastify'
+
 import {
     Card,
     CardHeader,
@@ -10,35 +8,9 @@ import {
     CardFooter,
     Button,
   } from "@material-tailwind/react";
-import { useDispatch, useSelector } from 'react-redux'
-import { setCoursesLoad} from '../../../Redux/ClientSlice/CoursesLoad'
 
+const Body = ({loading,courseData}) => {
 
-const Body = () => {
-    const CourseDataRedux= useSelector((store)=>store.CoursesLoad.courseData)
-    const axiosInstance = userAxios()
-    const dispatch = useDispatch()
-    const [courseData,setCourseData] = useState([])
-    const [loading,setLoading] = useState(false)
-    useEffect(()=>{
-        if(!CourseDataRedux){
-            setLoading(true)
-            axiosInstance.get('/all-courses')
-            .then((res)=>{
-            setCourseData(res.data.result)
-            console.log(res.data.result);
-            dispatch(setCoursesLoad(res.data.result))
-        }).catch((error)=>{
-            error.code === 'ECONNABORTED' ? console.log('Request canceled due to timeout') 
-            : toast.error(error.message)
-        }).finally(()=>{
-            setLoading(false)
-        })
-    }else{
-        setCourseData(CourseDataRedux)
-    }
-    },[])
-    
     return (
     <>
         <div className='grid md:grid-cols-3 gap-2 h-screen overflow-x-hidden overflow-y-scroll bg-slate-50'>
@@ -49,9 +21,9 @@ const Body = () => {
         }
         
         {
-          loading && [1,2,3,4,5,6].map((obj)=>{
+          loading && [...Array(4)].map((obj,i)=>{
                return (
-                <Card key={obj} className="w-auto mx-1 my-2">
+                <Card key={i} className="w-auto mx-1 my-2">
                  <CardHeader shadow={false} floated={false} className="h-44">
                     <div className='w-full h-full animate-pulse bg-slate-300'>
                     </div>

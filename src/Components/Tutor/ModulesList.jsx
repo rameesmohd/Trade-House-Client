@@ -131,8 +131,7 @@ const ModulesList = () => {
       setSpinner(true)
       const title = chapterTitleRef.current.value
       await axiosInstance.post('/chapter',{moduleId:id,title:title,courseId:courseId}).then((res)=>{
-        const moduleData = res.data.result 
-        setModuleData(moduleData)
+        setModuleData(res.data.result)
         toast.success(res.data.message)
       }).catch((error)=>{
         console.log(error);

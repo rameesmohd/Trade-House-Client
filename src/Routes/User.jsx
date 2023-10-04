@@ -11,10 +11,10 @@ import Success from '../Pages/User/Success'
 import Userpanel from '../Pages/User/Userpanel'
 import LearningRoom from '../Pages/User/LearningRoom'
 import Markets from '../Pages/User/Markets'
+import Chat from '../Pages/User/Chat'
 
 const User = () => {
   const userAuth = useSelector((state)=>state.Client.Token)
-
   const PrivateRoute = ({ element, ...rest }) => {
     return userAuth ? element : <Navigate to="/login" />;
   };
@@ -36,6 +36,7 @@ const User = () => {
             <Route path='/payments/success' element={ <PrivateRoute element={<Success/>}/> }/>
             <Route path='/userpanel' element={ <PrivateRoute element={<Userpanel/>}/> }/>
             <Route path='/userpanel/watch' element={ <PrivateRoute element={<LearningRoom/>}/> }/>
+            <Route path='/chat' element={ <PrivateRoute element={<Chat/>}/> }/>
       </Routes>
     </>
   )

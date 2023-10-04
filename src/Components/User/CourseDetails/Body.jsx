@@ -9,6 +9,8 @@ import { useState } from 'react'
 import userAxios from '../../../Axios/UserAxios'
 import { toast } from 'react-toastify'
 import { setPurchsedCourses} from '../../../Redux/ClientSlice/CoursesLoad'
+import {BiChat} from 'react-icons/bi'
+import { Spinner } from '@material-tailwind/react'
 
 const Body = () => {
     const purchasedCourses= useSelector((store)=>store.CoursesLoad.purchasedCourses)
@@ -19,6 +21,7 @@ const Body = () => {
     const location = useLocation()
     const courseData = location.state
     const [isPurchased,setIsPurchased] = useState(false)
+    const [loading,setLoading] = useState(false)
     
     useEffect(()=>{
         const loadPurchasedCourses=async()=>{
@@ -40,6 +43,15 @@ const Body = () => {
             purchased.length !== 0 ? setIsPurchased(true) : setIsPurchased(false)
         }
     })
+
+    const accessChat=async()=>{
+        setLoading(true)
+        console.log('other_id:', courseData.tutor._id);
+        console.log('user_role:', 'user');
+        await axiosInstance.post('/chat',{other_id:courseData.tutor._id,user_role:'user'})
+        setLoading(false)
+        navigate('/chat')  
+    }
 
   return (
     <div>
@@ -79,6 +91,8 @@ const Body = () => {
                     <p className='text-white mb-2'>About the Trainer</p>
                     <h1 className='text-white text-3xl mb-2'>{courseData?.tutor?.firstName+ " " +courseData?.tutor?.lastName}</h1>
                     <p className='text-white'>{courseData?.tutor?.about_me}</p>
+                    {!loading ? <button onClick={()=>accessChat()} className='border p-1 font-poppins rounded-lg bg-slate-200 text-black border-white mt-2 flex items-center justify-center w-36'><BiChat className='mx-1'/><p>Chat with me</p></button>:
+                    <button className='border p-1 font-poppins rounded-lg bg-slate-200 text-black border-white mt-2 flex items-center justify-center w-36'><Spinner/></button>}
                 </div>
                 </div>
             </div>

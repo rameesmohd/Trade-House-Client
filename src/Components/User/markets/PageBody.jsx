@@ -14,6 +14,8 @@ import {
 } from "@material-tailwind/react";
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { toast } from 'react-toastify'
+import ScrollToTopButton from '../../ScrollToTopButton'
+
 
 
 const PageBody = () => {
@@ -216,7 +218,7 @@ const fetchLiveCurrencyData=async()=>{
   }, []);
 
   useEffect(() => {
-    calculateLiveFxPrice();
+    // calculateLiveFxPrice();
   }, [base, quote]);
 
   useEffect(()=>{
@@ -245,7 +247,7 @@ const fetchLiveCurrencyData=async()=>{
                       <div className='font-poppins md:text-lg font-semibold rounded-xl'>Quote Currecy</div>
                       <input ref={quoteRef} type="text" className='border rounded-xl' placeholder='eg:USD' />
                     </div>
-                  </div>
+                </div>
             <div className='w-full flex justify-center'>
               <button onClick={()=>handleLivePriceFunction()} className='border p-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm'>Get Live Price</button>
             </div>
@@ -306,7 +308,7 @@ const fetchLiveCurrencyData=async()=>{
       </div>
 
     {/* Carousel */}
-    <div className="carousel w-full md:h-[500px]">
+    <div className="carousel w-full overflow-hidden  md:h-[500px]">
       {/* Slide 1 */}
       <div id="slide1" className={`carousel-item relative w-full ${activeSlide === 1 ? 'block' : 'hidden'}`}>
         <div className="w-full grid md:grid-cols-2 p-5">
@@ -326,7 +328,7 @@ const fetchLiveCurrencyData=async()=>{
               retail forex brokers, and investors.
             </p>
           </div>
-          <div className="col-span-1 w-full col h-full flex items-center overflow-hidden">
+          <div className="col-span-1 w-full col h-full flex items-center overflow-hidden ">
             <img src={img} alt="" className="object-cover" />
           </div>
         </div>
@@ -647,6 +649,7 @@ const fetchLiveCurrencyData=async()=>{
     </Card>
   </div>
   <hr className='my-8'/>
+  <ScrollToTopButton/>
 </div>
   )
 }

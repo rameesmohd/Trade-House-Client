@@ -7,8 +7,6 @@ import {
 import adminAxios from '../../Axios/AdminAxios'
 import {  toast } from 'react-toastify';
 import { HiSearch } from 'react-icons/hi'
-import {CiWallet} from 'react-icons/ci'
-
 
 
 
@@ -145,11 +143,9 @@ const Sales = () => {
               <button className='border border-gray-300 p-1 md:p-3 rounded-lg mx-2 my-2 md:my-0' onClick={handleSearch}><HiSearch/></button>
           </div>
         </div>
-        <div className="dropdown mt-3 flex">
-            <label tabIndex={0} 
-            className={`${statusFilter==='all' ? 'bg-slate-400' : statusFilter==='success' ? 
-              'bg-green-400' : statusFilter==='pending' ? 'bg-yellow-400' : statusFilter==='refunded' ? 'bg-red-600 ' : ''} 
-              m-1 font-poppins rounded-md p-1 flex items-center`}>Filter 
+          <div className="dropdown mt-3 flex">
+            
+            <label tabIndex={0} className='flex items-center font-poppins font-semibold'>Filter 
             <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg></label>
@@ -172,15 +168,9 @@ const Sales = () => {
           <table id="sales-table" className="w-full min-w-[640px] table-auto ">
             <thead>
               <tr>
-                {["order_id", "User",'course',"tutor", "date","mode of payment","Amount","status"].map((el) => (
-                  <th
-                    key={el}
-                    className="border border-blue-gray-50 py-3 px-5 text-left bg-slate-200"
-                    >
-                    <Typography
-                      variant="small"
-                      className="text-sm font-bold uppercase font-poppins"
-                    >
+                {["Order_id", "User",'Course',"Tutor", "Date","Mode of Payment","Amount","Status","Admin Share","Tutor Share"].map((el) => (
+                  <th key={el} className="border border-blue-gray-50 py-3 px-5 text-left bg-slate-200">
+                    <Typography variant="small" className="text-sm font-semibold  font-poppins">
                       {el}
                     </Typography>
                   </th>
@@ -189,7 +179,7 @@ const Sales = () => {
             </thead>
             <tbody>
             {
-              loading && [1,2,3,4,5,6,7].map((value)=>{
+              loading && [...Array(7)].map((value)=>{
                     const className = 'py-3 px-5 border-b border-blue-gray-50';
                     return(
                     <tr key={1599+value} className='animate-pulse overflow-x-hidden'>
@@ -304,6 +294,16 @@ const Sales = () => {
                       {order.status === 'success' && !order.is_refundable && <p className='text-green-500 font-semibold'>Success</p>}
                       {order.status === 'success' && order.is_refundable && <p className='text-orange-400'>Pending</p>}
                       {order.status === 'refunded' && !order.is_refundable && <p className='text-red-600 font-semibold'>Refunded</p>}
+                        </p>
+                      </td>
+                      <td className={className}>
+                      <p className="text-sm text-green-600 font-semibold ">
+                        {order.status === 'success' && !order.is_refundable && '+₹'+order.amount*0.25}
+                        </p>
+                      </td>
+                      <td className={className}>
+                      <p className="text-sm text-red-600 font-semibold ">
+                        { order.status === 'success' && !order.is_refundable && '-₹'+order.amount*0.75}
                         </p>
                       </td>
                     </tr>

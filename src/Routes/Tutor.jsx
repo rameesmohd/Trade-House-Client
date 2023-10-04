@@ -7,6 +7,7 @@ import Profile from '../Pages/Tutor/Profile'
 import { useSelector } from 'react-redux';
 import Modules from '../Pages/Tutor/Modules';
 import Login from '../Pages/Tutor/Login'
+import Chat from '../Pages/Tutor/Chat';
 
 const Tutor = () => {
   const tutorAuth = useSelector((state)=>state.Tutor.Token)
@@ -24,6 +25,8 @@ const Tutor = () => {
             <Route path='/my-courses' element={ <PrivateRoute element={<Mycourses/>} /> }/>  
             <Route path='/students' element={ <PrivateRoute element={<Students/>} />}/>
             <Route path='/modules' element={ <PrivateRoute element={<Modules/>} />}/>
+            <Route path='/chat' element={ <PrivateRoute element={<Chat/>} />}/>
+
        </Routes>
     </>
   )

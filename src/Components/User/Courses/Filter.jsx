@@ -1,67 +1,126 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import Body from './Body'
-
-const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-]
-const subCategories = [
-  { name: 'Forex', href: '#' },
-  { name: 'Crypto', href: '#' },
-  { name: 'NFT', href: '#' },
-  { name: 'Indian Stock', href: '#' },
-  { name: 'Volatility', href: '#' },
-]
-const filters = [
-  {
-    id: 'color',
-    name: 'Difficulty',
-    options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
-    ],
-  },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
-  },
-  {
-    id: 'size',
-    name: 'Price',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
-]
+import userAxios from '../../../Axios/UserAxios'
+import { toast } from 'react-toastify'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCoursesLoad} from '../../../Redux/ClientSlice/CoursesLoad'
+import { debounce } from 'lodash'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Filter() {
+  const axiosInstance = userAxios()
+  const dispatch = useDispatch()
+  const CourseDataRedux= useSelector((store)=>store.CoursesLoad.courseData)
+  const [courseData,setCourseData] = useState([])
+  const [loading,setLoading] = useState(false)
+  const [category,setCategory] = useState([{category:'All',_id:'All',checked:true}])
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [filter,setFilter] = useState({
+      category:'All',
+      level : 'All',
+      price: 'All',
+      search:'All'
+  })
+
+  const fetchCourses = async()=>{
+    setLoading(true);
+    await axiosInstance.get(`/courses?category=${filter.category}&level=${filter.level}&price=${filter.price}&search=${filter.search}`)
+    .then((res)=>{
+        setCourseData(res.data.result)
+        dispatch(setCoursesLoad(res.data.result))
+    }).catch((error)=>{
+        error.code === 'ECONNABORTED' ? console.log('Request canceled due to timeout') 
+        : toast.error(error.message)
+    }).finally(()=>{
+        setLoading(false)
+    })
+  }
+
+  const fetchCategory=async()=>{
+    await axiosInstance.get('/categories').then((res)=>{
+      setCategory((prev) =>([...prev,...res.data.result]))
+    })
+  }  
+
+  const debouncedFetchCourses = debounce(fetchCourses, 1000);
+  let [isInitialMount,setInitailMount] = useState(true);
+  useEffect(() => {
+    if (!isInitialMount) {
+      debouncedFetchCourses();
+    } else {
+      setInitailMount(false)
+    }
+    return () => {
+      debouncedFetchCourses.cancel();
+    };
+  }, [filter]);
+
+  useEffect(() => {
+    if (!CourseDataRedux) {
+      debouncedFetchCourses();
+    } else {
+      setCourseData(CourseDataRedux);
+    }
+    
+    if (category.length < 2) {
+      fetchCategory();
+    }
+  }, []);
+  
+  const debouncedHandleChange = debounce((value) => {
+    setFilter((prev) => ({ ...prev, search: value }));
+  }, 2000);
+
+  const handleSearchChange = (e) => {
+    const { value } = e.target;
+    debouncedHandleChange.cancel();
+    debouncedHandleChange(value === '' ? 'All' : value);
+  };
+
+  const sortOptions = [
+    { name: 'Price Low to High', href: '#', current: false },
+    { name: 'Price High to Low', href: '#', current: false },
+  ]
+  
+  const handleSort = (option) => {
+    if (option == 'Price Low to High') {
+      const sortedData = courseData.slice().sort((a, b) => a.price - b.price);
+      setCourseData(sortedData);
+    } else if (option == 'Price High to Low') {
+      const sortedData = courseData.slice().sort((a, b) => b.price - a.price);
+      setCourseData(sortedData);
+    }
+  };
+  
+  const filters = [
+    {
+      id: 'color',
+      name: 'level',
+      options: [
+        { value: 'All', label: 'All', checked: true },
+        { value: 'Beginner', label: 'Beginner', checked: false },
+        { value: 'Intermediate', label: 'Intermediate', checked: false },
+        { value: 'Advanced', label: 'Advanced', checked: false },
+      ]
+    },
+    {
+      id: 'size',
+      name: 'price',
+      options:[
+        {value: 'All', label: 'All', checked: true },
+        {value: [1000, 5000], label: '₹1000 - ₹5000', checked: false },
+        {value: [5000, 10000], label: '₹5000 - ₹10000', checked: false },
+        {value: [10000, 50000], label: '₹10000 - ₹50000', checked: false },
+        {value: [50000, Infinity], label: 'Above ₹50000', checked: false },
+      ]
+    }
+  ]
 
   return (
     <div className="bg-white">
@@ -91,6 +150,7 @@ export default function Filter() {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
+               
                 <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
                   <div className="flex items-center justify-between px-4">
                     <h2 className="text-lg font-medium text-gray-900">Filters</h2>
@@ -108,13 +168,25 @@ export default function Filter() {
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
                     <ul role="list" className="px-2 py-3 font-medium text-gray-900">
-                      {subCategories.map((category) => (
-                        <li key={category.name}>
-                          <a href={category.href} className="block px-2 py-3">
-                            {category.name}
-                          </a>
-                        </li>
-                      ))}
+                    {category.map((category,optionIdx) => (
+                    <li key={category.category}>
+                      <div className='flex items-center'>
+                       <input
+                          id={`filter-${category._id}-${optionIdx}`}
+                          name='category'
+                          defaultValue={category.category}
+                          type="radio"
+                          onChange={(e) => e.target.checked ? setFilter((prev) => ({ ...prev, [e.target.name]: category._id })) : null}
+                          defaultChecked={category.checked}
+                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                      <div  
+                          className='cursor-pointer mx-3'>
+                          {category?.category?.charAt(0).toUpperCase() + category?.category?.slice(1).toLowerCase()}
+                      </div>
+                      </div>
+                    </li>
+                  ))}
                     </ul>
 
                     {filters.map((section) => (
@@ -136,23 +208,24 @@ export default function Filter() {
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 {section.options.map((option, optionIdx) => (
-                                  <div key={option.value} className="flex items-center">
-                                    <input
-                                      id={`filter-mobile-${section.id}-${optionIdx}`}
-                                      name={`${section.id}[]`}
-                                      defaultValue={option.value}
-                                      type="checkbox"
-                                      defaultChecked={option.checked}
-                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                    />
-                                    <label
-                                      htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                      className="ml-3 min-w-0 flex-1 text-gray-500"
-                                    >
-                                      {option.label}
-                                    </label>
-                                  </div>
-                                ))}
+                                <div key={option.value} className="flex items-center">
+                                  <input
+                                    id={`filter-${section.id}-${optionIdx}`}
+                                    name={section.name}
+                                    defaultValue={option.value}
+                                    type="radio"
+                                    onChange={(e) => e.target.checked ? setFilter((prev) => ({ ...prev, [e.target.name]: e.target.value })) : null}
+                                    defaultChecked={option.checked}
+                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  />
+                                  <label
+                                    htmlFor={`filter-${section.id}-${optionIdx}`}
+                                    className="ml-3 text-sm text-gray-600"
+                                  >
+                                    {option.label}
+                                  </label>
+                                </div>
+                              ))}
                               </div>
                             </Disclosure.Panel>
                           </>
@@ -200,8 +273,8 @@ export default function Filter() {
                         <Menu.Item key={option.name}>
                           {({ active }) => (
                             <a
-                              href={option.href}
-                              className={classNames(
+                                onClick={()=>handleSort(option.name)}
+                                className={classNames(
                                 option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                 active ? 'bg-gray-100' : '',
                                 'block px-4 py-2 text-sm'
@@ -216,11 +289,6 @@ export default function Filter() {
                   </Menu.Items>
                 </Transition>
               </Menu>
-
-              <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
-                <span className="sr-only">View grid</span>
-                <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
-              </button>
               <button
                 type="button"
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -231,7 +299,10 @@ export default function Filter() {
               </button>
             </div>
           </div>
-
+          <div className='flex justify-end items-center my-1'>
+          <input name='search' onChange={handleSearchChange} type="text" className='border-gray-300 rounded-md sm:hidden' placeholder='Search here' />
+          </div>
+          
           <section aria-labelledby="products-heading" className="pb-24 pt-6">
             <h2 id="products-heading" className="sr-only">
               Products
@@ -240,23 +311,37 @@ export default function Filter() {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
               <form className="hidden lg:block">
-                <h3 className="sr-only">Categories</h3>
                 <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
-                  <input type="text" className='border-gray-300 rounded-md' placeholder='Search here' />
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
+                  <input type="text" onChange={handleSearchChange} className='border-gray-300 rounded-md' placeholder='Search here' />
+                  <h3 className="font-poppins">Categories</h3>
+                  {category.map((category,optionIdx) => (
+                    <li key={category.category}>
+                      <div className='flex items-center'>
+                       <input
+                          id={`filter-${category._id}-${optionIdx}`}
+                          name='category'
+                          defaultValue={category.category}
+                          type="radio"
+                          onChange={(e) => e.target.checked ? setFilter((prev) => ({ ...prev, [e.target.name]: category._id })) : null}
+                          defaultChecked={category.checked}
+                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                      <div  
+                          className='cursor-pointer mx-3'>
+                          {category?.category?.charAt(0).toUpperCase() + category?.category?.slice(1).toLowerCase()}
+                      </div>
+                      </div>
                     </li>
                   ))}
                 </ul>
 
-                {filters.map((section) => (
+                { filters.map((section) => (
                   <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                     {({ open }) => (
                       <>
                         <h3 className="-my-3 flow-root">
                           <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                            <span className="font-medium text-gray-900">{section.name}</span>
+                            <span className="font-poppins font-medium text-gray-900">{section.name}</span>
                             <span className="ml-6 flex items-center">
                               {open ? (
                                 <MinusIcon className="h-5 w-5" aria-hidden="true" />
@@ -272,9 +357,10 @@ export default function Filter() {
                               <div key={option.value} className="flex items-center">
                                 <input
                                   id={`filter-${section.id}-${optionIdx}`}
-                                  name={`${section.id}[]`}
+                                  name={section.name}
                                   defaultValue={option.value}
-                                  type="checkbox"
+                                  type="radio"
+                                  onChange={(e) => e.target.checked ? setFilter((prev) => ({ ...prev, [e.target.name]: e.target.value })) : null}
                                   defaultChecked={option.checked}
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 />
@@ -293,9 +379,8 @@ export default function Filter() {
                   </Disclosure>
                 ))}
               </form>
-
               {/* Product grid */}
-              <div className="lg:col-span-3">{<Body/>}</div>
+              <div className="lg:col-span-3">{<Body loading={loading} courseData={courseData}/>}</div>
             </div>
           </section>
         </main>
