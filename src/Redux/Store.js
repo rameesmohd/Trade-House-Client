@@ -21,10 +21,6 @@ const tutorPersistorReducer = persistReducer(tutorpersistConfig,TutorAuth.reduce
 const CourseOnPaymentpersistConfig = {key : 'CourseOnPayment',storage ,version : 1}
 const CourseOnPaymentReducer = persistReducer(CourseOnPaymentpersistConfig,CourseOnPayment.reducer)
 
-const ChatpersistConfig = {key : 'Chat',storage ,version : 1}
-const ChatReducer = persistReducer(ChatpersistConfig,Chat.reducer)
-
-
 export const store = configureStore({
     reducer : {
         Client : userPersistReducer,
@@ -35,7 +31,7 @@ export const store = configureStore({
 
         Tutor : tutorPersistorReducer,
         Courses : Courses.reducer,
-        Chat : ChatReducer
+        Chat : Chat.reducer
     }
 })
 

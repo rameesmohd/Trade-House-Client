@@ -11,6 +11,8 @@ function ChatComponent() {
    const [inboxData,setInboxData] = useState([])
    const user_id = useSelector((store)=>store.Tutor.id)
    const [loading,setLoading] = useState()
+   const [fetchAgain,setFetchAgain] = useState(false)
+
 
   const inboxDatafetch =async()=>{
     setLoading(true)
@@ -25,7 +27,7 @@ function ChatComponent() {
 
   useEffect(()=>{
     inboxDatafetch()
-  },[])
+  },[fetchAgain])
 
   return (
     <div className="w-full h-full">
@@ -96,7 +98,7 @@ function ChatComponent() {
 
               <div className="flex-1 flex h-full">
                 <ChatList inboxData={inboxData} width={'1/3'} hidden={'hidden md:block'} dataToListRole={'user'} />
-                <ChatContent axiosInstance={axiosInstance} user_id={user_id} senderRole={'tutor'} recieverRole={'user'}/>
+                <ChatContent setFetchAgain={setFetchAgain} axiosInstance={axiosInstance} user_id={user_id} senderRole={'tutor'} recieverRole={'user'}/>
               </div>
             </div>
           </div>

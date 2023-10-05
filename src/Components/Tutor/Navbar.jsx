@@ -21,9 +21,9 @@ const Navbar = () => {
     navigate('/tutor/login')
   }
 
-  useEffect(()=>{
-    dispatch(setBlocker({logOut}))
-  })
+  // useEffect(()=>{
+  //   dispatch(setBlocker({logOut}))
+  // })
   
   return (
     <>

@@ -1,22 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import ChatList from '../../ChatList';
-import ChatContent from '../../ChatContent';
-import userAxios from '../../../Axios/UserAxios'
+import ChatList from './ChatList';
+import ChatContent from './ChatContent';
+import userAxios from '../../Axios/UserAxios'
+import tutorAxios from '../../Axios/TutorAxios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setAllInboxData } from '../../Redux/ClientSlice/Chat';
 
 
+function ChatComponent({role}) {
+  const dispatch = useDispatch()
+  const [loading,setLoading] = useState(true)
+  const [fetchAgain,setFetchAgain] = useState(false)
+  
+  const user_id = useSelector((store) => {
+    if (role === 'tutor') {
+      return store.Tutor.id;
+    } else if (role === 'user') {
+      return store.Client.user_id;
+    }
+  });
 
-function ChatComponent() {
-   const axiosInstance = userAxios()
-   const user_id = useSelector((store)=>store.Client.user_id)
-   const [inboxData,setInboxData] = useState([])
-   const [loading,setLoading] = useState()
-
+  const axiosInstance = role === 'tutor' ? tutorAxios() : userAxios();
+  const receiverRole = role === 'tutor' ? 'user' : 'tutor';
+  const senderRole = role;
+  
   const inboxDatafetch =async()=>{
     setLoading(true)
-    await axiosInstance.get('/chat?user_role=user').then((res)=>{
-      setInboxData(res.data.result)
+    await axiosInstance.get(`/chat?user_role=${role}`).then((res)=>{
+      dispatch(setAllInboxData(res.data.result))
       setLoading(false)
     }).catch((error)=>{
       console.log(error)
@@ -31,7 +44,7 @@ function ChatComponent() {
   return (
     <div className="w-full h-full mt-24 ">
       <div className="flex h-full">
-        <div className="flex-1 bg-gray-100 w-full h-full">
+        <div className="flex-1 bg-slate-50 w-full h-full">
           <div className="main-body m-auto w-11/12 h-full flex flex-col">
             <div className="py-4 flex-2 flex flex-row">
               <div className="flex-1">
@@ -72,14 +85,13 @@ function ChatComponent() {
                 </span>
               </div>
             </div>
-
             <div className="main flex-1 flex flex-col">
               <div className="hidden lg:block heading flex-2">
                 <h1 className="text-3xl text-gray-700 mb-4">Chat</h1>
               </div>
               <div className="flex-1 flex h-full">
-                <ChatList inboxData={inboxData} width={'1/3'} hidden={'hidden md:block'} dataToListRole={'tutor'}/>
-                <ChatContent axiosInstance={axiosInstance} user_id={user_id} senderRole={'user'} recieverRole={'tutor'}/>
+                <ChatList loading={loading}  width={'1/3'} hidden={'hidden md:block'} dataToListRole={receiverRole}/>
+                <ChatContent axiosInstance={axiosInstance} user_id={user_id} senderRole={senderRole} receiverRole={receiverRole}/>
               </div>
             </div>
           </div>

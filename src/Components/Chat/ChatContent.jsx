@@ -4,46 +4,54 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import { io } from 'socket.io-client'
+import {TbMessages} from 'react-icons/tb' 
 
-const ChatContent = ({axiosInstance,user_id,senderRole,recieverRole}) => {
+const ChatContent = ({axiosInstance,user_id,senderRole,receiverRole}) => {
   const selectedChat =  useSelector((store)=>store.Chat.selectedChat)
   const [message,setMessage] = useState([])
   const [loading,setLoading] = useState(false)
   const [newMessage,setNewMessage] = useState("")
-  const [socket,setSocket]= useState()
+  const [typing,setTyping] = useState(false)
+  const [isTyping,setIsTyping] = useState(false)
+  const [socket,setSocket]= useState('')
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5001/chat")
+    const newSocket = io("http://localhost:5001")
     setSocket(newSocket)
-
     newSocket.on("error",(err)=>{
       console.log(err);
     })
-
-    console.log(selectedChat);
-
+    
     return () => {
       if (newSocket) newSocket.disconnect();
     };
   },[selectedChat]);
 
   useEffect(() => {
-    if (socket && selectedChat!==null) {
-    socket.emit("joinRoom",selectedChat._id,selectedChat?.[senderRole].name)
+    if (socket && selectedChat !== null) {
+    socket.emit("joinRoom", selectedChat._id, selectedChat?.[senderRole]._id);
+  
+    socket.on('online', (user) => {
+        console.log('Received online event:', user);
+      });
 
-    socket.on("messageResponse", (message, receivedChatId) => {
-      console.log(message,'response');
-    if (selectedChat._id === receivedChatId) {
-          setMessage((prevMessages) => [...prevMessages,message])
-    }});
+    socket.on("messageResponse", (message, ChatId) => {
+        console.log(message,'response here---from socket');
+    
+        setMessage((prevMessages) => [...prevMessages,message])
+    });
 
+    socket.on("typing",()=>setIsTyping(true))
+    socket.on("stoptyping",()=>setIsTyping(false))
     socket.on("error", (err) => {
       console.log("error", err);
     });
+    console.log('Socket connected:', socket.id);
     }
-  },[socket]);
+  },[socket,selectedChat]);
 
-const sendMessage = async () => {
+  const sendMessage = async () => {
+    console.log('socket',socket);
   if (newMessage.length > 0) {
     let NewMessage = {
       content: newMessage,
@@ -53,14 +61,16 @@ const sendMessage = async () => {
       name:selectedChat?.[senderRole]?.name 
       },
       chat:selectedChat._id,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     }
+    socket.emit('stoptyping',selectedChat._id)
+    console.log(NewMessage,'new message to send');
+    socket.emit("newMessage",NewMessage, selectedChat._id);
     setNewMessage("");
-    socket.emit("newMessage", NewMessage, selectedChat._id);
     }
   }
 
-const fetchMessages = async()=>{
+  const fetchMessages = async()=>{
     try {      
       setLoading(true)
       await axiosInstance.get(`/message?chatId=${selectedChat._id}`).then((res)=>{
@@ -69,91 +79,122 @@ const fetchMessages = async()=>{
       })
     } catch (error) {
       setLoading(false)
-      toast.error('error occured')
+      toast.error('something went wrong')
     }
   }
 
   useEffect(()=>{
-    fetchMessages()
+    if(selectedChat){
+      fetchMessages()
+    }
   },[selectedChat])
-
-  // const sendMessage =async()=>{
-  //   // try{  
-  //   //     console.log(newMessage);
-  //   //     setNewMessage("")
-  //   //     await axiosInstance.post('/message',{
-  //   //       content : newMessage,
-  //   //       chatId :selectedChat._id
-  //   //     }).then((res)=>{
-  //   //       console.log(res.data.result);
-  //   //       setMessage([...message,res.data.result])
-  //   //     })
-  //   //   }  catch (error){
-  //   //       toast.error('error occured')
-  //   //   }
-  // }
   
-
-const handleKeyPress = (e) => {
+  const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault(); 
       sendMessage();
     }
   };
 
-const typingHandler=(e)=>{
-    e.preventDefault()
-    setNewMessage(e.target.value)
+  const typingHandler = (e) => {
+    let typingTimeout;
+    e.preventDefault();
+    setNewMessage(e.target.value);
+  
+    if (!socket) return;
+  
+    if (!typing) {
+      setTyping(true);
+      socket.emit('typing', selectedChat._id);
+    }
+  
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
 
-    //typing logic here
-  }
+    typingTimeout = setTimeout(() => {
+      socket.emit("stoptyping", selectedChat._id);
+      setTyping(false); 
+    },3000); 
+  };
+  
 
   return (
     <>
       <div className="chat-area flex-1 flex flex-col h-[500px]">
           <div className="flex-3">
-            <h2 className="text-xl py-1 mb-8 border-b-2 border-gray-200">
-              Chatting with <b>{selectedChat?.[recieverRole].name}</b>
-            </h2>
+           {selectedChat&& <h2 className="text-xl py-1 mb-8 border-b-2 border-gray-200">
+              Chatting with <b>{selectedChat?.[receiverRole]?.name}</b>
+            </h2>}
           </div>
+          {selectedChat ? <>
           <div className="messages flex-1 overflow-auto">
-            { loading ? <div className='w-full flex justify-center h-full items-center'><Spinner /></div> 
-            : 
+            { loading && <div className='w-full flex justify-center h-full items-center'><Spinner /></div> }
+            {!loading && 
             <div class="messages flex-1 overflow-auto">
-               {
-                    message && message.map((mssg,i)=>(
-                    <>
-                     { mssg?.sender._id!==user_id && <div className="chat chat-start">
+               { message?.map((mssg,i)=>
+               <React.Fragment>
+                  { mssg?.sender._id!==user_id && 
+                  <div key={`start-${mssg._id + i}`} className="chat chat-start">
                         <div className="chat-image avatar">
                           <div className="w-10 rounded-full">
                             <img src={mssg.sender.image ? mssg.sender.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'} />
                           </div>
                         </div>
                         <div className="chat-header">
-                          <time className="text-xs opacity-50">12:45</time>
+                          <time className="text-xs opacity-50">
+                          {mssg?.createdAt ?
+                            new Date(mssg.createdAt).toLocaleString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            }) : new Date().toLocaleString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </time>
                         </div>
                         <div className="chat-bubble bg-slate-200">{mssg.content}</div>
                         <div className="chat-footer opacity-50">
-                          Delivered
                         </div>
                       </div> }
-    
-                     {mssg.sender._id===user_id && <div className="chat chat-end">
+
+                  { mssg.sender._id===user_id && 
+                  <div key={`end-${mssg._id + i}`} className="chat chat-end">
                         <div className="chat-header">
-                          <time className="text-xs opacity-50">12:46</time>
-                        </div>
-                        <div className="chat-bubble bg-blue-500 text-white"> {mssg.content}</div>
-                        <div className="chat-footer opacity-50">
-                          Seen at 12:46
-                        </div>
-                      </div>}
-                    </>
-                ))}    
+                        <time className="text-xs opacity-50">
+                          {mssg?.createdAt &&
+                            new Date(mssg.createdAt).toLocaleString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                        </time>
+                       </div>
+                      <div className="chat-bubble bg-blue-500 text-white"> {mssg.content}</div>
+                      <div className="chat-footer opacity-50">
+                      </div>
+                   </div> }
+                  </React.Fragment>
+                )}
+                {
+                  isTyping && <div key={selectedChat._id} className="chat chat-start" style={{ opacity: isTyping ? 1 : 0, transition: 'opacity 0.3s' }}>
+                  <div className="chat-bubble bg-slate-200">
+                    <span className="loading loading-dots loading-sm"></span>
+                  </div>
+                  </div>
+                }  
               </div>
-              }
+            }
             </div>
           <div className="flex-2 pt-4 pb-10">
-          
             <form onSubmit={(e) => e.preventDefault()} onKeyDown={handleKeyPress} >
                 <label for="chat" class="sr-only">Your message</label>
                 <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50 ">
@@ -172,7 +213,7 @@ const typingHandler=(e)=>{
                         <span class="sr-only">Add emoji</span>
                     </button>
                     <textarea value={newMessage} onChange={typingHandler} id="chat" rows="1" class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Your message..."></textarea>
-                        <button type="submit" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+                        <button onClick={()=>sendMessage()} type="button" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
                         <svg class="w-5 h-5 rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                             <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
                         </svg>
@@ -180,8 +221,18 @@ const typingHandler=(e)=>{
                     </button>
                 </div>
             </form>
-
           </div>
+          </> :
+          <div className='flex justify-center items-center h-full w-full bg-slate-200'>
+          <div>
+            <div className='w-full flex justify-center'>
+              <TbMessages className='w-24 h-24 opacity-75'/>
+            </div >
+            <div className='w-full text-center font-poppins'>Start Chatting Now</div>
+            <div className='w-full text-center text-sm font-poppins'>"Engage in meaningful conversations</div>
+          </div>
+          </div>
+          }
         </div>
     </>
   )

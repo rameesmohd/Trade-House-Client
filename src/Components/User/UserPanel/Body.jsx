@@ -7,7 +7,7 @@ import userAxios from '../../../Axios/UserAxios'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import walletIcon from '../../../assets/pngwing.com.png'
-import ChatList from '../../ChatList'
+import ChatList from '../../Chat/ChatList'
 
 
 const MainBody = () => {
