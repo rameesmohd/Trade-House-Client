@@ -16,14 +16,16 @@ const RefundModal = ({title,showModal,approveRefund}) => {
 
   return (
     <>
-      <div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" className="backdrop-blur-sm fixed flex justify-center items-center right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div className="relative w-full max-w-2xl max-h-full">
-            <div className="relative bg-white rounded-lg shadow ">
+<div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={()=>showModal(false)}></div>
+  <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div className=" bg-white rounded-lg shadow ">
                 <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                     <h3 className="text-xl font-semibold text-gray-900 ">
                         Cancel Purchase
                     </h3>
-                    <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="staticModal">
+                    <button type="button" onClick={()=>showModal(false)} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="staticModal">
                         <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
@@ -31,14 +33,14 @@ const RefundModal = ({title,showModal,approveRefund}) => {
                     </button>
                 </div>
                 <div className="p-6 space-y-6">
-                    <p className="text-base leading-relaxed text-red-500  ">
+                    <p className="text-base leading-relaxed text-start text-red-500  ">
                         Are you sure you want to cancel the purchase of Course {title}?
                     </p>
-                    <p className="text-sm leading-relaxed text-gray-500 ">
+                    <p className="text-sm leading-relaxed text-start text-gray-500 ">
                         Please enter your feedback and resons for the cancellation?
                     </p>
                     <textarea ref={feedbackRef} className='rounded-lg' name="" id="" cols="60" rows="3" required></textarea>
-                    {error ? <p className="text-sm leading-relaxed text-gray-500 ">{error}</p> : ''}
+                    {error ? <p className="text-sm text-start leading-relaxed text-gray-500 ">{error}</p> : ''}
                 </div>
                 <div className="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b">
                     <button onClick={handleRefund}  data-modal-hide="staticModal" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Refund</button>
@@ -46,6 +48,8 @@ const RefundModal = ({title,showModal,approveRefund}) => {
                 </div>
             </div>
         </div>
+        </div>
+
     </div>
     </>
   )

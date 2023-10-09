@@ -138,7 +138,7 @@ const Courses = () => {
   
   return (
     <>
-    <div className='mx-5 py-5 w-full'>
+    <div className='md:mx-5 py-5 w-full'>
       <div className='w-full h-14 bg-slate-200 my-2 rounded-lg flex items-center justify-end p-2'>
       <DropDown key={1} role={'Filter by'} options={['ALL',...category.map((value)=>value.category)]} handle={handleFilter}/>
       <DropDown key={2} role={'Sort by'} options={['Price High To Low','Price Low To High']} handle={handleSort}/>
@@ -233,57 +233,57 @@ const Courses = () => {
             </tr>
             )
           }
-        {
-          loading && [...Array(5)].map((value,i)=>{
-             return <tr key={i}>
-              <td>
-                <div className="animate-pulse">
-                  <div className="h-[180px]">
-                      <div className='w-[250px] h-full  bg-gray-300 mx-auto flex justify-center items-center'>
-                      <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
-                          </svg>
-                      </div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div className="max-w-[150px] h-[150px] animate-pulse">
-                    <div className='w-full h-full object-cover bg-gray-300 flex justify-center items-center'>
-                    <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                              <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
-                          </svg>
+          {
+            loading && [...Array(5)].map((value,i)=>{
+              return <tr key={i}>
+                <td>
+                  <div className="animate-pulse">
+                    <div className="h-[180px]">
+                        <div className='w-[250px] h-full  bg-gray-300 mx-auto flex justify-center items-center'>
+                        <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+                            </svg>
+                        </div>
                     </div>
                   </div>
-              </td>
-              <td>
-                <div role="status" class="space-y-8 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center">
-                <div class="w-full">
-                          <div class="h-2.5 bg-gray-200 rounded-full  w-48 mb-4"></div>
-                          <div class="h-2 bg-gray-200 rounded-full  max-w-[480px] mb-2.5"></div>
-                          <div class="h-2 bg-gray-200 rounded-full  mb-2.5"></div>
-                          <div class="h-2 bg-gray-200 rounded-full  max-w-[440px] mb-2.5"></div>
-                          <div class="h-2 bg-gray-200 rounded-full  max-w-[460px] mb-2.5"></div>
-                          <div class="h-2 bg-gray-200 rounded-full  max-w-[360px]"></div>
+                </td>
+                <td>
+                  <div className="max-w-[150px] h-[150px] animate-pulse">
+                      <div className='w-full h-full object-cover bg-gray-300 flex justify-center items-center'>
+                      <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+                            </svg>
                       </div>
-                      <span class="sr-only">Loading...</span>
-                </div>
-              </td>
-              <td>
-                <div class="h-2 bg-gray-200 rounded-full   animate-pulse max-w-[440px] mb-2.5"></div>
-              </td>
-              <td>
-                <div class="h-2 bg-gray-200 rounded-full   animate-pulse max-w-[440px] mb-2.5"></div>
-              </td>
-              <td>
-                <div class="h-2 bg-gray-200 rounded-full   animate-pulse max-w-[440px] mb-2.5"></div>
-              </td>
-              <td>
-                <div class="h-2 bg-gray-200 rounded-full animate-pulse max-w-[440px] mb-2.5"></div>
-              </td>
-              </tr>
-          })
-        }
+                    </div>
+                </td>
+                <td>
+                  <div role="status" class="space-y-8 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center">
+                  <div class="w-full">
+                            <div class="h-2.5 bg-gray-200 rounded-full  w-48 mb-4"></div>
+                            <div class="h-2 bg-gray-200 rounded-full  max-w-[480px] mb-2.5"></div>
+                            <div class="h-2 bg-gray-200 rounded-full  mb-2.5"></div>
+                            <div class="h-2 bg-gray-200 rounded-full  max-w-[440px] mb-2.5"></div>
+                            <div class="h-2 bg-gray-200 rounded-full  max-w-[460px] mb-2.5"></div>
+                            <div class="h-2 bg-gray-200 rounded-full  max-w-[360px]"></div>
+                        </div>
+                        <span class="sr-only">Loading...</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="h-2 bg-gray-200 rounded-full   animate-pulse max-w-[440px] mb-2.5"></div>
+                </td>
+                <td>
+                  <div class="h-2 bg-gray-200 rounded-full   animate-pulse max-w-[440px] mb-2.5"></div>
+                </td>
+                <td>
+                  <div class="h-2 bg-gray-200 rounded-full   animate-pulse max-w-[440px] mb-2.5"></div>
+                </td>
+                <td>
+                  <div class="h-2 bg-gray-200 rounded-full animate-pulse max-w-[440px] mb-2.5"></div>
+                </td>
+                </tr>
+            })
+          }
         </tbody>
       </table>
         {loadingSpinner && <div className="spinner flex h-20 w-full justify-center font-poppins text-lg"><Spinner className='mx-3'/>Loading...</div>}

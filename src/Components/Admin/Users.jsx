@@ -3,7 +3,7 @@ import adminAxios from '../../Axios/AdminAxios'
 import { toast } from 'react-toastify'
 import EditUser from './EditUser'
 import Modal from '../ConfirmModal'
-let toggle;
+
 
 const Users=()=>{
     const axiosInstance = adminAxios()
@@ -13,7 +13,7 @@ const Users=()=>{
     const [edit,setEdit] = useState(false)
     const searchRef = useRef()
     const [showModal, setShowModal] = useState(false);
-    const [toggle,setToggle] = useState(false)
+
     
     const fetchUserData =async()=>{
        await axiosInstance.get('/users')
@@ -37,8 +37,8 @@ const Users=()=>{
         setEdit(true)
     }  
 
-    const handleBlock=async(id,shouldBlock)=>{
-        const action = shouldBlock ? 'block' : 'unblock';
+    const handleBlock=async(id,isBlock)=>{
+        const action = isBlock ? 'block' : 'unblock';
         await axiosInstance
             .patch(`${action}/${id}`)
             .then((res) => {
@@ -46,7 +46,7 @@ const Users=()=>{
              setUsersData((prev) => {
                 const updated = prev.map((user) => {
                 if (user._id === id) {
-                    return { ...user, is_blocked: shouldBlock };
+                    return { ...user, is_blocked: isBlock };
                 }
                 return user;
                 });
@@ -59,28 +59,25 @@ const Users=()=>{
       });
     }
     
-    // const handleModal=(id,state)=>{
-    //     if(!state){
-    //         toggle =()=>{
-    //             block(id)
-    //             setShowModal(false)}
-    //     }else{
-    //         toggle =()=>{
-    //             unBlock(id)
-    //             setShowModal(false)
-    //         }
-    //     }
-    //     setShowModal(true)
-    // }
+
+    const [isBlock,setIsBlock] = useState()
+    const [id,setId] = useState()
+    
+    const handleModal=(id,state)=>{
+        setId(id)
+        setIsBlock(state)
+        setShowModal(true)
+    }
+
 return (
     <>
     {!edit ? 
-    <div className="w-full px-3 py-1">
+    <div className="w-full px-3 py-1 ">
     <div className="flex flex-col">
-    <div className="m-5">
-        <nav className="bg-slate-200 py-3 px-3 rounded-md">
+    <div className="mb-1 p-2 w-full">
+        <div className="bg-slate-200 py-3 px-3 rounded-md">
             <div className="container flex justify-end mx-auto">
-                <form className="flex flex-col items-start md:flex-row md:items-end" role="search">
+                <form className="flex items-start md:flex-row md:items-end" role="search">
                     <input
                         className="w-full px-2 py-1 border rounded-md form-input md:mr-2 md:w-auto focus:outline-none focus:ring focus:border-blue-300"
                         type=""
@@ -88,22 +85,22 @@ return (
                         placeholder="Search"
                         aria-label="Search"
                     />
-                    <button className="p-1 rounded bg-blue-400" type='button' onClick={search}>
+                    <button className="p-1 rounded bg-blue-400 mx-2 sm:mx-0" type='button' onClick={search}>
                         Search
                     </button>
                 </form>
             </div>
-        </nav>
+        </div>
     </div>
-    <table className="table">
+    <div className='w-full h-full overflow-x-scroll'>
+    <table className="table ">
         <thead>
             <tr>
-                <th scope="col" className='py-4 text-center bg-slate-200' >#</th>
-                <th scope="col" className='py-4 text-center bg-slate-200'>Name</th>
-                <th scope="col" className='py-4 text-center bg-slate-200'>Email</th>
-                <th scope="col" className='py-4 text-center bg-slate-200'>Phone</th>
-                <th scope="col" className='py-4 text-center bg-slate-200'></th>
-                <th scope="col" className='py-4 text-center bg-slate-200'></th>
+            {['#', 'Name', 'Email', 'Phone', '', ''].map((label, index) => (
+            <th key={index} scope="col" className="py-4 text-center bg-slate-200">
+                {label}
+            </th>
+            ))}
             </tr>
         </thead>
         <tbody>
@@ -111,27 +108,28 @@ return (
             .filter((obj)=>obj.email.toLowerCase().includes(searchInput))
             .map((obj,index)=>{
             return(
-            <tr key={obj._id}>
+            <tr key={obj._id} className='border-b-gray-400'>
                 <td className="px-4 py-2 text-center">{index+1}</td>
                 <td className="px-4 py-2 text-center">{obj.name}</td>
                 <td className="px-4 py-2 text-center">{obj.email}</td>
                 <td className="px-4 py-2 text-center">{obj.mobile}</td>
-            
                 <td className="px-4 py-2">
                     <button className='mx-5 text-blue-600' onClick={()=>editUser(obj)}>Edit</button>
-                    <button className='mx-5 text-red-600' onClick={()=>handleBlock(obj._id,!obj.is_blocked)}>{obj.is_blocked ? 'Unblock' : 'Block'}</button>
+                    <button className='mx-5 text-red-600' onClick={()=>handleModal(obj._id,!obj.is_blocked)}>{obj.is_blocked ? 'Unblock' : 'Block'}</button>
                 </td>
             </tr> )
             })}
         </tbody>
     </table>
     </div>
+
+    </div>
     </div> : (
     <EditUser user={userDetails} func={setEdit}/>)}
     { showModal ?
        <Modal 
        setShowModal={setShowModal} 
-       confirm={toggle} 
+       confirm={()=>{handleBlock(id,isBlock),setShowModal(false)}} 
        message={'Are you sure?'} 
        description={'Please confirm to proceed this action?'} />  
        : '' }

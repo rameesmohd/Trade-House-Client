@@ -8,31 +8,26 @@ import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import walletIcon from '../../../assets/pngwing.com.png'
 import ChatList from '../../Chat/ChatList'
+import { useDispatch } from 'react-redux'
+import { setAllInboxData } from '../../../Redux/ClientSlice/Chat'
 
 
 const MainBody = () => {
     const axiosInstance = userAxios()
+    const dispatch = useDispatch()
     const [userDatas,setUserData] = useState({})
     const [purchaseDatas,setPurchaseData]= useState([])
     const [moduleDatas,setModuleData] = useState([])
     const [updateData,setUpdateData] = useState(false)
-
-    const [inboxData,setInboxData] = useState([])
-    const [loading,setLoading] = useState()
  
    const inboxDatafetch =async()=>{
-     setLoading(true)
      await axiosInstance.get('/chat?user_role=user').then((res)=>{
-       setInboxData(res.data.result)
-       setLoading(false)
+        dispatch(setAllInboxData(res.data.result))
      }).catch((error)=>{
        console.log(error)
        toast.error(error.message)
      })
     }
-    useEffect(()=>{
-        inboxDatafetch()
-    },[])
 
     const fetchData=async()=>{
         await axiosInstance.get('/userpanel').then((res)=>{
@@ -48,18 +43,15 @@ const MainBody = () => {
     fetchData()
    },[updateData])
 
-//    const inboxData = [
-//     {
-//       subject: 'Sample Subject 1',
-//       email: 'sample@email.com',
-//       time: '23m ago',
-//     },
-//     {
-//       subject: 'Sample Subject 2',
-//       email: 'sample@email.com',
-//       time: '1h ago',
-//     },
-//   ];
+   useEffect(()=>{
+    inboxDatafetch()
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    },[])
+
 
   return (
     <>
@@ -77,11 +69,11 @@ const MainBody = () => {
             { 
                 purchaseDatas.length ? (
                 purchaseDatas.filter((obj)=>obj.status!=='refunded').map((purchase)=>{
-                const modules = moduleDatas.filter((obj)=>obj.courseId === purchase?.course_id._id)
+                const modules = moduleDatas.filter((obj)=>obj?.courseId === purchase?.course_id?._id)
                 console.log(purchase);
                 return (
                     <div key={purchase?._id} className="col-span-4 sm:col-span-3">
-                        <List progressData={purchase.learning_progress} order_id={purchase._id} courseData={purchase?.course_id} moduleData={modules} user_id={userDatas._id}/>
+                        <List progressData={purchase?.learning_progress} order_id={purchase?._id} courseData={purchase?.course_id} moduleData={modules} user_id={userDatas._id}/>
                     </div>
                 )})
                 ):(
@@ -99,18 +91,18 @@ const MainBody = () => {
                 )
             }
             </div> 
-            <div className='md:col-span-1 bg-black'>
+            <div className='md:col-span-1 '>
+            <div className='text-2xl w-full font-poppins font-bold'>Profile</div>
                 <div className="flex w-full justify-center items-center">
                     <Card userData={userDatas} setUserData={setUserData}/>
                 </div>
-                <div className="flex-1 flex h-full ">
+                <div className="flex-1 flex h-auto ">
                     <div className="main flex-1 flex flex-col">
                         <div className=" heading flex-2">
                             <h1 className="text-3xl text-gray-700 mb-4">Chat</h1>
                         </div>
                         <div>
-                                {/* <ChatList inboxData={inboxData} width={'full'}/> */}
-                                <ChatList inboxData={inboxData} width={'full'} hidden={'hidden md:block'} dataToListRole={'tutor'}/>
+                            <ChatList userpanel={true} width={'full'} dataToListRole={'tutor'}/>
                         </div>
                     </div>
                 </div>

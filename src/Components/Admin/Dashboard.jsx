@@ -12,24 +12,9 @@ import {FaMoneyBillAlt,FaBookReader,FaUserFriends} from 'react-icons/fa'
 import {IoIosPeople} from 'react-icons/io'
 import {LiaChalkboardTeacherSolid} from 'react-icons/lia'
 import {GiTakeMyMoney} from 'react-icons/gi'
+import { useNavigate } from 'react-router-dom';
 
-const areaChartData = {
-  options: {
-    chart: {
-      id: 'area-chart',
-    },
-    xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-    },
-    colors: ['#000000'], // Customize the area color
-  },
-  series: [
-    {
-      name: 'Series 1',
-      data: [30, 40, 45, 50, 49, 60, 70, 91],
-    },
-  ],
-};
+
 
 const Dashboard = () => {
   const [recentSales,setRecentSales] = useState([])
@@ -45,11 +30,12 @@ const Dashboard = () => {
   const [revenue,setRevenue] = useState({
     weeklyTotalRevenue:'',
     monthlyTotalRevenue:'',
-    totalRevenue:''
+    totalRevenue:'',
+    monthlySalesAmountsArray : []
   })
   const axiosInstance = adminAxios()
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   const [wallet,setWallet] = useState('')
   const [visibleTransactions,setVisibleTransactions]=useState([])
   const [walletDataSeeMore,setWalletDataSeeMore] = useState(false)
@@ -66,8 +52,9 @@ const Dashboard = () => {
             ...revenue,
             weeklyTotalRevenue: res.data.weeklyTotalRevenue, 
             monthlyTotalRevenue: res.data.monthlyTotalRevenue, 
-            totalRevenue: res.data.totalRevenue
-        });
+            totalRevenue: res.data.totalRevenue,
+            monthlySalesAmountsArray:res.data.monthlySalesAmountsArray
+          });
           setCounts({
               ...count,
               userCount:res.data.userCount,
@@ -105,9 +92,25 @@ const Dashboard = () => {
     dispatch(setWalletBalance(wallet.b_wallet_balance))
   },[wallet])
 
-  console.log(count,revenue);
+  const areaChartData = {
+    options: {
+      chart: {
+        id: 'area-chart',
+      },
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep','Oct','Nov','Dec'],
+      },
+      colors: ['#000000'], // Customize the area color
+    },
+    series: [
+      {
+        name: 'Series 1',
+        data: revenue.monthlySalesAmountsArray,
+      },
+    ],
+  };
   return (
-    <div className='w-full p-3'>
+    <div className='w-full p-3 overflow-x-hidden'>
     <div className='grid md:grid-cols-2'>
         <div className='grid md:grid-cols-4 gap-2 p-4 col-span-1'>
           <div className=' bg-red-200 p-3 rounded-2xl font-poppins text-sm md:text-base font-semibold text-gray-600 '>
@@ -205,7 +208,7 @@ const Dashboard = () => {
       {/* Graphs */}
       <div className='space-x-1 bg-slate-50 rounded-2xl p-2'>
         <div className="charts-card">
-            <h2 className="chart-title">Purchase and Sales Orders</h2>
+            <h2 className="chart-title">Sales Orders(Year)</h2>
             <ReactApexChart
               options={areaChartData.options}
               series={areaChartData.series}
@@ -216,7 +219,7 @@ const Dashboard = () => {
       </div>
     </div>  
 
-    <div className=" overflow-y-hidden grid md:grid-cols-2 gap-4">
+    <div className=" overflow-y-hidden grid md:grid-cols-2 gap-4 pb-10">
         <div className='md:col-span-1 '>
           <div className='flex justify-between px-3'>
               <div className='text-center text-xl font-semibold font-poppins my-2'>Wallet Transactions</div>
@@ -263,7 +266,7 @@ const Dashboard = () => {
          <div className='md:col-span-1 '>
           <div className='flex justify-between px-3'>
               <div className='text-center text-xl font-semibold font-poppins'>Recent Sales</div>
-              <div className='text-center text-sm font-semibold font-poppins bg-blue-400 p-1 border rounded-md my-2'>Show More</div>
+              <div onClick={()=>navigate('/admin/sales')} className='text-center text-sm font-semibold font-poppins bg-blue-400 p-1 border rounded-md my-2'>Show More</div>
           </div>
           <table  className="w-full max-h-44 text-sm text-left text-gray-500 overflow-x-scroll">
             <thead className="text-xs text-gray-700 uppercase bg-gray-200">

@@ -14,12 +14,12 @@ export default function ModalDialogScrollable({showModel}){
   return (
     <div>
       {/* <!-- Modal --> */}
-      <TEModal show={showModal} setShow={showModel} scrollable>
-        <TEModalDialog>
-          <TEModalContent>
-            <TEModalHeader>
+      <TEModal show={showModal} setShow={showModel}  scrollable>
+        <TEModalDialog className="bg-white">
+          <TEModalContent className="bg-white ">
+            <TEModalHeader className="bg-white ">
               {/* <!--Modal title--> */}
-              <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
+              <h5 className="text-xl font-medium leading-normal text-neutral-800 ">
                 Modal title
               </h5>
               {/* <!--Close button--> */}
@@ -45,8 +45,7 @@ export default function ModalDialogScrollable({showModel}){
                 </svg>
               </button>
             </TEModalHeader>
-            {/* <!--Modal body--> */}
-            <TEModalBody>
+            <TEModalBody className="bg-white ">
               <p>
               Your use constitutes acceptance of these Terms and Conditions as at the date of your first use of the site.
 Demos reserves the rights to change these Terms and Conditions at any time by posting changes online. Your continued use of this site after changes are posted constitutes your acceptance of this agreement as modified.
@@ -63,7 +62,7 @@ If these Terms and Conditions are not accepted in full, the use of this site mus
              
               <p>This content should appear at the bottom after you scroll.</p>
             </TEModalBody>
-            <TEModalFooter>
+            <TEModalFooter className="bg-white ">
               <TERipple rippleColor="light">
                 <button
                   type="button"
@@ -73,14 +72,7 @@ If these Terms and Conditions are not accepted in full, the use of this site mus
                   Close
                 </button>
               </TERipple>
-              {/* <TERipple rippleColor="light">
-                <button
-                  type="button"
-                  className="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-                >
-                  Save changes
-                </button>
-              </TERipple> */}
+            
             </TEModalFooter>
           </TEModalContent>
         </TEModalDialog>

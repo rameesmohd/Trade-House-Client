@@ -92,7 +92,6 @@ const Login =()=>{
                     console.log(error);
                     toast.error(error.response.data?.response?.message) 
                 })
-            
         }else{
             setError(validationErrors)
         }
@@ -103,6 +102,16 @@ const Login =()=>{
         const max = 999999; // Largest 6-digit number
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
+    const timerStart = () => {
+        setIsActive(true);
+    };
+
+    const timerReset = () => {
+        setIsActive(false);
+        setSeconds(60);
+    };
+
     
     const forgotPassAuth =async(email)=>{
         if(!email){
@@ -117,7 +126,6 @@ const Login =()=>{
                 await axiosInstance.post('/forgetpasswordauth',{email,OTP}).then((res)=>{
                     console.log(res);
                     toast.success(res.data.message)
-                    //------
                     res.status ? setOtpFieldShow(true) : ''   
                     setEmail(email)
                     timerStart()
@@ -149,6 +157,7 @@ const Login =()=>{
                 setLoading(false)
                 setUserExist(false)
                 setOtpFieldShow(false)
+                setError("")
             }).catch((err)=>{
                 toast.error(error.response.data.msg)
             })
@@ -159,7 +168,6 @@ const Login =()=>{
     
     const verifyOTP=()=>{
         if(compareOTP==otp){
-            console.log(compareOTP,otp);
             setUserExist(true)
         }else{
             toast.error('incurrect OTP')
@@ -178,16 +186,6 @@ const Login =()=>{
         return () => {
         clearInterval(timer)};
     }, [isActive, seconds]);
-
-    const timerStart = () => {
-        setIsActive(true);
-    };
-
-    const timerReset = () => {
-        setIsActive(false);
-        setSeconds(30);
-    };
-
  
     return (
         <div className='bg-grey-100 flex flex-col justify-center'>

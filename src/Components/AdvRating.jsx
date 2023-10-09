@@ -1,98 +1,48 @@
 import React from 'react';
+import StarRating from './User/CourseDetails/Star';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
-function RatingStats() {
+function RatingStats({user_ratings}) {
+  const [totalRating,setTotalRating] = useState(0)
+  const [ratings,setRatings ] = useState([])
+
+  useEffect(()=>{
+      let totalNumberofRating = user_ratings.length
+      let data = [1,2,3,4,5].map((star,i)=>user_ratings.filter((value,i)=>value.rating===star).length )
+      let ratings = data.map((value,i)=>{return {stars : `${5-i} stars`,numberofrating : totalNumberofRating ? (value/totalNumberofRating)*100 : '0'}})
+      let totalRating =totalNumberofRating &&  data.reduce((total,value,index)=>total+value*index+1)/totalNumberofRating 
+      setRatings(ratings)
+      setTotalRating(totalRating)
+  },[])
+  
+
   return (
     <>
-    <div className="flex items-center mb-2">
-      {[1, 2, 3, 4, 5].map((rating) => (
-        <svg
-          key={rating}
-          className="w-4 h-4 text-yellow-300 mr-1"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 22 20"
-        >
-          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-        </svg>
+    <div className='flex items-center '>
+    <p className='mx-2'>Total Rating</p>
+    <StarRating rating={totalRating} size={'text-2xl'} disable={true}/>
+    </div>
+    <div>
+      {ratings.map((rating, index) => (
+        <div className="flex items-center mt-4" key={index}>
+          <a
+            href="#"
+            className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          >
+            {rating?.stars }
+          </a>
+          <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded">
+            <div
+              className="h-5 bg-yellow-300 rounded"
+              style={{ width: `${rating?.numberofrating}` }}
+            ></div>
+          </div>
+          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            {Math.floor(rating?.numberofrating)}%
+          </span>
+        </div>
       ))}
-      <p className="ml-2 text-sm font-medium text-gray-900 dark:text-white">
-        4.95 out of 5
-      </p>
-    </div>
-    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-      1,745 global ratings
-    </p>
-    
-    <div className="flex items-center mt-4">
-      <a
-        href="#"
-        className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-      >
-        5 star
-      </a>
-      <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded ">
-        <div className="h-5 bg-yellow-300 rounded" style={{ width: '70%' }}></div>
-      </div>
-      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-        70%
-      </span>
-    </div>
-    <div className="flex items-center mt-4">
-      <a
-        href="#"
-        className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-      >
-        4 star
-      </a>
-      <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded ">
-        <div className="h-5 bg-yellow-300 rounded" style={{ width: '17%' }}></div>
-      </div>
-      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-        17%
-      </span>
-    </div>
-    <div className="flex items-center mt-4">
-      <a
-        href="#"
-        className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-      >
-        3 star
-      </a>
-      <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded ">
-        <div className="h-5 bg-yellow-300 rounded" style={{ width: '8%' }}></div>
-      </div>
-      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-        8%
-      </span>
-    </div>
-    <div className="flex items-center mt-4">
-      <a
-        href="#"
-        className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-      >
-        2 star
-      </a>
-      <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded ">
-        <div className="h-5 bg-yellow-300 rounded" style={{ width: '4%' }}></div>
-      </div>
-      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-        4%
-      </span>
-    </div>
-    <div className="flex items-center mt-4">
-      <a
-        href="#"
-        className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-      >
-        1 star
-      </a>
-      <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded ">
-        <div className="h-5 bg-yellow-300 rounded" style={{ width: '1%' }}></div>
-      </div>
-      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-        1%
-      </span>
     </div>
     </>
   );

@@ -1,11 +1,19 @@
 import React from 'react'
 import image from '../../../assets/image 3.png'
 import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 
 
 const Header = () => {
   const location =useLocation()
   const courseData = location.state
+  useEffect(()=>{
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  })
   return (
     <div className='relative w-full h-56 bg-slate-300 mt-2'>
       <img className='absolute w-full h-full object-cover' src={image} alt="" srcset=""/>

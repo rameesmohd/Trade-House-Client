@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { tutorReqSubmit, updateTutorStates } from '../../Redux/ClientAuth'
-import Loading from '../Loading'
+import { Spinner as Loading } from '@material-tailwind/react'
 
 const Tutorform = () => {
     const axiosInstance = userAxios()
@@ -34,26 +34,33 @@ const Tutorform = () => {
     const { pathname } = useLocation()
 
     useEffect(() => {
-      window.scrollTo(0, 0);
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
     }, [pathname]);
 
+    const loadTutor=async()=>{
+      await axiosInstance.get(`/tutor-load?email=${email}`)
+      .then((res)=>{
+        const result = res.data.result
+        dispatch(updateTutorStates({
+          is_requested : result.is_requested,
+          is_tutor : result.is_tutor
+        }))
+        setReqStatus(result.req_status)
+      }).catch((error)=>{
+        toast.error(error.message)
+        console.log(error);
+      })
+    }
+
     useEffect(()=>{
-        axiosInstance.get(`/tutor-load?email=${email}`)
-        .then((res)=>{
-          console.log(res);
-          const result = res.data.result
-          dispatch(updateTutorStates({
-            is_requested : result.is_requested,
-            is_tutor : result.is_tutor
-          }))
-          setReqStatus(result.req_status)
-        }).catch((error)=>{
-          toast.error(error.message)
-          console.log(error);
-        })
+      loadTutor()
     },[])
 
-    const handleSubmit=(e)=>{
+    const handleSubmit=async(e)=>{
         e.preventDefault()
         const obj = {
             category:categoryRef.current.value,
@@ -66,7 +73,7 @@ const Tutorform = () => {
             file :pdfDataUrl,
         }
         setLoading(true)
-        axiosInstance.post('/tutor-request',obj,{headers:{ 'Content-Type': 'multipart/form-data'}}).then((res)=>{
+        await axiosInstance.post('/tutor-request',obj,{headers:{ 'Content-Type': 'multipart/form-data'}}).then((res)=>{
             setLoading(false)
             dispatch(tutorReqSubmit())
             toast.success(res.data.message)
@@ -79,7 +86,6 @@ const Tutorform = () => {
     const handleFileChange = (event) => {
             const selectedFile = event.target.files[0];
         if (selectedFile && selectedFile.type === 'application/pdf') {
-            // pdfConverter(selectedFile);
             setPdfDataUrl(selectedFile);
         }
     };
@@ -261,7 +267,6 @@ const Tutorform = () => {
              </div>
            </div>
          </div> }
-
         <div className='w-full bg-slate-300 h-10'>
         </div>
         { loading && <Loading/> }

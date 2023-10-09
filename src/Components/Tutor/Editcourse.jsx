@@ -22,13 +22,28 @@ function Editcourse({editCourse,goBack,setLoading}) {
   const [categoryData ,setCategoryData] = useState([])
   const [price,setPrice] = useState()
 
-  useEffect(()=>{
-    axiosInstance.get('/category').then((res)=>{
+  const fetchChategory=async()=>{
+    await axiosInstance.get('/category').then((res)=>{
       setCategoryData(res.data.result)
     }).catch((error)=>{
       toast.error(error.message)
     })
+  }
+
+  useEffect(()=>{
+    fetchChategory()
   },[])
+
+  const disableCourse=async()=>{
+      
+      await axiosInstance.put(`/courses?courseId=${editCourse._id}`).then((res)=>{
+        goBack(false)
+        toast.success(res.data.message)
+      }).catch((error)=>{
+        console.log(error);
+        toast.error(error.message)
+      })
+  }
 
   useEffect(()=>{
     splitParagraphByPeriod()
@@ -57,7 +72,7 @@ function Editcourse({editCourse,goBack,setLoading}) {
       const id=editCourse._id
       setLoading({id : id,spinner : true})
       goBack(false)
-      axiosInstance.patch('/courses',formData,{
+      await axiosInstance.patch('/courses',formData,{
       headers: {'Content-Type': 'multipart/form-data'},
     }).then((res)=>{
         toast.success(res.data.message)
@@ -169,12 +184,21 @@ function Editcourse({editCourse,goBack,setLoading}) {
         <label className="block mb-2 text-sm font-medium text-gray-900">What will you learn?(students)</label>
         <textarea onChange={(e)=>setParagraph(e.target.value)} defaultValue={editCourse?.skillsOffering} placeholder="Enter point by point" className="textarea textarea-bordered textarea-md w-full" />
       </div>
-      <button
-        type="submit" 
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none
-         focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-5">
-        Submit
-      </button>
+      <div className='flex justify-between'>
+        <button
+          type="submit" 
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none
+          focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center mb-5">
+          Submit
+        </button>
+        <button
+          type="button" 
+          onClick={()=>disableCourse()}
+          className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none
+          focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center mb-5">
+          Suspend course
+        </button>
+      </div>
     </form>
     <div className='hidden md:block col-span-1 m-auto'>
       <img src={img} alt="" />

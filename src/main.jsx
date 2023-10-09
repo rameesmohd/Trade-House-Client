@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import { store } from './Redux/Store'
 import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import './index.css'
-import './spinkit.css'
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
@@ -16,5 +16,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <App/>
     </GoogleOAuthProvider>
     </Provider>
-  //  </React.StrictMode>
+//  </React.StrictMode>
 )

@@ -26,9 +26,7 @@ export const store = configureStore({
         Client : userPersistReducer,
         CourseOnPayment : CourseOnPaymentReducer,
         CoursesLoad : CoursesLoad.reducer,
-
         Admin : adminPersistorReducer,
-
         Tutor : tutorPersistorReducer,
         Courses : Courses.reducer,
         Chat : Chat.reducer

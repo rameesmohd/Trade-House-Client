@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import Modules from '../Pages/Tutor/Modules';
 import Login from '../Pages/Tutor/Login'
 import Chat from '../Pages/Tutor/Chat';
+import NotFoundPage from '../Pages/NotFoundPage'
+
 
 const Tutor = () => {
   const tutorAuth = useSelector((state)=>state.Tutor.Token)
@@ -27,6 +29,7 @@ const Tutor = () => {
             <Route path='/modules' element={ <PrivateRoute element={<Modules/>} />}/>
             <Route path='/chat' element={ <PrivateRoute element={<Chat/>} />}/>
 
+            <Route path='*' element={<NotFoundPage />} />
        </Routes>
     </>
   )

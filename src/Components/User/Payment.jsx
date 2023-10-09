@@ -13,7 +13,7 @@ import { Spinner } from "@material-tailwind/react";
 import ModalScroll from '../ModalScrollable'
 import Failed from '../Failed'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCourseData ,removeCourseData} from '../../Redux/ClientSlice/CourseOnPayment'
+import { setCourseData } from '../../Redux/ClientSlice/CourseOnPayment'
 import CryptoModal from '../CryptoPaymentModal'
 
 const Payment = () => {
@@ -189,10 +189,9 @@ const Payment = () => {
                         </div>
                         <div className="flex flex-col px-8 pt-4">
                             <button onClick={()=>handlePayment()} 
-                            className={`flex items-center justify-center
+                            className={` flex items-center justify-center
                              bg-blue-600 text-sm font-medium w-full h-10 mt-3 
-                             rounded ${isChecked ? 'text-blue-50' : 'text-gray-400'} hover:bg-blue-700`} disabled={!isChecked}> {loading ? <Spinner/> : 'Start Subscription'} </button>
-                            {/* <button className="text-xs text-blue-500 mt-3 underline">Have a coupon code?</button> */}
+                             rounded ${isChecked ? 'text-blue-50' : 'text-gray-400 cursor-not-allowed'} hover:bg-blue-700`} disabled={!isChecked}> {loading ? <Spinner/> : 'Start Subscription'} </button>
                         </div>
                     </div>
                 </div>

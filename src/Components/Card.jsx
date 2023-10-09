@@ -7,9 +7,31 @@ import {
   } from "@material-tailwind/react";
   import Rating from './RatingStar'
   import { useNavigate } from "react-router-dom";
+  import StarRating from '../Components/User/CourseDetails/Star'
+import { useEffect } from "react";
+import { useState } from "react";
    
-  export function Cards({coursedata}) {
-    const navigate = useNavigate()
+export function Cards({coursedata}) {
+  const navigate = useNavigate()
+  const [totalRating,setTotalRating] = useState(0)
+
+  const calulateRating =()=>{
+    let totalNumberofRating = coursedata.user_ratings.length
+
+   if(totalNumberofRating){ let data = [1,2,3,4,5].map((star,i)=>
+    coursedata.user_ratings.filter((value,i)=>value.rating===star).length)
+
+    let weightedSum = data.reduce((total,value,index)=>total+value*(index+1),0)
+    let total = weightedSum/totalNumberofRating
+    setTotalRating(total)
+  }}
+
+  useEffect(()=>{
+    calulateRating()
+  },[])
+
+  console.log(totalRating);
+  
     return (
       <Card className="w-auto mx-1 my-2">
         <CardHeader shadow={false} floated={false} className="h-44">
@@ -25,7 +47,8 @@ import {
               By {coursedata?.tutor?.firstName+' '+coursedata?.tutor?.lastName}
             </Typography>
             <Typography color="blue-gray" className="font-medium">
-             <Rating/>
+             {/* <Rating/> */}
+             <StarRating size={'text-2xl'} rating={totalRating} disable={true}/>
             </Typography>
           </div>
           <Typography

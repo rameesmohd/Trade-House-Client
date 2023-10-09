@@ -1,7 +1,7 @@
 import React, { useEffect, useRef,useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import userAxios from '../../Axios/UserAxios'
-import {BsFillShieldLockFill, BsTelephoneFill} from 'react-icons/bs'
+import {BsFillShieldLockFill} from 'react-icons/bs'
 import OtpInput from "otp-input-react"
 import {CgSpinner} from 'react-icons/cg'
 import 'react-phone-input-2/lib/style.css'
@@ -58,9 +58,13 @@ const Signup = () => {
         }
     };
     
-
+    const [initailRender,setIntialRender] = useState(true)
     useEffect(()=>{
-        handleOTP()
+        if(!initailRender){
+            handleOTP()
+        }else{
+            setIntialRender(true)
+        }
     },[formData])
 
     const handleOTP =async ()=>{

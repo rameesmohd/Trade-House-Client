@@ -10,7 +10,7 @@ import {
   } from "@material-tailwind/react";
 
 const Body = ({loading,courseData}) => {
-
+    
     return (
     <>
         <div className='grid md:grid-cols-3 gap-2 h-screen overflow-x-hidden overflow-y-scroll bg-slate-50'>

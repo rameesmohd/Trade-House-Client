@@ -5,14 +5,10 @@ export const Chat = createSlice({
     initialState: {
         selectedChat : null,
         inboxAllChat : [],
-        notification : []
     },
     reducers:{
         setSelectedChat(state,action){
             state.selectedChat = action.payload
-        },
-        setNotification(state,action){
-            state.notification = action.payload
         },
         setAllInboxData(state,action){
             console.log(action.payload,'setAllInboxData redux');
@@ -22,5 +18,5 @@ export const Chat = createSlice({
     }
 })
 
-export const {setSelectedChat,setNotification,setAllInboxData} = Chat.actions
+export const {setSelectedChat,setAllInboxData} = Chat.actions
 export default Chat.reducer

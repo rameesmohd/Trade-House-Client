@@ -62,7 +62,7 @@ const TutorReq = () => {
 
   return (
     <>
-    <div className="w-full py-3 px-3">
+    <div className="w-full py-3 md:px-3">
     <div className="flex flex-col">
     <table className="table">
         <thead>

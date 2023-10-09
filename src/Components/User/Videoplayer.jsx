@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 
 export default function VideoPlayer({height,width,video,disabled,autoPlay,controls}) {
     return (

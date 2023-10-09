@@ -83,10 +83,6 @@ const Login =()=>{
                 <div className='flex justify-between '>
                     <Link to={'/login'} className='underline'>Back</Link>
                 </div>
-                <div className='flex justify-between'>
-               
-               
-                </div>
             </form> 
         </div>
   )

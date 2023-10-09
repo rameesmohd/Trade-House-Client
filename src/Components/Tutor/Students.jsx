@@ -124,7 +124,7 @@ const Students = () => {
                 }
               )}
               {
-                loading && [1,2,3,4].map((value)=>{
+                loading && [...Array(4)].map((value)=>{
                     const className = 'py-3 px-5 border-b border-blue-gray-50';
                     return(
                     <tr key={1599+value} className='animate-pulse overflow-x-hidden'>

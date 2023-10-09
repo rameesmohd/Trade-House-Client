@@ -4,13 +4,13 @@ import adminAxios from '../../Axios/AdminAxios'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns';
-import contactUs from '../../assets/contact-Us.gif'
 
 
 const Inbox = () => {
     const axiosInstance = adminAxios()
     const [inboxData,setInboxData] = useState([])
     const [showMssg,setShowMssg] = useState({}) 
+    const [mobileview,setMobileView] = useState(false)
     const fetchData=async()=>{
         await axiosInstance.get('/contact-inbox').then((res)=>{
             setInboxData(res.data.result)
@@ -25,16 +25,18 @@ const Inbox = () => {
 
     const handleShowMssg=async(mssg)=>{
         setShowMssg(mssg)
+        setMobileView(!mobileview)
         setInboxData((prev) =>prev.map((message)=>message._id === mssg._id ? {...message,is_read : true} : message))
         await axiosInstance.patch('/contact-inbox',{id:mssg._id}).then((res)=>{
         setInboxData(res.data.result)
     }).catch((error)=>{
-        console.log(error) 
+        console.log(error)  
         toast.error(error.message)})
     }
     return (
-        <main className="flex w-full h-full shadow-lg rounded-3xl px-5 border m-5">
-            <section className="flex flex-col pt-3 md:w-4/12  h-full overflow-y-scroll">
+        <main className="flex w-full h-full shadow-lg rounded-3xl px-5 border m-5 ">
+
+            <section className={`flex flex-col pt-3 w-full md:w-4/12  h-full overflow-y-scroll ${!mobileview ?  '' : 'hidden md:block' }`}>
               <ul className="mt-6">
                { inboxData.map((mssg)=>
                 <li onClick={()=>handleShowMssg(mssg)} key={mssg._id} className={`py-5 border-b px-3 ${showMssg._id===mssg._id && 'bg-indigo-100'} transition  hover:bg-indigo-100`}>
@@ -53,8 +55,9 @@ const Inbox = () => {
               </ul>
             </section>
 
-            <section className="md:w-6/12 px-4 flex flex-col bg-white rounded-r-3xl">
-            { <> <div className="flex justify-between items-center h-48 border-b-2 mb-8">
+            {<section className={`md:w-6/12 py-3 px-4 flex-col bg-white rounded-r-3xl ${!mobileview ? 'hidden md:block' :''  }`}>
+             <p className='sm:hidden underline ' onClick={()=>setMobileView(!mobileview)}>Back</p>
+             <div className="flex justify-between items-center border-b-2 mb-8">
                 <div className="flex space-x-4 items-center">
                   <div className="flex flex-col">
                     <h3 className=" text-lg">Email : </h3>
@@ -68,9 +71,9 @@ const Inbox = () => {
                   {showMssg.comment&&<p>Hi,</p>}
                   <p>{showMssg.comment}</p>
                 </comment>
-              </section> </>
-              }
-            </section>
+              </section> 
+            </section>}
+
           </main>
   )
 }

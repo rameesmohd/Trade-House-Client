@@ -38,7 +38,7 @@ const Card = ({userData,setUserData}) => {
 
   return (
     <>
-     <div className='p-10 '>
+     <div className='px-10 py-2 w-full'>
             <div className="bg-white shadow rounded-lg p-6 border">
             <div className="flex flex-col items-center">
               <img

@@ -27,11 +27,31 @@ export default function Filter() {
       price: 'All',
       search:'All'
   })
+  const [hasMoreData,setHasMoreData] = useState(true)
+  const [DataToSkipCount,setDataToSkipCount] = useState(0)
+
+  const resetFilter=(e)=>{
+    e.preventDefault()
+    setFilter({
+      category:'All',
+      level : 'All',
+      price: 'All',
+      search:'All'
+  })
+  }
 
   const fetchCourses = async()=>{
+    if( filter.category!=='All'||filter.level !== 'All'||filter.price !== 'All'||filter.search !== 'All') {
+      setDataToSkipCount(0)
+    }
     setLoading(true);
-    await axiosInstance.get(`/courses?category=${filter.category}&level=${filter.level}&price=${filter.price}&search=${filter.search}`)
+    await axiosInstance.get(`/courses?category=${filter.category}&level=${filter.level}&price=${filter.price}&search=${filter.search}&skip=${DataToSkipCount}&limit=9`)
     .then((res)=>{
+        if(res.data.result.length < 9){
+          setHasMoreData(false)
+        }else if(res.data.result.length == 9){
+          setHasMoreData(true)
+        }
         setCourseData(res.data.result)
         dispatch(setCoursesLoad(res.data.result))
     }).catch((error)=>{
@@ -49,7 +69,9 @@ export default function Filter() {
   }  
 
   const debouncedFetchCourses = debounce(fetchCourses, 1000);
+
   let [isInitialMount,setInitailMount] = useState(true);
+
   useEffect(() => {
     if (!isInitialMount) {
       debouncedFetchCourses();
@@ -59,7 +81,7 @@ export default function Filter() {
     return () => {
       debouncedFetchCourses.cancel();
     };
-  }, [filter]);
+  }, [filter,DataToSkipCount]);
 
   useEffect(() => {
     if (!CourseDataRedux) {
@@ -75,12 +97,20 @@ export default function Filter() {
   
   const debouncedHandleChange = debounce((value) => {
     setFilter((prev) => ({ ...prev, search: value }));
-  }, 2000);
+  }, 1000);
+
+  const handlePagination=(event)=>{
+    if(hasMoreData && event=='next'){
+      setDataToSkipCount((prev)=>prev+9)
+    }else if(DataToSkipCount !== 0 && event=='prev'){
+      setDataToSkipCount((prev)=>prev-9)
+    }
+  }
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
-    debouncedHandleChange.cancel();
-    debouncedHandleChange(value === '' ? 'All' : value);
+      debouncedHandleChange.cancel();
+      debouncedHandleChange(value === '' ? 'All' : value);
   };
 
   const sortOptions = [
@@ -303,7 +333,7 @@ export default function Filter() {
           <input name='search' onChange={handleSearchChange} type="text" className='border-gray-300 rounded-md sm:hidden' placeholder='Search here' />
           </div>
           
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
+          <section aria-labelledby="products-heading" className="pt-6">
             <h2 id="products-heading" className="sr-only">
               Products
             </h2>
@@ -322,6 +352,7 @@ export default function Filter() {
                           name='category'
                           defaultValue={category.category}
                           type="radio"
+                          checked={filter.category===category._id}
                           onChange={(e) => e.target.checked ? setFilter((prev) => ({ ...prev, [e.target.name]: category._id })) : null}
                           defaultChecked={category.checked}
                           className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -359,6 +390,7 @@ export default function Filter() {
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={section.name}
                                   defaultValue={option.value}
+                                  checked={filter?.[section.name]==option.value}
                                   type="radio"
                                   onChange={(e) => e.target.checked ? setFilter((prev) => ({ ...prev, [e.target.name]: e.target.value })) : null}
                                   defaultChecked={option.checked}
@@ -378,13 +410,36 @@ export default function Filter() {
                     )}
                   </Disclosure>
                 ))}
+                <div className='w-full flex justify-end'>
+                <button onClick={(e)=>resetFilter(e)} className='bg-slate-200 border rounded-sm px-1 mt-2'>clear filter</button>
+                </div>
               </form>
+
               {/* Product grid */}
               <div className="lg:col-span-3">{<Body loading={loading} courseData={courseData}/>}</div>
             </div>
           </section>
+          <div className='h-24 flex justify-center md:justify-end items-center'>
+            <div className='w-full md:w-2/3 flex justify-center '>
+          <button onClick={()=>handlePagination('prev')} class={`flex items-center justify-center px-4 h-10 text-base font-medium text-white ${!DataToSkipCount ? 'bg-gray-200' : 'bg-gray-600'} rounded-l `}>
+              <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+              </svg>
+              Prev
+          </button>
+          <button onClick={()=>handlePagination('next')} class={`flex md:mr-20 items-center justify-center px-4 h-10 text-base font-medium text-white ${hasMoreData ? 'bg-gray-600' :'bg-gray-200' } border-0 border-l border-gray-700 rounded-r`}>
+              Next
+              <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+            </svg>
+          </button>
+            </div>
+          </div>
         </main>
       </div>
     </div>
   )
 }
+
+
+

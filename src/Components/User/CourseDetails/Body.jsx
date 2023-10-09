@@ -11,6 +11,8 @@ import { toast } from 'react-toastify'
 import { setPurchsedCourses} from '../../../Redux/ClientSlice/CoursesLoad'
 import {BiChat} from 'react-icons/bi'
 import { Spinner } from '@material-tailwind/react'
+import ReviewModal from './ReviewModal'
+import StarRating from './Star'
 
 const Body = () => {
     const purchasedCourses= useSelector((store)=>store.CoursesLoad.purchasedCourses)
@@ -19,10 +21,13 @@ const Body = () => {
     const navigate = useNavigate()
     const axiosInstance = userAxios()
     const location = useLocation()
-    const courseData = location.state
+    const [courseData,setCourseData] = useState(location.state)
     const [isPurchased,setIsPurchased] = useState(false)
     const [loading,setLoading] = useState(false)
-    
+    const [reviewModal,setReviewModal] = useState(false)
+    const [success,setSuccess] = useState(false)
+    const [totalRating,setTotalRating] = useState(0)
+
     useEffect(()=>{
         const loadPurchasedCourses=async()=>{
             await axiosInstance.get('/purchased-courses').then((res)=>{
@@ -42,15 +47,33 @@ const Body = () => {
             const purchased = purchasedCourses.filter((value)=>value === courseData._id)
             purchased.length !== 0 ? setIsPurchased(true) : setIsPurchased(false)
         }
-    })
+        
+        let totalNumberofRating = courseData.user_ratings.length
+        if(totalNumberofRating){
+            let data = [1,2,3,4,5].map((star,i)=>courseData.user_ratings.filter((value,i)=>value.rating===star).length )
+            let totalRating = data.reduce((total,value,index)=>total+value*index+1)/totalNumberofRating
+            setTotalRating(totalRating)
+        }
+    },[])
+
+ 
 
     const accessChat=async()=>{
+        if(!token) navigate('/login')
         setLoading(true)
-        console.log('other_id:', courseData.tutor._id);
-        console.log('user_role:', 'user');
         await axiosInstance.post('/chat',{other_id:courseData.tutor._id,user_role:'user'})
         setLoading(false)
-        navigate('/chat')  
+        navigate('/chat')
+    }
+
+    const addReview=async(rating,feedback)=>{
+            await axiosInstance.post('/review',{rating,feedback,id:courseData._id}).then((res)=>{
+                setSuccess(true)
+                setCourseData(res.data.courseData)
+            }).catch((error)=>{
+                toast.error(error.message)
+                console.log(error);
+        })
     }
 
   return (
@@ -60,12 +83,16 @@ const Body = () => {
             <div className='bg-slate-50 h-auto w-full p-8 md:col-span-1'>
                 <h1 className='underline text-sm font-poppins'>Course</h1>
                 <br />
+                <div className='flex justify-between'>
                 <h1 className='text-3xl font-poppins'>{courseData?.title}</h1>
+                <h1 className='text-2xl font-poppins'>₹{courseData?.price}</h1>
+                </div>
                 <br />
                 <p className='font-sans'>{courseData?.description}</p> 
                 <br />  
-                <div className='flex '>
-                <Rating/> <p className='ml-4'>{courseData?.user_ratings ? (courseData?.user_ratings.length+" ratings") : 'No reviews'}</p>
+                <div className='flex items-center'>
+                <StarRating size={'text-2xl'} rating={totalRating} disable={true}/> <p className='ml-4'>{courseData?.user_ratings ? (courseData?.user_ratings.length+" ratings") : 'No reviews'}</p>
+                {isPurchased&&   <div onClick={()=>setReviewModal(true)} className='ml-5 cursor-pointer underline text-sm bg-slate-300 rounded-md px-1'>Add Review</div>}
                 </div>
                 <br />
                 {
@@ -109,45 +136,33 @@ const Body = () => {
         <div className='grid md:grid-cols-2 w-full h-auto mb-5'>
 
             <div className='col-span-1 my-16 ml-12'>
-             <AdvRating/>
+             <AdvRating user_ratings={courseData.user_ratings} />
             </div>
-
-            <div className='col-span-1 my-16'>
+          
+            <div className='col-span-1 my-16 px-4 h-96 overflow-y-auto'>
                 <h1 className='font-poppins text-lg'>All Reviews</h1>
-                <div className='w-full h-24 bg-slate-50 flex flex-row items-center rounded-md'>
+                {courseData.user_ratings.map((value,i)=>{
+                   return <div className='w-full h-24 bg-slate-50 flex flex-row items-center rounded-md mb-3 '>
                     <div className='w-1/6 h-full p-3 flex justify-center items-center'>
-                            <div style={{ overflow: 'hidden' }} className='mx-auto my-auto h-14 w-14 rounded-full bg-slate-600 flex justify-center items-center text-4xl text-white'>M</div>
+                    <div className='mx-auto my-auto h-14 w-14 rounded-full bg-slate-600 flex justify-center items-center text-4xl text-white'>{value.user_name?.charAt(0).toUpperCase()}</div>
                     </div>
-                    <div className='flex flex-col h-full ml-2 py-3'>
-                    <div className='text-lg'>Mbcdefg</div>
-                    <p className='text-xs opacity-75'>1/2/3333</p>
-                    <p className='whitespace-normal break-words'>ewdfdfsdaf qwerfawef awefqwef awefwedsfefwerfwerfg awefawef</p>
+                    <div className='flex flex-col h-full ml-2 py-3 w-full overflow-auto'>
+                        <div className='flex justify-between'>
+                            <div className='text-lg'>{value.user_name?.charAt(0).toUpperCase() + value.user_name?.slice(1).toLowerCase()}</div>
+                            <StarRating size={'text-1xl'} rating={value.rating} disable={true}/>
+                        </div>
+                        <p className='text-xs opacity-75'>{value?.date?.split('T')[0]}</p>
+                        <p className='whitespace-normal break-words'>{value.review}</p>
                     </div>
-                </div>
+                    </div>
+                }) 
+            }
 
-                <div className='w-full h-24 bg-slate-50 flex flex-row items-center rounded-md'>
-                    <div className='w-1/6 h-full p-3 flex justify-center items-center'>
-                            <div style={{ overflow: 'hidden' }} className='mx-auto my-auto h-14 w-14 rounded-full bg-slate-600 flex justify-center items-center text-4xl text-white'>M</div>
-                    </div>
-                    <div className='flex flex-col h-full ml-2 py-3'>
-                    <div className='text-lg'>Mbcdefg</div>
-                    <p className='text-xs opacity-75'>1/2/3333</p>
-                    <p className='whitespace-normal break-words'>ewdfdfsdaf qwerfawef awefqwef awefwedsfefwerfwerfg awefawef</p>
-                    </div>
-                </div>
-                <div className='w-full h-24 bg-slate-50 flex flex-row items-center rounded-md'>
-                    <div className='w-1/6 h-full p-3 flex justify-center items-center'>
-                            <div style={{ overflow: 'hidden' }} className='mx-auto my-auto h-14 w-14 rounded-full bg-slate-600 flex justify-center items-center text-4xl text-white'>M</div>
-                    </div>
-                    <div className='flex flex-col h-full ml-2 py-3'>
-                    <div className='text-lg'>Mbcdefg</div>
-                    <p className='text-xs opacity-75'>1/2/3333</p>
-                    <p className='whitespace-normal break-words'>ewdfdfsdaf qwerfawef awefqwef awefwedsfefwerfwerfg awefawef</p>
-                    </div>
-                </div>
+     
             </div>
-            
+
         </div>
+        {reviewModal && <ReviewModal showModal={setReviewModal} success={success} addReview={addReview}/>}
     </div>
   )
 }

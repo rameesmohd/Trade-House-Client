@@ -74,7 +74,7 @@ function Addcourse({setAddcourse,setLoading}) {
         preview : preview,
         banner : banner
       }
-      dispatch(addCourse({    
+    dispatch(addCourse({    
         _id : '123456',
         title : titleRef.current.value,
         level : levelRef.current.value,
@@ -88,7 +88,6 @@ function Addcourse({setAddcourse,setLoading}) {
         banner : 'loading'
       }))
       setLoading({id:'123456',spinner:true})
-
       await axiosInstance.post('/courses',formData,{
       headers: {'Content-Type': 'multipart/form-data'},
     }).then((res)=>{
@@ -97,7 +96,6 @@ function Addcourse({setAddcourse,setLoading}) {
         setLoading({id:'123456',spinner:false})
     }).catch((error)=>{
       toast.error(error.message)
-      toast.error(error.response.data.message)
       console.log(error);
     })
   }

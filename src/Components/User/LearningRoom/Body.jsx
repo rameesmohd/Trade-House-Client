@@ -31,6 +31,11 @@ const Body = () => {
     console.log(user_id);
     useEffect(()=>{
         loadModules()
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+          });
     },[])
 
 
@@ -83,7 +88,7 @@ const Body = () => {
                  <Videoplayer height={'auto'} width={'full'} video={currVideo} controls={true} disabled={false} autoPlay={true}/>
                  </div>
               <div className='flex justify-between'>
-              <a onClick={decreament} class="flex items-center justify-center px-3 h-8 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+              <a onClick={decreament} class="cursor-pointer flex items-center justify-center px-3 h-8 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                 <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
                 </svg>
@@ -91,11 +96,11 @@ const Body = () => {
             </a>
               {
                 index === moduleData?.chapters?.length-1 ?
-                <a onClick={increamant} class="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <a onClick={increamant} class="cursor-pointer flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                     Completed
                 </a>
                 :
-                <a onClick={increamant} class="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <a onClick={increamant} class="cursor-pointer flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                 Next Chapter
                 <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
@@ -110,7 +115,7 @@ const Body = () => {
             { 
                 moduleData?.chapters && moduleData.chapters.map((chapter,i)=>
                     <div key={chapter._id} className=' rounded-lg my-1'>
-                        <a onClick={()=>changevideo(chapter?.video)} className={`flex border border-slate-800 items-center ${i===index ? 'bg-gray-900' : 'bg-black'}  rounded-lg shadow flex-row max-w-xl  hover:bg-gray-900`}>
+                        <a onClick={()=>changevideo(chapter?.video)} className={`flex border border-slate-800 items-center ${i===index ? 'bg-gray-600' : 'bg-black'}  rounded-lg shadow flex-row max-w-xl  hover:bg-gray-900`}>
                             <Videoplayer height={'auto'} width={48} video={chapter?.video} controls={false} disabled={true} autoPlay={false}/>    
                             <div className="flex flex-col justify-between p-1 ml-1 leading-normal">
                                 <p className='mb-1 text-sm font-bold text-white'>Chapter {i+1}</p>

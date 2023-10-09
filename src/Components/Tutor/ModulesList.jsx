@@ -6,7 +6,6 @@ import tutorAxios from '../../Axios/TutorAxios'
 import { toast } from 'react-toastify'
 import Modal from '../ConfirmModal'
 import { Spinner } from "@material-tailwind/react";
-import Loading from '../Loading'
 let deleteId;
 
 const ModulesList = () => {
@@ -55,12 +54,12 @@ const ModulesList = () => {
     }
     if(save){
       const title = titleRef.current.value
-      let filteredData
-      title ? filteredData = moduleData.filter((value)=>value.courseId!=='0') : toast.warning('Invalid title')
-      const updatedData = [...filteredData,{title:title,courseId:courseId,chapters:[]}]
-      setModuleData(updatedData)
+      console.log(moduleData);
       await axiosInstance.post('/modules',{courseId:courseId,title:title}).then((res)=>{
-        const moduleData = res.result 
+        let filteredData
+        title ? filteredData = moduleData.filter((value)=>value.courseId!=='0') : toast.warning('Invalid title')
+        const updatedData = [...filteredData,{_id:res.data.savedModule._id, title:title,courseId:courseId,chapters:[]}]
+        setModuleData(updatedData)
         toast.success(res.data.message)
       }).catch((error)=>{
         toast.error(error.message)
@@ -119,6 +118,7 @@ const ModulesList = () => {
   }
 
   const AddChapterhandle =async({id,save,cancel}) => {
+    console.log('AddChapterhandle',id,save,cancel);
     if(!save && !cancel){
       const data = moduleData.map((obj) =>
       obj._id === id ? { ...obj, chapters: [...obj?.chapters, { _id: 'add chapter' ,video : '' ,title : ''}] } : obj
@@ -128,6 +128,7 @@ const ModulesList = () => {
         setModuleData(data)
     }
     if(save){
+      console.log('saving.................');
       setSpinner(true)
       const title = chapterTitleRef.current.value
       await axiosInstance.post('/chapter',{moduleId:id,title:title,courseId:courseId}).then((res)=>{
@@ -254,8 +255,8 @@ const ModulesList = () => {
         </div>
         { moduleData.map((obj,index)=>{
           return(
-          <div key={obj._id} className=" overflow-x-auto shadow-md sm:rounded-lg mb-5">
-            <table key={obj._id} className="w-full  text-sm text-left text-gray-500 ">
+          <div key={obj._id+index} className=" overflow-x-auto shadow-md sm:rounded-lg mb-5">
+            <table key={obj._id+index*2} className="w-full  text-sm text-left text-gray-500 ">
               <thead className="text-sm text-gray-700 uppercase bg-yellow-400 ">
                 <tr>
                   <th scope="col" className="px-6 py-3">
@@ -339,7 +340,8 @@ const ModulesList = () => {
             <div className='w-full py-3 px-4'>
 
               {drop._id==obj._id && obj?.chapters?.map((chapter,index)=>
-                chapter._id === 'add chapter' ? 
+              {console.log(obj._id,'zzzzzzzzzzzzzzzz')
+                return chapter._id === 'add chapter' ? 
                 <div key={chapter._id} className='flex justify-between w-full mx-2 border border-black rounded-md h-auto p-3 focus:text-white' >
                   <input placeholder='Enter title' ref={chapterTitleRef} className='border-red-700 w-4/6 h-9 rounded-md' type="text" />
                   <button onClick={()=>AddChapterhandle({id:obj._id,save : true})} className='w-1/6 rounded mx-2 hover:bg-slate-900 hover:text-white text-black bg-slate-200 text-sm p-1 text-center flex items-center justify-center'>
@@ -352,7 +354,7 @@ const ModulesList = () => {
                        className="bi bi-plus" viewBox="0 0 16 16"> 
                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/> 
                    </svg>}
-                </button>
+                </button>}
               )}
               </div> 
           </div>)
@@ -407,7 +409,7 @@ const ModulesList = () => {
     </div>
     {chapterDeleteModal && <Modal setShowModal={setchapterDeleteModal} confirm={deleteChapter} message={'Are you sure?'} description={'Chapter will be deleted permenently'}/>}
     {modal && <Modal setShowModal={setShowModal} confirm={()=>deleteModule(deleteId)} message={'Are you sure?'} description={'Module will be deleted permenently'}/>}
-    {loading && <Loading/>}
+    {loading && <Spinner/>}
     </>
   )
 }

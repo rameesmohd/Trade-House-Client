@@ -4,6 +4,7 @@ import successIcom from '../../../assets/icons8-success-64.png'
 import userAxios from '../../../Axios/UserAxios'
 
 
+
 const Trial = ({progressData,order_id,courseData,moduleData,user_id}) => {
    const [dropDown,setDropDown] = useState(true)
    const [progress,setProgress] = useState(0)
@@ -12,9 +13,6 @@ const Trial = ({progressData,order_id,courseData,moduleData,user_id}) => {
    const axiosInstance = userAxios()
    let next_module_id;
 
-  //  let resume;
-  //  let index;
-  //  let resumeTitle;
    const handleProgress = async() => {
       let completedModuleCount = 0 
       let resume = []
@@ -45,7 +43,7 @@ const Trial = ({progressData,order_id,courseData,moduleData,user_id}) => {
   },[])
 
 
-    const DropdownIcon =()=> (
+  const DropdownIcon =()=> (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         className="w-5 h-5 hover:scale-125"
@@ -91,7 +89,7 @@ const Trial = ({progressData,order_id,courseData,moduleData,user_id}) => {
             </div>
           
            { dropDown &&
-            <div className='w-full h-auto border rounded border-gray-600 border-spacing-4  p-4 bg-white my-2 transition'>
+            <div className='w-full h-auto border rounded border-gray-600 border-spacing-4  p-4 bg-white my-2 transition duration-300 delay-150 ' >
                 {
                  moduleData.map((module, index) => {
                   next_module_id = index+1 > moduleData.length-1 ? 'completed' : moduleData[index+1]._id
@@ -130,9 +128,9 @@ const Trial = ({progressData,order_id,courseData,moduleData,user_id}) => {
                         </div>
                       </li>
                     </ul>)
-                  })
-                }
-            </div> }
+                  })}
+            </div> 
+            }
             <div className="bg-gray-300 rounded-full h-2.5 mb-4 w-5/6 flex ml-3">
                 <div className="bg-green-500 h-2.5 rounded-full" style={{width: `${progress}%`}}></div>
             </div>

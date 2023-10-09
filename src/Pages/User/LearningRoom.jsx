@@ -8,7 +8,6 @@ const LearningRoom = () => {
     <div className='bg-gray-900'>
         <Navbar/>
         <Body/>
-        <Footer/>
     </div>
   )
 }

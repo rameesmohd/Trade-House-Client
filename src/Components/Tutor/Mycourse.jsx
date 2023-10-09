@@ -20,7 +20,7 @@ const Mycourse = () => {
   const dispatch = useDispatch()
   const [edit,setEdit]=useState(false)
   const [editCourse,setEditCourse]=useState({})
-  const[addCourse,setAddcourse] = useState(false)
+  const [addCourse,setAddcourse] = useState(false)
   const [loading,setLoading]= useState({})
 
   const logOut=()=>{
@@ -36,7 +36,6 @@ const Mycourse = () => {
     }).catch((error)=>{
       toast.error(error.message)
       toast.error(error.response?.data?.message)
-      console.log(error);
       if(error.response.status == 403){
         logOut()
       }
@@ -62,13 +61,12 @@ const Mycourse = () => {
       addCourse ? <Addcourse setAddcourse={setAddcourse} setLoading={setLoading}/>
       : 
     (!edit ? <div className='mx-5 py-5 '>
-      <div className='w-full h-16 bg-slate-100 my-2  rounded-md flex justify-end items-center p-4'> 
+      <div className='w-full h-16 bg-slate-100 my-2  rounded-md flex justify-end items-center p-4 overflow-hidden'> 
               <div onClick={()=>setAddcourse(true)} className='btn btn-sm border-none hover:bg-black hover:text-white bg-slate-400'>
                         Add Course
               </div>
       </div>
-
-      <div className="">
+      <div className="w-full overflow-x-scroll overflow-y-hidden pt-8">
       <table className="table">
         {/* head */}
         <thead className='bg-slate-300'>

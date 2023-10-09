@@ -9,7 +9,11 @@ import IntIcon from '../../../assets/indices-icon.png'
 import graph1 from '../../../assets/grade1-trendlines.png'
 import meta4 from '../../../assets/meta4.jpeg'
 import meta5 from '../../../assets/meta5.jpeg'
-import img6 from '../../../assets/faa2b801f1a2a58d3458bd13983842d3.jpeg'
+import testimonials from '../../../assets/testimonials.png'
+import testimonial2 from '../../../assets/testimonial2.png'
+import testimonial1 from '../../../assets/testimonial1.png'
+import testimonial4 from '../../../assets/testimonial4.png'
+
 import Footer from '../Footer'
 import MarketOverview from '../Markets/MarketOverview'
 import Charts from '../Markets/Charts'
@@ -20,7 +24,6 @@ import ScrollToTopButton from '../../ScrollToTopButton'
 import { toast } from 'react-toastify'
 import userAxios from '../../../Axios/UserAxios'
 import { useSelector } from 'react-redux'
-import { useEffect } from 'react'
 
 function Home() {
     const navigate = useNavigate()
@@ -30,6 +33,7 @@ function Home() {
     const commentRef = useRef()
     const axiosInstance = userAxios()
     const [contactUsSubmited,setContactUsSubmited] = useState(false)
+    
 
     const handleContactUsSubmit=async(e)=>{
         e.preventDefault()
@@ -64,12 +68,12 @@ function Home() {
     via-yellow-400
     to-yellow-300 
     background-animate'>
-    <div className='grid grid-cols-1 md:grid-cols-2 container mx-auto'>
+    <div className='grid grid-cols-1 md:grid-cols-2 container mx-auto '>
         <div className='p-6 md:p-12 '>
             <img className='object-cover rounded-md shadow-2xl animate-bounce-img' src={img3} alt="" />
         </div>
         <div className='p-6 md:p-12'>
-            <h1 className='mb-8 lg:mb-16 font-semibold text-2xl lg:text-3xl'>Let us help you become a Successful Trader<br/> in financial markets</h1>
+            <h1 className='mb-8 lg:mb-16 font-semibold text-2xl lg:text-3xl '>Let us help you become a Successful Trader<br/> in financial markets</h1>
             <p className='lg:pr-44 '>Our tutors  will walk you through the different steps to
             make a trade profitable.<br/> With each trade being different, you have to   </p>
             <p>understand how the market works</p>
@@ -143,16 +147,16 @@ function Home() {
             <div className='h-full grid grid-cols-6 '>
                     <div className='h-96 m-10 bg-slate-50 grid grid-rows-4 col-span-1'>
                         <div className='col-span-1 h-20 w-20  border-red-300 border bg-white relative'>
-                                <img className='bg-white absolute w-full h-full ' src={fxIcon} alt="" srcset="" />
+                                <img className='bg-white absolute w-full h-full  object-cover' src={fxIcon} alt="" srcset="" />
                         </div>
                         <div className='col-span-1 h-20 w-20 border-red-300 border relative'>
-                            <img className='bg-white absolute w-full h-full' src={CommIcon} alt="" srcset="" />
+                            <img className='bg-white absolute w-full h-full object-cover' src={CommIcon} alt="" srcset="" />
                         </div>
                         <div className='col-span-1 h-20 w-20 border-red-300 border relative'>
-                            <img className='bg-white absolute w-full h-full' src={stockIcon} alt="" srcset="" />
+                            <img className='bg-white absolute w-full h-full object-cover' src={stockIcon} alt="" srcset="" />
                         </div>
                         <div className='col-span-1 h-20 w-20 border-red-300 border relative'>
-                            <img className='bg-white absolute w-full h-full' src={IntIcon} alt="" srcset="" />
+                            <img className='bg-white absolute w-full h-full object-cover' src={IntIcon} alt="" srcset="" />
                         </div>
                     </div>
                     <div className='col-span-5 mt-12 ml-5'>
@@ -166,18 +170,18 @@ function Home() {
      <div className='container md:h-[400px] mx-auto '>
             <div className='grid grid-cols-1 md:grid-cols-4 h-full gap-5 mt-2'>
                 <div className='col-span-1 mr-1'></div>
-                <div className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5 hover:scale-110 transition'> 
+                <a href='https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe?utm_source=www.metatrader4.com&utm_campaign=download'  className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5 hover:scale-110 transition'> 
                         <h4 className='mb-5'>MetaTrader 4</h4>
                         <p className='mb-5'>The world’s most popular trading 
                             <br />platform</p>
-                        <img className='' src={meta4} alt="" />
-                </div>
-                <div className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5 hover:scale-110 transition'>
+                        <img  src={meta4} alt="" />
+                </a>
+                <a href='https://download.mql5.com/cdn/web/metaquotes.software.corp/mt4/mt4setup.exe?utm_source=www.metatrader4.com&utm_campaign=download' className='col-span-1 mr-1  rounded-md flex flex-col justify-center text-center p-5 hover:scale-110 transition'>
                         <h4 className='mb-5'>MetaTrader 5</h4>
                         <p className='mb-5'>Multi-asset trading on one 
                             <br />powerful platform</p>
                             <img className='' src={meta5} alt="" />
-                </div>
+                </a>
                 <div className='col-span-1 mr-1'></div>
             </div>
         </div>
@@ -187,40 +191,27 @@ function Home() {
             <MarketOverview/>
         </div>
         <Charts/>
-        <div onClick={()=>navigate('/markets')} className='w-full h-24 text-2xl text-center flex items-center justify-center animate-bounce'>Enroll Markets <button className='btn btn-circle btn-sm mx-2'>❯</button></div>
+        <div onClick={()=>navigate('/markets')} className='w-full h-24 text-3xl font-bold text-center flex items-center text-blue-700 border-black cursor-pointer justify-center animate-bounce'>Enroll Markets <button className='btn btn-circle font-bold btn-sm mx-2'>❯</button></div>
         {/* section-6 */}
         <div className='h-full min-w-full relative my-3'>
-            <img className='object-cover absolute h-full w-full -z-20 overflow-hidden opacity-50' src={img6} alt="" srcset="" />
-        <div className='container  mx-auto md:h-[280px]  mt-1'>  
+        <div className='container  mx-auto   mt-1'>  
             <div className='w-full md:h-14 text-center md:p-10'>
                     <h1 className='text-3xl text-black font-bold'>Real Students, Real Progress</h1>
             </div>
-            <div className='grid grid-cols-1 md:grid-cols-5 gap-4 m-6'>
-                <div className='md:col-start-2 col-span-1 shadow-md rounded-3xl h-36 bg-violet-600 text-center'>
-                    hhdgvchjchchvch
-                </div>
-                <div className='shadow-md rounded-3xl col-span-1 bg-green-700 text-center'>
-                    sacacssssss
-                </div>
-                <div className=' shadow-md rounded-3xl col-span-1  bg-blue-500 text-center'>
-                    acsssssssssss
-                </div>
-            </div>         
         </div>
-        
-        <div className='container  mx-auto md:h-[200px] '>  
+        <div className='container  mx-auto  '>  
             <div className='grid grid-cols-1 md:grid-cols-10 gap-4 m-6'>
-                <div className='md:col-start-2 col-span-2 shadow-md rounded-3xl h-36 bg-violet-600 text-center'>
-                    hhdgvchjchchvch
+                <div className='md:col-start-2 col-span-2  rounded-3xl text-center'>
+                    <img className='h-full w-full' src={testimonial1} alt="" />
                 </div>
-                <div className='shadow-md rounded-3xl col-span-2 bg-green-700 text-center'>
-                    sacacssssss
+                <div className='rounded-3xl col-span-2  text-center'>
+                <img className='h-full w-full' src={testimonial2} alt="" />
                 </div>
-                <div className=' shadow-md rounded-3xl col-span-2  bg-blue-500 text-center'>
-                    acsssssssssss
+                <div className='rounded-3xl col-span-2   text-center'>
+                <img className='h-full w-full' src={testimonials} alt="" />
                 </div>
-                <div className=' shadow-md rounded-3xl col-span-2  bg-blue-500 text-center'>
-                    acsssssssssss
+                <div className='rounded-3xl col-span-2   text-center'>
+                <img className='h-full w-full' src={testimonial4} alt="" />
                 </div>
             </div>         
         </div>

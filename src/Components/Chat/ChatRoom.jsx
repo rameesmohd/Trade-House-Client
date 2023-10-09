@@ -7,12 +7,13 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setAllInboxData } from '../../Redux/ClientSlice/Chat';
-
+import { io } from 'socket.io-client'
 
 function ChatComponent({role}) {
   const dispatch = useDispatch()
   const [loading,setLoading] = useState(true)
-  const [fetchAgain,setFetchAgain] = useState(false)
+  const [socket,setSocket]= useState('')
+  const [toggle,setToggle] = useState(false)
   
   const user_id = useSelector((store) => {
     if (role === 'tutor') {
@@ -37,19 +38,44 @@ function ChatComponent({role}) {
     })
   }
 
+  useEffect(() => {
+    const newSocket = io("http://localhost:5001")
+    setSocket(newSocket)
+    newSocket.on("error",(err)=>{
+      console.log(err);
+    })
+
+    newSocket.on('online', (user) => {
+      console.log('Received online event:', user);
+    });
+
+    //initialising chat
+    if(senderRole==='tutor'){
+      newSocket.emit('initializeChat',user_id,user_id);
+    }
+    newSocket.on('newInitialize',(sender)=>{
+      console.log('new message initialed from ',sender);
+      inboxDatafetch()
+    });
+    
+    return () => {
+      if (newSocket) newSocket.disconnect();
+    };
+  },[]);
+
   useEffect(()=>{
     inboxDatafetch()
   },[])
 
   return (
-    <div className="w-full h-full mt-24 ">
+    <div className="w-full h-full sm:mt-20 ">
       <div className="flex h-full">
-        <div className="flex-1 bg-slate-50 w-full h-full">
+        <div className="flex-1 bg-white border w-full h-full">
           <div className="main-body m-auto w-11/12 h-full flex flex-col">
             <div className="py-4 flex-2 flex flex-row">
               <div className="flex-1">
                 <span className="xl:hidden inline-block text-gray-700 hover:text-gray-900 align-bottom">
-                  <span className="block h-6 w-6 p-1 rounded-full hover:bg-gray-400">
+                  <span onClick={()=>setToggle(!toggle)} className="block h-6 w-6 p-1 rounded-full hover:bg-gray-400">
                     <svg
                       className="w-4 h-4"
                       fill="none"
@@ -64,34 +90,15 @@ function ChatComponent({role}) {
                   </span>
                 </span>
               </div>
-              <div className="flex-1 text-right">
-                <span className="inline-block text-gray-700">
-                  Status:{' '}
-                  <span className="inline-block align-text-bottom w-4 h-4 bg-green-400 rounded-full border-2 border-white"></span>{' '}
-                  <b>Online</b>
-                  <span className="inline-block align-text-bottom">
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      className="w-4 h-4"
-                    >
-                      <path d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  </span>
-                </span>
-              </div>
+  
             </div>
-            <div className="main flex-1 flex flex-col">
-              <div className="hidden lg:block heading flex-2">
-                <h1 className="text-3xl text-gray-700 mb-4">Chat</h1>
+            <div className="main flex-1 flex flex-col ">
+              <div className="hidden lg:block heading flex-2 bg-slate-300 rounded-lg pt-2 px-3">
+                <h1 className="text-3xl text-gray-700  mb-4">Chat</h1>
               </div>
-              <div className="flex-1 flex h-full">
-                <ChatList loading={loading}  width={'1/3'} hidden={'hidden md:block'} dataToListRole={receiverRole}/>
-                <ChatContent axiosInstance={axiosInstance} user_id={user_id} senderRole={senderRole} receiverRole={receiverRole}/>
+              <div className="flex-1 flex h-full border-s border-e">
+                <ChatList socket={socket} loading={loading}  width={'w-full md:w-1/3'} toggle={toggle} setToggle={setToggle} hidden={!toggle ? 'hidden md:block' : 'block'} dataToListRole={receiverRole}/>
+                <ChatContent socket={socket} axiosInstance={axiosInstance} hidden={!toggle ? 'block' : 'hidden md:block'} user_id={user_id} senderRole={senderRole} receiverRole={receiverRole}/>
               </div>
             </div>
           </div>

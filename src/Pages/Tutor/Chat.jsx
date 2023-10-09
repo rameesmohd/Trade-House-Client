@@ -4,7 +4,7 @@ import Navbar from '../../Components/Tutor/Navbar'
 import ChatRoom from '../../Components/Chat/ChatRoom'
 const Chat = () => {
   return (
-    <div className='pt-24 md:pt-0 md:pl-64 '>
+    <div className='pt-24 md:pt-0 md:pl-64 overflow-y-scroll'>
     <Navbar/>
     <Sidebar/>
     <ChatRoom role={'tutor'}/>

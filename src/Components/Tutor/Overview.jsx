@@ -13,11 +13,10 @@ const Overview = () => {
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
-
   const [walletTransData,setWalletTransData] = useState()
   const [visibleTransactions,setVisibleTransactions]=useState([])
   const [walletDataSeeMore,setWalletDataSeeMore] = useState(false)
-
+  const [revenueData,setRevenueData] = useState({})
   const handleFilterClick = (filter) => {
     setSelectedFilter(filter);
   };
@@ -31,11 +30,19 @@ const Overview = () => {
     .then((res)=>{
         setWalletTransData(res.data.transaction)
         setRecentSales(res.data.recentSales)
-    }).catch((error)=>{
-      console.log(error)
+        setRevenueData({
+            weeklyTotalRevenue:res.data.weeklyTotalRevenue,
+            monthlyTotalRevenue: res.data.monthlyTotalRevenue,
+            totalRevenue:res.data.totalRevenue,
+            monthlySalesAmountsArray:res.data.monthlySalesAmountsArray
+          })
+        }).catch((error)=>{
+          console.log(error)
       toast.error(error.message)
     })
   }
+  
+  console.log(revenueData);
 
   const walletTransactionVisibleHandle=()=>{
     const transaction = walletTransData.b_wallet_transaction
@@ -66,14 +73,14 @@ const Overview = () => {
         id: 'bar-chart',
       },
       xaxis: {
-        categories: ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5', 'Category 6', 'Category 7', 'Category 8'],
+        categories:  ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep','Oct','Nov','Dec'],
       },
-      colors: ['#000000'], // Customize the bar color
+      colors: ['#000000'],
     },
     series: [
       {
         name: 'Series 1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91],
+        data: revenueData?.monthlySalesAmountsArray?.map((value)=>value*0.75)
       },
     ],
   };
@@ -84,19 +91,17 @@ const Overview = () => {
         id: 'area-chart',
       },
       xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep','Oct','Nov','Dec'],
       },
       colors: ['#FFAA33'], // Customize the area color
     },
     series: [
       {
         name: 'Series 1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91],
+        data: revenueData.monthlySalesAmountsArray,
       },
     ],
   };
-
-  console.log(visibleTransactions);
 
   const handlePrint = () => {
     const printContents = document.getElementById('sales-table').outerHTML;
@@ -132,7 +137,6 @@ const handleSearch = () => {
   }
 };
 
-
 const handleFromDateChange = (event) => {
   setFromDate(event.target.value);
 };
@@ -142,13 +146,12 @@ const handleToDateChange = (event) => {
 };
 
   return (
-<div className='p-2'>
+  <div className='p-2 overflow-hidden'>
   <div className={`w-full ${!seeMore && 'grid grid-cols-1  md:grid-cols-2'} gap-1 my-3`}>
-   
     {/* Graphs */}
     {!seeMore && <div className='space-x-1 bg-slate-50 rounded-2xl p-2'>
       <div className="charts-card">
-          <h2 className="chart-title">Purchase and Sales Orders</h2>
+          <h2 className="chart-title">Sales Orders(Year)</h2>
           <ReactApexChart
             options={areaChartData.options}
             series={areaChartData.series}
@@ -158,7 +161,7 @@ const handleToDateChange = (event) => {
         </div>
       <div className="charts">
         <div className="charts-card">
-          <h2 className="chart-title">Top 5 Products</h2>
+          <h2 className="chart-title">Monthly Revenue</h2>
           <ReactApexChart
             options={chartData.options}
             series={chartData.series}
@@ -174,20 +177,23 @@ const handleToDateChange = (event) => {
     <div className='bg-slate-100 rounded-2xl p-2 col-span-1'>
     { !seeMore &&  <>
     <div className='flex p-2'>
-      <div className='relative card bg-green-500 border m-1 w-1/2 h-20 text-white font-poppins font-semibold p-1 text-sm md:text-lg'>
-        <p className='absolute ml-2'>
-          Today's Earnings
+      <div className=' card bg-green-500 border   shadow-md m-1 w-1/2 h-20  font-poppins font-semibold p-1 text-sm '>
+        <p className=' ml-2 text-sm md:text-lg'>
+          Weekly Earnings
         </p>
+        <p className='text-2xl text-white  text-center'>₹{revenueData.weeklyTotalRevenue}</p>
       </div>
-      <div className='relative card bg-red-500 border m-1 w-1/2 h-20 font-poppins text-white font-semibold p-1 text-sm md:text-lg'>
-        <p className='absolute ml-2'>
+      <div className=' card bg-red-500 border  shadow-md m-1 w-1/2 h-20 font-poppins  font-semibold p-1 text-sm md:text-lg'>
+        <p className=' ml-2 text-sm md:text-lg'>
           Montly Earnings
         </p>
+        <p className='text-2xl text-white  text-center'>₹{revenueData.monthlyTotalRevenue}</p>
       </div>
-      <div className='relative card bg-red-500 border m-1 w-1/2 h-20 font-poppins text-white font-semibold p-1 text-sm md:text-lg'>
-        <p className='absolute ml-2'>
-          Yearly Earnings
+      <div className=' card bg-red-500 border shadow-md m-1 w-1/2 h-20 font-poppins  font-semibold p-1 text-sm md:text-lg'>
+        <p className=' ml-2 text-base md:text-lg'>
+          Total Earnings
         </p>
+        <p className='text-2xl text-white  text-center'>₹{revenueData.totalRevenue}</p>
       </div>
       </div>
 
@@ -252,7 +258,7 @@ const handleToDateChange = (event) => {
       </> }
       {/* table-2 */}
       <div className="relative my-2 h-1/3 bg-white">
-      <div className={`w-full bg-slate-100 my-1 md:flex items-center justify-between rounded-md`}>
+      <div className={`w-full bg-slate-100 my-1 flex items-center justify-between rounded-md`}>
           <span className='text-lg font-bold opacity-70 ml-3 w-56'>{seeMore? selectedFilter :'Recent'} Sales</span>
 
          {!seeMore ? <p onClick={()=>expandSalesList()} className='mr-3 text-sm font-poppins font-bold cursor-pointer border border-double border-black px-1 border-blue rounded-lg bg-white-800 text-black flex items-center'>
@@ -260,7 +266,7 @@ const handleToDateChange = (event) => {
             View All
           </p> :
           <>
-           <div className='text-black flex md:flex-none my-2 md:my-0 py-2'>
+           <div className='text-black flex justify-center sm:justify-normal md:flex-none my-2 md:my-0 py-2'>
             <button
               className={`bg-slate-50 w-16 p-1 border ${selectedFilter === 'All' ? 'bg-slate-900 text-white' : ''}`}
               onClick={() => handleFilterClick('All')}
@@ -287,9 +293,9 @@ const handleToDateChange = (event) => {
             </button>
           </div>
 
-          <div className='md:flex'> 
+          <div className='flex justify-center'> 
           <div date-rangepicker class="md:flex items-center">
-              <div className='flex md:items-center my-2 md:my-0'>
+              <div className='md:flex md:items-center my-2 md:my-0'>
                 <div class="relative">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                       <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -381,7 +387,7 @@ const handleToDateChange = (event) => {
                 <td scope="row" className="px-1 w-5xl py-1 font-medium text-gray-900 whitespace-nowrap">
                   {order.status==='refunded' 
                   &&
-                  <p>"{order.user_message}"</p>
+                  <p className='w-44 h-16 break-words whitespace-normal overflow-y-scroll'>"{order.user_message}"</p>
                   }
                 </td>}
                 <td className="px-6 py-4">

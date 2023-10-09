@@ -12,6 +12,7 @@ import Userpanel from '../Pages/User/Userpanel'
 import LearningRoom from '../Pages/User/LearningRoom'
 import Markets from '../Pages/User/Markets'
 import Chat from '../Pages/User/Chat'
+import NotFoundPage from '../Pages/NotFoundPage'
 
 const User = () => {
   const userAuth = useSelector((state)=>state.Client.Token)
@@ -37,6 +38,9 @@ const User = () => {
             <Route path='/userpanel' element={ <PrivateRoute element={<Userpanel/>}/> }/>
             <Route path='/userpanel/watch' element={ <PrivateRoute element={<LearningRoom/>}/> }/>
             <Route path='/chat' element={ <PrivateRoute element={<Chat/>}/> }/>
+
+             {/* 404 route */}
+            <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </>
   )

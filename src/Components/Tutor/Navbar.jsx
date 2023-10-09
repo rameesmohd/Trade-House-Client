@@ -1,29 +1,20 @@
 import React from 'react'
 import logo from '../../assets/icon_line.png'
 import { useDispatch } from 'react-redux'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux/es/hooks/useSelector'
+import { Link, useNavigate } from 'react-router-dom'
 import { tutorLogout } from '../../Redux/TutorAuth'
 import { emptyMyCourse } from '../../Redux/TutorSlice/Courses'
-import { useEffect } from 'react'
-import {setBlocker} from '../../Redux/TutorAuth'
-
 
 const Navbar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const location = useLocation()
-  const tutorAuth = useSelector((state)=>state.Client?.is_tutor)
+
 
   const logOut=()=>{
     dispatch(emptyMyCourse())
     dispatch(tutorLogout())
     navigate('/tutor/login')
   }
-
-  // useEffect(()=>{
-  //   dispatch(setBlocker({logOut}))
-  // })
   
   return (
     <>
@@ -37,7 +28,7 @@ const Navbar = () => {
             <button
             type="button"
             onClick={logOut}
-            className="px-4 py-2 mr-3 text-sm font-medium text-center text-white bg-transparent border border-red-600 rounded-lg hover:bg-red-700 focus:ring-red-4 focus:outline-none focus:ring-red-300 md:mr-0">
+            className="px-1 md:px-4 py-2 md:py-2 mr-3 text-sm font-medium text-center text-white bg-transparent border border-red-600 rounded-lg hover:bg-red-700 focus:ring-red-4 focus:outline-none focus:ring-red-300 md:mr-0">
             LogOut
           </button>
 

@@ -11,7 +11,7 @@ import Allcourses from '../Pages/Admin/AllCourses'
 import TutorDetails from '../Pages/Admin/TutorDetails'
 import SalesPage from '../Pages/Admin/SalesPage'
 import ContactInbox from '../Pages/Admin/ContactInbox'
-
+import NotFoundPage from '../Pages/NotFoundPage'
 
 const Admin = () => {
   const adminAuth = useSelector((state) => state.Admin.Token)
@@ -35,6 +35,9 @@ const Admin = () => {
       <Route path="/tutors/tutor-details" element={<PrivateRoute element={<TutorDetails/>}/>}/>
       <Route path="/sales" element={<PrivateRoute element={<SalesPage/>}/>}/>
       <Route path="/contact-inbox" element={<PrivateRoute element={<ContactInbox/>}/>}/>
+
+      {/* 404 route */}
+      <Route path='*' element={<NotFoundPage />} />
     </Routes>
   );
 }

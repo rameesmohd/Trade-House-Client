@@ -5,7 +5,8 @@ export const  AdminAuth = createSlice({
     initialState : {
         Token : null,
         email: '',
-        wallet : '0.00'
+        wallet : '0.00',
+        mobileView:false
     },
     reducers : {
         adminLogin(state,action){
@@ -18,9 +19,12 @@ export const  AdminAuth = createSlice({
         },
         setWalletBalance(state,action){
             state.wallet = action.payload
+        },
+        setMobileViewMenuToggler(state,action){
+            state.mobileView = action.payload
         }
     }
 })
 
-export const {adminLogin,adminLogout,setWalletBalance} = AdminAuth.actions
+export const {adminLogin,adminLogout,setWalletBalance,setMobileViewMenuToggler} = AdminAuth.actions
 export default AdminAuth.reducer
