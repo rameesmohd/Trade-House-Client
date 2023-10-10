@@ -1,10 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { removeCourseData } from '../Redux/ClientSlice/CourseOnPayment'
 const Success = () => {
-    const dispatch = useDispatch()
-    // dispatch(removeCourseData())
     const navigate = useNavigate()
   return (
     <div>
