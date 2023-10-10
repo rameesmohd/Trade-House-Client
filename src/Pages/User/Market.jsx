@@ -3,7 +3,7 @@ import Navbar from '../../Components/User/Navbar'
 import Footer from '../../Components/User/Footer'
 import Body from '../../Components/User/Markets/Body'
 
-const Markets = () => {
+const Market = () => {
   return (
     <div className='lg:container mx-auto'>
         <Navbar/>
@@ -13,4 +13,4 @@ const Markets = () => {
   )
 }
 
-export default Markets
+export default Market
