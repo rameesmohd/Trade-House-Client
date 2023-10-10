@@ -49,7 +49,6 @@ function ChatComponent({role}) {
       console.log('Received online event:', user);
     });
 
-    //initialising chat
     if(senderRole==='tutor'){
       newSocket.emit('initializeChat',user_id,user_id);
     }
