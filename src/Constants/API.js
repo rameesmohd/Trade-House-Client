@@ -1,10 +1,6 @@
-// export const userAPI ="http://localhost:5001/";
-// export const adminAPI ="http://localhost:5001/admin/";
-// export const tutorAPI ="http://localhost:5001/tutor/";
+export const userAPI =import.meta.env.VITE_USER_API
+export const adminAPI =import.meta.env.VITE_ADMIN_API
+export const tutorAPI =import.meta.env.VITE_TUTOR_API
 
-export const userAPI ="https://api.tradeh.online/";
-export const adminAPI ="https://api.tradeh.online/admin/";
-export const tutorAPI ="https://api.tradeh.online/tutor/";
-
-export const GoogleClientId ='873744942590-1pmttm90g91l7v65g5illcthig1jpcem.apps.googleusercontent.com'
+export const GoogleClientId =import.meta.env.VITE_GOOGLE_CLIENT_ID
 
