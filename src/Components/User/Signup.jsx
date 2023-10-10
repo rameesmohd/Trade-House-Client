@@ -63,7 +63,7 @@ const Signup = () => {
         if(!initailRender){
             handleOTP()
         }else{
-            setIntialRender(true)
+            setIntialRender(false)
         }
     },[formData])
 
