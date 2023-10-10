@@ -86,7 +86,7 @@ const Navbar = () => {
           className="items-center justify-between bg-black rounded-md  w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
         >
-          <ul className={`flex flex-col p-1 mt-4 font-medium ${!isMobileMenuOpen ? '' : 'hidden border border-gray-800'}  rounded-lg md:p-0 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-black`}>
+          <ul className={`flex flex-col p-1 mt-4 font-medium ${isMobileMenuOpen ? '' : 'hidden border border-gray-800'}  rounded-lg md:p-0 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-black`}>
             <li>
               <a
                onClick={()=>navigate('/home')}

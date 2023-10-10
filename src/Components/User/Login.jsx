@@ -71,27 +71,28 @@ const Login =()=>{
             }
         }  
         if(Object.keys(validationErrors).length === 0){
+            setLoading(true)
             setError(validationErrors)
             await axiosInstance.post('/login',{email,password}).then((res)=>{
-                    const result = res.data.response
-                    console.log(result);
-                 if(result.status){   
-                    dispatch(clientLogin({
-                        token : result?.token,
-                        email : result?.email,
-                        name : result?.name,
-                        user_id : result?.user_id,
-                        is_requested : result?.is_requested,
-                        is_tutor : result?.is_tutor
-                     }))  
-                    navigate('/home')
-                 }else{
-                     toast.error(result.message)     
-                 }
-                }).catch((error)=>{
-                    console.log(error);
-                    toast.error(error.response.data?.response?.message) 
-                })
+            const result = res.data.response
+            setLoading(false)
+            if(result.status){   
+                dispatch(clientLogin({
+                    token : result?.token,
+                    email : result?.email,
+                    name : result?.name,
+                    user_id : result?.user_id,
+                    is_requested : result?.is_requested,
+                    is_tutor : result?.is_tutor
+                    }))  
+                navigate('/home')
+                }else{
+                    toast.error(result.message)     
+                }
+            }).catch((error)=>{
+                console.log(error);
+                toast.error(error.response.data?.response?.message) 
+            })
         }else{
             setError(validationErrors)
         }
@@ -215,7 +216,16 @@ const Login =()=>{
                     </button>
                     {error.password && <div className="error text-red-700">{error.password}</div>}
                 </div>
-                <button type='submit' className='text-white border w-full my-5 py-2 bg-indigo-600 hover:bg-indigo-400'>Login</button>
+                {
+                    !loading && <button type='submit' className='text-white border w-full my-5 py-2 flex justify-center bg-indigo-600 hover:bg-indigo-400 rounded'>  <span>Login</span></button>
+                }
+                {   loading && 
+                    <button type='submit' className='text-white border w-full my-5 py-2 flex justify-center bg-indigo-600 hover:bg-indigo-400 rounded'>
+                        <CgSpinner size={20} className='mt-1 animate-spin mr-2' />
+                    </button>
+                }
+              
+
                 {error.resError && <div className="error text-red-700">{error.resError}</div>}
                 <div className='flex justify-between '>
                     <p className='flex items-center'>
