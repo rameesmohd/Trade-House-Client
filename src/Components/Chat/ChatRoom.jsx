@@ -39,7 +39,7 @@ function ChatComponent({role}) {
   }
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5001")
+    const newSocket = io("https://api.tradeh.online/")
     setSocket(newSocket)
     newSocket.on("error",(err)=>{
       console.log(err);
