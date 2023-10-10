@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../../Components/User/Navbar'
 import Footer from '../../Components/User/Footer'
-import Body from '../../Components/User/Markets/PageBody'
+import Body from '../../Components/User/Markets/Body'
 
 const Markets = () => {
   return (

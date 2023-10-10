@@ -18,7 +18,7 @@ import ScrollToTopButton from '../../ScrollToTopButton'
 
 
 
-const PageBody = () => {
+const Body = () => {
   const axiosInstance = userAxios()
   const [loading,setLoading] = useState(false)
   const [cryptoData,setCryptoData] = useState([])
@@ -658,7 +658,7 @@ const fetchLiveCurrencyData=async()=>{
   )
 }
 
-export default PageBody
+export default Body
 
 
 
