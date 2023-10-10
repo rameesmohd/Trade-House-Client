@@ -11,7 +11,7 @@ const PopoverDes = ({Description}) => {
     <div>
       <p className="flex items-center text-sm text-gray-500 dark:text-gray-400">
         <button
-          onClick={togglePopover} // Add an onClick handler to toggle popover visibility
+          onClick={togglePopover}
           type="button"
         >
           <svg
