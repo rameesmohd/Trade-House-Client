@@ -18,14 +18,14 @@ const ChatContent = ({hidden,socket,axiosInstance,user_id,senderRole,receiverRol
   const messagesRef = useRef()
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  // const scrollToBottom = debounce(() => {
-  //   messagesRef.current?.scrollIntoView({behavior: 'smooth'});
-  // }, 300);
+  const scrollToBottom = debounce(() => {
+    messagesRef.current?.scrollIntoView({behavior: 'smooth'});
+  }, 300);
 
   useEffect(() => {
-    // if (messagesRef.current) {
-    //   messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-    // }
+    if (messagesRef.current) {
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }
   },[]);
 
   useEffect(() => {
@@ -120,6 +120,7 @@ const ChatContent = ({hidden,socket,axiosInstance,user_id,senderRole,receiverRol
 
   };
   
+  console.log(message);
 
   return (
     <>
@@ -141,7 +142,7 @@ const ChatContent = ({hidden,socket,axiosInstance,user_id,senderRole,receiverRol
                   <div key={`start-${mssg._id + i}`} className="chat chat-start">
                         <div className="chat-image avatar">
                           <div className="w-10 rounded-full">
-                            <img src={mssg.sender.image ? mssg.sender.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'} />
+                            <img src={selectedChat?.[receiverRole]?.image ? selectedChat?.[receiverRole].image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'} />
                           </div>
                         </div>
                         <div className="chat-header">

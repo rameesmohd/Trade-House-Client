@@ -105,7 +105,7 @@ return (
         </thead>
         <tbody>
             {usersData
-            .filter((obj)=>obj.email.toLowerCase().includes(searchInput))
+            .filter((obj)=>obj?.email.toLowerCase().includes(searchInput))
             .map((obj,index)=>{
             return(
             <tr key={obj._id} className='border-b-gray-400'>

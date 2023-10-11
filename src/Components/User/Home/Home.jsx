@@ -291,7 +291,7 @@ function Home() {
                                     Technical support
                                 </p>
                                 <p className="text-neutral-500 dark:text-neutral-200">
-                                    support@example.com
+                                    support@th.com
                                 </p>
                                 <p className="text-neutral-500 dark:text-neutral-200">
                                     +1 234-567-89
@@ -300,7 +300,7 @@ function Home() {
                             </div>
                             </div>
                             <div className="mb-12 w-full shrink-0 grow-0 basis-auto px-3 md:w-6/12 md:px-6 lg:w-full xl:mb-0 xl:w-6/12 xl:px-12">
-                                <div className="align-start flex">
+                                <div className="align-start flex items-center">
                                     <div className="shrink-0">
                                     <div className="inline-block rounded-md bg-primary-100 p-4 text-primary">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -315,7 +315,7 @@ function Home() {
                                         Sales questions
                                     </p>
                                     <p className="text-neutral-500 dark:text-neutral-200">
-                                        sales@example.com
+                                        sales@th.com
                                     </p>
                                     <p className="text-neutral-500 dark:text-neutral-200">
                                         +1 234-567-89

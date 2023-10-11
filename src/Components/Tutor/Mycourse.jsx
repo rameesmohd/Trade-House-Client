@@ -82,7 +82,6 @@ const Mycourse = () => {
               return(
               <tr key={obj._id}>
               <td>
-                <div className="">
                   <div className="h-[180px]">
                     { obj.banner=='loading' ? 
                       <div class="flex items-center justify-center max-w-[250px] h-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
@@ -93,7 +92,6 @@ const Mycourse = () => {
                       : <img className='max-w-[250px] h-full bg-slate-50 mx-auto' src={obj.banner} alt="" /> )
                     }
                   </div>
-                </div>
               </td>
               <td>
                 <div className="max-w-[250px] h-[180px]">

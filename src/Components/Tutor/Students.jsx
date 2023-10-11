@@ -16,15 +16,19 @@ const Students = () => {
     const axiosInstance =  tutorAxios()
     const [studentsData,setStudentsData]= useState([])
     const [loading,setLoading] = useState(false)
+
+    const fetchData = async()=>{
+      setLoading(true)
+      await axiosInstance.get('/my-students').then((res)=>{
+        setStudentsData(res.data.result)
+      }).catch((error)=>{
+        toast.error(error.message)
+      }).finally(()=>{
+        setLoading(false)
+      })
+    }
     useEffect(()=>{
-        setLoading(true)
-        axiosInstance.get('/my-students').then((res)=>{
-            console.log(res.data.result);
-            setStudentsData(res.data.result)
-            setLoading(false)
-        }).catch((error)=>{
-            toast.error(error.message)
-        })
+      fetchData()
     },[])
 
   return (
@@ -66,24 +70,24 @@ const Students = () => {
                       </td>
                       <td className={className}>
                         <div className="flex items-center gap-4">
-                          <Avatar src={students.user_id.image} alt={name} size="sm" />
+                          <Avatar src={students?.user_id?.image} alt={name} size="sm" loading='lazy'/>
                           <div>
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-semibold"
                             >
-                              {students.user_id.name}
+                              {students?.user_id?.name}
                             </Typography>
                             <Typography className="text-xs font-normal text-blue-gray-500">
-                              {students.user_id.email}
+                              {students?.user_id?.email}
                             </Typography>
                           </div>
                         </div>
                       </td>
                       <td className={className}>
                         <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {students.course_id.title}
+                          {students?.course_id?.title}
                         </Typography>
                         <Typography className="text-xs font-normal text-blue-gray-500">
                           {students.course_id._id}
@@ -92,7 +96,7 @@ const Students = () => {
                    
                       <td className={className}>
                         <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {students.date_of_purchase.split('T')[0]}
+                          {students?.date_of_purchase.split('T')[0]}
                         </Typography>
                       </td>
                       <td className={className}>
@@ -104,9 +108,9 @@ const Students = () => {
                           href="#"
                           className="text-xs font-semibold text-blue-gray-600 mx-1"
                           >
-                          {students.learning_progress ? students.learning_progress+'%' : '1%'}
+                          {students.learning_progress ? students?.learning_progress+'%' : '1%'}
                           </Typography>
-                          <Progress value={students.learning_progress ? students.learning_progress : 1} color="green" />
+                          <Progress value={students?.learning_progress ? students?.learning_progress : 1} color="green" />
                         </>}
                         </div>
                       </td>
@@ -127,13 +131,13 @@ const Students = () => {
                 loading && [...Array(4)].map((value)=>{
                     const className = 'py-3 px-5 border-b border-blue-gray-50';
                     return(
-                    <tr key={1599+value} className='animate-pulse overflow-x-hidden'>
+                    <tr key={1599+value} className='animate-pulse '>
                     <td className={className}>
-                
+           
                   </td>
                   <td className={className}>
                     <div className="flex items-center gap-4">
-                      <Avatar  size="sm" className='bg-gray-300' />
+                      <Avatar   size="sm" className='bg-gray-300 w-10 h-10' />
                     <div>
                     <div className=" h-3 w-32 bg-gray-300" >
                     </div>

@@ -17,7 +17,7 @@ const Card = ({userData,setUserData}) => {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-          setImageUrlData(reader.result)
+          setImageUrlData(file)
         }
       }
   }
@@ -25,14 +25,16 @@ const Card = ({userData,setUserData}) => {
   imageUrlData ? updateImage() : ''
 
   async function updateImage(){
-    await axiosInstance.patch('/image',{id:userData._id,imageUrlData})
+    await axiosInstance.patch('/image',
+    {id:userData._id,image:imageUrlData},
+    {headers: {'Content-Type': 'multipart/form-data'}})
     .then((res)=>{
      toast.success(res.message)
    }).catch((error)=>{
      console.log(error);
      toast.error(error.message)
    }).finally(()=>{
-    setImgDataUrl('')
+      setImgDataUrl('')
    })
  }
 

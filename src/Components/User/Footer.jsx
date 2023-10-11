@@ -48,11 +48,11 @@ const Footer = () => {
                 <ul>
                     <h3 className='font-bold' >CONTACT</h3>
                     <li className='my-2 flex item-center'>
-                        <RiHomeOfficeFill className='text-1xl md:text-2xl'/>
+                        <RiHomeOfficeFill className='text-1xl mt-2 md:text-2xl'/>
                         <p className='mx-2'>city tower,baby hospital,Calicut, 94126</p>
                     </li>
-                    <li className='my-2 flex item-center'><AiFillPhone/><p className='mx-2'>+ 01 234 567 88</p></li>
-                    <li className='my-2 flex item-center underline'><FiMail/><p className='mx-2'>th@gmail.com</p></li>
+                    <li className='my-2 flex item-center'><AiFillPhone className='mt-1'/><p className='mx-2'>+ 01 234 567 88</p></li>
+                    <li className='my-2 flex item-center underline'><FiMail className='mt-1'/><p className='mx-2'>th@gmail.com</p></li>
                     </ul>
                 </div>          
         </div>

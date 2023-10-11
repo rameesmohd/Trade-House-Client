@@ -173,17 +173,15 @@ const Courses = () => {
             myCourses?.map((obj,index)=>
             <tr key={obj._id}>
               <td>
-                <div className="">
                   <div className="h-[180px]">
                     { !obj.banner ? 
                       <div className='h-full w-full bg-slate-100 flex justify-center items-center'><h1>No banner</h1></div>
                       : <img className='max-w-[250px] h-auto  bg-slate-50 mx-auto' src={obj?.banner} alt="" /> 
                     }
                   </div>
-                </div>
               </td>
               <td>
-                <div className="max-w-[150px] h-[150px]">
+                <div className="w-[150px] h-[150px]">
                     <img className='w-full h-full object-cover' src={obj?.tutor?.image ? obj?.tutor?.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'} alt="" />
                     <h2 className='w-full text-center font-semibold text-base'>{obj.tutor?.firstName+' '+obj.tutor?.lastName }</h2>
                   </div>

@@ -9,7 +9,7 @@ const TutorProfile = () => {
   const fileInputRef = useRef()
   const id = useSelector((store)=>store.Tutor.id)
   const [tutorData,setProfileData] = useState({})
-  const [imgDataUrl, setImgDataUrl] = useState('');
+  const [imgDataUrl, setImgDataUrl] = useState();
   const [editAbout,setEditAbout] = useState(false)
 
   const fetchData =async()=>{
@@ -30,20 +30,20 @@ const TutorProfile = () => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
+    setImgDataUrl(selectedFile)
     if (selectedFile) {
       setProfileData(prev=>({...prev,image :URL.createObjectURL(selectedFile)}))
       let reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onload = () => {
-        setImgDataUrl(reader.result)
       }
     }
   };
 
   const updateImage=async()=>{
-     await axiosInstance.patch('/image',{id,imgDataUrl})
+     await axiosInstance.patch('/image',{id,image:imgDataUrl},{headers: {'Content-Type': 'multipart/form-data'}})
      .then((res)=>{
-      setImgDataUrl('')
+      setImgDataUrl()
       toast.success('Updated successfully')
     }).catch((error)=>{
       console.log(error);
@@ -52,6 +52,8 @@ const TutorProfile = () => {
   }
 
   imgDataUrl ? updateImage() : ''
+
+  console.log(imgDataUrl);
 
   const handleAboutEdit=()=>{
     !tutorData.about_me ? 

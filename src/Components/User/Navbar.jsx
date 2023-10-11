@@ -24,11 +24,11 @@ const Navbar = () => {
   }
   return (
     <>
-      <nav className="fixed top-0 left-0 z-20 w-full h-24 py-5 bg-black border-b border-black dark:bg-black dark:border-black" >
+      <nav className="fixed top-0 left-0 z-20 w-full h-24 py-5 bg-black border-b border-black " >
       <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
         <Link to={'/home'} className="flex items-center hover:scale-125 w3-animate-bottom delay-75">
           <img src={logo} className="h-10 mr-1 " alt="Flowbite Logo" />
-          <span className="self-center text-lg font-semibold md:text-2xl whitespace-nowrap dark:text-white ">TRADE HOUSE</span>
+          <span className="self-center text-lg font-semibold md:text-2xl whitespace-nowrap">TRADE HOUSE</span>
         </Link>
         <div className="flex md:order-2">
           {!clientAuth ? <button
@@ -64,7 +64,7 @@ const Navbar = () => {
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
-            className="inline-flex items-center justify-center w-10 h-10 p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            className="inline-flex items-center justify-center w-10 h-10 p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
             aria-controls="navbar-sticky"
             aria-expanded="false"
             onClick={toggleMobileMenu}
@@ -82,11 +82,9 @@ const Navbar = () => {
           </button>
         </div>
 
-        <div
-          className="items-center justify-between bg-black rounded-md  w-full md:flex md:w-auto md:order-1"
-          id="navbar-sticky"
-        >
-          <ul className={`flex flex-col p-1 mt-4 font-medium ${isMobileMenuOpen ? '' : 'hidden border border-gray-800'}  rounded-lg md:p-0 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-black`}>
+        <div className="items-center justify-between bg-black rounded-md  w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+          
+          <ul className={` flex-col p-1 mt-4 md:flex font-medium ${isMobileMenuOpen ? 'flex' : 'hidden border border-gray-800'}  rounded-lg md:p-0 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-black`}>
             <li>
               <a
                onClick={()=>navigate('/home')}
@@ -109,7 +107,7 @@ const Navbar = () => {
                 Courses
               </a>
             </li>
-            {clientAuth && !isMobileMenuOpen? <>
+            {clientAuth && isMobileMenuOpen? <>
            <li>
               <a
                 onClick={()=>navigate('/userpanel')}

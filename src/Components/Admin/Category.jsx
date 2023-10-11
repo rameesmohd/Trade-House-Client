@@ -114,12 +114,11 @@ const MarketCategory = () => {
   return (
     <div className=' w-full h-full'>
       <div className='relative flex justify-start'>
-     
-        <div className='absolute m-12 md:w-1/2'>
-        <div className='h-12 w-full bg-gray-100 rounded-lg mb-3 flex justify-end'>
+        <div className='absolute mt-10 ml-12 md:w-1/2'>
+          <div className='h-12 w-full bg-gray-100 rounded-lg mb-3 flex justify-end'>
           { !temp && <div className='bg-slate-900 rounded-md w-28 h-auto text-center flex justify-center items-center m-2 text-white hover:bg-slate-600 cursor-pointer' onClick={()=>handleAddCategory()}>Add Category</div>
             }
-        </div>
+          </div>
           <div className=" overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full  text-sm text-left text-gray-500 ">
               <thead className="text-xs text-gray-700 uppercase bg-gray-200 ">

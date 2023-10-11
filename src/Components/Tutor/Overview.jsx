@@ -258,14 +258,16 @@ const handleToDateChange = (event) => {
       </> }
       {/* table-2 */}
       <div className="relative my-2 h-1/3 bg-white">
-      <div className={`w-full bg-slate-100 my-1 flex items-center justify-between rounded-md`}>
+      <div className={`w-full bg-slate-100 my-1 sm:flex items-center justify-between rounded-md`}>
           <span className='text-lg font-bold opacity-70 ml-3 w-56'>{seeMore? selectedFilter :'Recent'} Sales</span>
 
-         {!seeMore ? <p onClick={()=>expandSalesList()} className='mr-3 text-sm font-poppins font-bold cursor-pointer border border-double border-black px-1 border-blue rounded-lg bg-white-800 text-black flex items-center'>
+         {!seeMore ? 
+         <p onClick={()=>expandSalesList()} className='mr-3 text-sm font-poppins font-bold cursor-pointer border border-double border-black px-1 border-blue rounded-lg bg-white-800 text-black flex items-center'>
           <img className='h-4 bg-white ' src="https://static.thenounproject.com/png/5014978-200.png" alt="" />
             View All
           </p> :
           <>
+          <div className='sm:flex'>
            <div className='text-black flex justify-center sm:justify-normal md:flex-none my-2 md:my-0 py-2'>
             <button
               className={`bg-slate-50 w-16 p-1 border ${selectedFilter === 'All' ? 'bg-slate-900 text-white' : ''}`}
@@ -304,7 +306,7 @@ const handleToDateChange = (event) => {
                 </div>
                   <input name="start" value={fromDate} type="date" onChange={handleFromDateChange} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block md:w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start"/>
                 </div>
-                <span class="mx-4 text-gray-500">to</span>
+                <span class="sm:mx-4 text-gray-500 w-full flex justify-center">to</span>
                 <div class="relative">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                       <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -314,8 +316,9 @@ const handleToDateChange = (event) => {
                 <input name="end" value={toDate} type="date" onChange={handleToDateChange} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end"/>
                 </div>
               </div>
-              <button className='border border-gray-300 p-1 md:p-3 rounded-lg mx-2 my-2 md:my-0' onClick={handleSearch}><HiSearch/></button>
+              <button className='border border-gray-300 p-1 md:p-3 rounded-lg mx-2 my-2 md:my-0 flex justify-center items-center w-full' onClick={handleSearch}><HiSearch/></button>
           </div>
+        </div>
         </div>
         <button
               className="text-black border hidden md:block border-gray-100 p-1 rounded-md mx-2"
@@ -323,11 +326,12 @@ const handleToDateChange = (event) => {
               🖨️ Print
           </button>
           <div className='flex justify-end'>
-        <div onClick={()=>setSeeMore(!seeMore)} className='mr-3 cursor-pointer border border-double border-black px-1 border-blue rounded-lg bg-white-800 text-black flex items-center'>
-          <img className='h-4 bg-white mx-1' src="https://cdn.iconscout.com/icon/premium/png-256-thumb/minimize-button-567898.png" alt="" />
-           <p className='text-xs md:text-sm font-poppins overflow-hidden m-1'> min</p>
-        </div>
+          <div onClick={()=>setSeeMore(!seeMore)} className='mr-3 cursor-pointer border border-double border-black px-1 border-blue rounded-lg bg-white-800 text-black flex items-center'>
+            <img className='h-4 bg-white mx-1' src="https://cdn.iconscout.com/icon/premium/png-256-thumb/minimize-button-567898.png" alt="" />
+            <p className='text-xs md:text-sm font-poppins overflow-hidden m-1'> min</p>
           </div>
+          </div>
+
           </>
           }
       </div>

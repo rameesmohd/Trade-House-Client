@@ -39,7 +39,7 @@ function ChatComponent({role}) {
   }
 
   useEffect(() => {
-    const newSocket = io("https://api.tradeh.online/")
+    const newSocket = io(import.meta.env.VITE_USER_API)
     setSocket(newSocket)
     newSocket.on("error",(err)=>{
       console.log(err);

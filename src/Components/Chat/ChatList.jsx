@@ -21,7 +21,6 @@ const ChatList = ({loading,width,hidden,dataToListRole,userpanel,toggle,setToggl
     setToggle(!toggle)
   }
 
-  console.log(inboxData);
   return (
     <>
         <div className={`sidebar ${hidden} lg:flex ${width} flex-2 flex-col pr-6 min-h-[500px]`}>
@@ -44,7 +43,6 @@ const ChatList = ({loading,width,hidden,dataToListRole,userpanel,toggle,setToggl
                                 src={chat?.[dataToListRole]?.image ? chat?.[dataToListRole]?.image : 'https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg'}
                                 alt="chat-user"
                               />
-                   `           {/* <span className="absolute w-4 h-4 bg-green-400 rounded-full right-0 bottom-0 border-2 border-white"></span> */}`
                             </div>
                           </div>
                           <div className="flex-1 px-2">

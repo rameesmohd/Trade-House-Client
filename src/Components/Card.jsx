@@ -18,7 +18,8 @@ export function Cards({coursedata}) {
   const calulateRating =()=>{
     let totalNumberofRating = coursedata.user_ratings.length
 
-   if(totalNumberofRating){ let data = [1,2,3,4,5].map((star,i)=>
+   if(totalNumberofRating){ 
+    let data = [1,2,3,4,5].map((star,i)=>
     coursedata.user_ratings.filter((value,i)=>value.rating===star).length)
 
     let weightedSum = data.reduce((total,value,index)=>total+value*(index+1),0)
@@ -27,7 +28,7 @@ export function Cards({coursedata}) {
   }}
 
   useEffect(()=>{
-    calulateRating()
+    // calulateRating()
   },[])
 
   console.log(totalRating);

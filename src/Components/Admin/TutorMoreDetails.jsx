@@ -51,7 +51,8 @@ const MoreDetails = () => {
   return (
 <>
     <div className='p-4 w-full '>
-    <div className='w-full bg-white h-auto gap-3 grid md:grid-cols-4'>
+    <div className='w-full bg-white h-auto gap-3 sm:grid md:grid-cols-4'>
+
     <section className="bg-blueGray-200 py-2 w-full  flex items-center p-3 md:col-span-2">
       <div className=" mx-auto px-4">
         <div className=" flex flex-col min-w-0 break-words bg-slate-100 shadow-xl rounded-lg ">
@@ -95,6 +96,7 @@ const MoreDetails = () => {
         </div>
       </div>
     </section>
+
     <section className=' md:col-span-2 bg-white  p-3'>
       {/* table-1 */}
       <div className=' overflow-y-hidden'>

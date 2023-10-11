@@ -6,9 +6,9 @@ const SortDropdown = ({role,options,handle}) => {
 
   return (
     <div className=" flex justify-center items-center">
-      <div className="w-full flex justify-center">
+      <div className=" flex justify-center">
         <div className="relative">
-          <button onClick={() => setOpenSort(!openSort)} className="flex text-black bg-gray-200 items-center justify-start w-40 py-2 mt-2 text-sm  text-left bg-transparent rounded-lg">
+          <button onClick={() => setOpenSort(!openSort)} className="flex text-black bg-gray-200 items-center justify-start sm:w-40 py-2 mt-2 text-sm  text-left bg-transparent rounded-lg">
             <span>{sortType}</span>
             <svg
               fill="currentColor"
