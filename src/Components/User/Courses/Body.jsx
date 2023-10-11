@@ -13,7 +13,7 @@ const Body = ({loading,courseData}) => {
     
     return (
     <>
-        <div className='grid md:grid-cols-3 gap-2 h-screen overflow-x-hidden overflow-y-scroll bg-slate-50'>
+        <div className='grid md:grid-cols-3 gap-2 overflow-x-hidden  overflow-y-scroll bg-slate-50'>
         {
             !loading && courseData.map((obj)=>{
                return <div className=' col-span-1 hover:scale-105'><Cards coursedata={obj}/></div>

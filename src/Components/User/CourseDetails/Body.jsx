@@ -95,7 +95,7 @@ const Body = () => {
                 <h1 className='text-2xl font-poppins'>₹{courseData?.price}</h1>
                 </div>
                 <br />
-                {!loading ? <p className='font-sans'>{courseData?.description}</p> : [...Array(5)].map((_,i)=><div className='w-full h-4 my-2 bg-slate-400 animate-pulse'></div>)} 
+                {!loading ? <p className='font-sans'>{courseData?.description}</p> : [...Array(5)].map((_,i)=><div className='w-full h-4 my-2 rounded-md bg-slate-400 animate-pulse'></div>)} 
                 <br /> 
                 <div className='flex items-center'>
                 <StarRating size={'text-2xl'} rating={totalRating} disable={true}/> <p className='ml-4'>{courseData?.user_ratings ? (courseData?.user_ratings.length+" ratings") : 'No reviews'}</p>
@@ -126,7 +126,7 @@ const Body = () => {
                 <div className='md:col-span-2 py-8'>
                     <p className='text-white mb-2'>About the Trainer</p>
                     <h1 className='text-white text-3xl mb-2'>{courseData?.tutor?.firstName+ " "+courseData?.tutor?.lastName}</h1>
-                    {!loading ?  <p className='text-white'>{courseData?.tutor?.about_me}</p> : [...Array(5)].map((_,i)=><div className='w-full h-4 my-2 bg-slate-200 animate-pulse'></div>)} 
+                    {!loading ?  <p className='text-white'>{courseData?.tutor?.about_me}</p> : [...Array(5)].map((_,i)=><div className='w-full h-4 my-2 bg-slate-200 animate-pulse rounded-md'></div>)} 
                     {!chatLoad ? <button onClick={()=>accessChat()} className='border p-1 font-poppins rounded-lg bg-slate-200 text-black border-white mt-2 flex items-center justify-center w-36'><BiChat className='mx-1'/><p>Chat with me</p></button>
                     : <button className='border p-1 font-poppins rounded-lg bg-slate-200 text-black border-white mt-2 flex items-center justify-center w-36'><Spinner/></button>}
                 </div>

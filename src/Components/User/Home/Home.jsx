@@ -216,7 +216,7 @@ function Home() {
             </div>         
         </div>
         </div> 
-        <div className='md:grid md:grid-cols-6 p-10'>
+        <div className='md:grid md:grid-cols-6 md:p-10'>
 
         <section className="bg-white col-span-2">
           <div className="py-4 lg:py-5 px-4 mx-auto max-w-screen-md">

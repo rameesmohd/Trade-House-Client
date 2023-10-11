@@ -28,7 +28,7 @@ const Navbar = () => {
       <div className="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
         <Link to={'/home'} className="flex items-center hover:scale-125 w3-animate-bottom delay-75">
           <img src={logo} className="h-10 mr-1 " alt="Flowbite Logo" />
-          <span className="self-center text-lg font-semibold md:text-2xl whitespace-nowrap">TRADE HOUSE</span>
+          <span className="self-center text-lg text-white font-semibold md:text-2xl whitespace-nowrap">TRADE HOUSE</span>
         </Link>
         <div className="flex md:order-2">
           {!clientAuth ? <button
