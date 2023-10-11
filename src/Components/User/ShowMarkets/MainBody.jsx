@@ -222,13 +222,13 @@ const fetchLiveCurrencyData=async()=>{
   }, []);
 
   useEffect(() => {
-    // calculateLiveFxPrice();
+    calculateLiveFxPrice();
   }, [base, quote]);
 
   useEffect(()=>{
-  //   fetchcalenderData()
-  //   fetchCryptoData()
-  //  fetchLiveCurrencyData()
+    fetchcalenderData()
+    fetchCryptoData()
+   fetchLiveCurrencyData()
   },[])
 
   return (
