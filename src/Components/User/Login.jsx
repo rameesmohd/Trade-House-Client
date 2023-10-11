@@ -75,7 +75,6 @@ const Login =()=>{
             setError(validationErrors)
             await axiosInstance.post('/login',{email,password}).then((res)=>{
             const result = res.data.response
-            setLoading(false)
             if(result.status){   
                 dispatch(clientLogin({
                     token : result?.token,
@@ -92,6 +91,8 @@ const Login =()=>{
             }).catch((error)=>{
                 console.log(error);
                 toast.error(error.response.data?.response?.message) 
+            }).finally(()=>{
+                setLoading(false)
             })
         }else{
             setError(validationErrors)
@@ -132,8 +133,9 @@ const Login =()=>{
                     timerStart()
                 }).catch((error)=>{
                     toast.error(error.response.data.message)
+                }).finally(()=>{
+                    setLoading(false)    
                 })
-                setLoading(false)    
             } catch (error) {
                 toast.error('somthing went wrong')
             }
@@ -155,12 +157,13 @@ const Login =()=>{
                 res.status ? toast.success(res.data.msg) : 
                 toast.error('something went wrong')
                 setForgot(false)
-                setLoading(false)
                 setUserExist(false)
                 setOtpFieldShow(false)
                 setError("")
             }).catch((err)=>{
                 toast.error(error.response.data.msg)
+            }).finally(()=>{
+                setLoading(false)
             })
         }else{
             setError(validationErrors)
@@ -288,26 +291,26 @@ const Login =()=>{
             </form>    
             ) : 
             <form onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-4 border '>
-                 <h2 className='text-4xl font-bold text-center py-6'>Forget Password</h2>
+                <h2 className='text-4xl font-bold text-center py-6'>Forget Password</h2>
                 <div className='flex flex-col py-2'>
-                    <div className='flex flex-col py-2'>
-                    <label>New Password</label>
-                    <input ref={newPassRef} type='text' className='border p-2' required/>
-                    {error.password && <div className="error text-red-700">{error.password}</div>}
-                    </div>
-                    <div className='flex flex-col py-2'>
-                    <label>Confirm Password</label>
-                    <input ref={newPassConfirmRef} type='password' className='border p-2'  required/>
-                    {error.nomatch && <div className="error text-red-700">{error.nomatch}</div>}
-                    </div>
-                    <button type='button' onClick={()=>forgotPass()} className='text-white border
-                     w-full my-8 py-2 bg-indigo-600 hover:bg-indigo-400 flex justify-center'>
-                    { 
-                    loading && <CgSpinner size={20} className='mt-1 animate-spin mr-2' />
-                    }
-                    <span>Submit</span>
-                    </button>
-                    <Link onClick={()=>{setForgot(false),setUserExist(false)}} className='text-right'>Back to login</Link>
+                <div className='flex flex-col py-2'>
+                 <label>New Password</label>
+                 <input ref={newPassRef} type='text' className='border p-2' required/>
+                {error.password && <div className="error text-red-700">{error.password}</div>}
+                </div>
+                <div className='flex flex-col py-2'>
+                <label>Confirm Password</label>
+                <input ref={newPassConfirmRef} type='password' className='border p-2'  required/>
+                {error.nomatch && <div className="error text-red-700">{error.nomatch}</div>}
+                </div>
+                <button type='button' onClick={()=>forgotPass()} className='text-white border
+                    w-full my-8 py-2 bg-indigo-600 hover:bg-indigo-400 flex justify-center'>
+                { 
+                loading && <CgSpinner size={20} className='mt-1 animate-spin mr-2' />
+                }
+                <span>Submit</span>
+                </button>
+                <Link onClick={()=>{setForgot(false),setUserExist(false)}} className='text-right'>Back to login</Link>
                 </div>
             </form> )}
 

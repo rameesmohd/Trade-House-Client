@@ -65,12 +65,11 @@ const MainBody = () => {
         </div>
             <hr/>
         <div className='w-full md:h-auto md:grid  md:grid-cols-4 p-2'>
-            <div  className='w-full p-10 md:col-span-3 md:flex-row'>  
+            <div  className='w-full md:p-10 md:col-span-3 md:flex-row'>  
             { 
                 purchaseDatas.length ? (
                 purchaseDatas.filter((obj)=>obj.status!=='refunded').map((purchase)=>{
                 const modules = moduleDatas.filter((obj)=>obj?.courseId === purchase?.course_id?._id)
-                console.log(purchase);
                 return (
                     <div key={purchase?._id} className="col-span-4 sm:col-span-3">
                         <List progressData={purchase?.learning_progress} order_id={purchase?._id} courseData={purchase?.course_id} moduleData={modules} user_id={userDatas._id}/>
@@ -79,7 +78,7 @@ const MainBody = () => {
                 ):(
                 <div className='w-full p-10 md:col-span-3 '>  
                     <div className="col-span-4 sm:col-span-3 p-4">
-                    <div className='w-full h-full bg-slate-100 p-24 border rounded-md border-gray-600'>
+                    <div className='w-full h-full bg-slate-100 p-10 sm:p-24 border rounded-md border-gray-600'>
                         <div className='w-full flex justify-center'>
                             <img className='h-24 w-24' src={emptyIcon} alt="" /> 
                         </div>
