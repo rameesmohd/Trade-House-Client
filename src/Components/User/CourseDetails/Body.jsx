@@ -98,7 +98,7 @@ const Body = () => {
                 {!loading ? <p className='font-sans'>{courseData?.description}</p> : [...Array(5)].map((_,i)=><div className='w-full h-4 my-2 rounded-md bg-slate-400 animate-pulse'></div>)} 
                 <br /> 
                 <div className='flex items-center'>
-                <StarRating size={'text-2xl'} rating={totalRating} disable={true}/> <p className='ml-4'>{courseData?.user_ratings ? (courseData?.user_ratings.length+" ratings") : 'No reviews'}</p>
+                <StarRating size={'text-2xl'} rating={totalRating} disable={true}/> <p className='ml-4'>{courseData?.user_ratings ? (courseData?.user_ratings?.length+" ratings") : 'No reviews'}</p>
                 {isPurchased && <div onClick={()=>setReviewModal(true)} className='ml-5 cursor-pointer underline text-sm bg-slate-300 rounded-md px-1'>Add Review</div>}
                 </div>
                 <br />
@@ -148,9 +148,9 @@ const Body = () => {
            { !loading && <AdvRating user_ratings={courseData?.user_ratings} />}
             </div>
           
-            <div className={`col-span-1 my-16 px-4 ${!loading && courseData.user_ratings.length && 'h-96'} overflow-y-auto`}>
+            <div className={`col-span-1 my-16 px-4 ${!loading && courseData?.user_ratings?.length && 'h-96'} overflow-y-auto`}>
                 <h1 className='font-poppins text-lg'>All Reviews</h1>
-            {!loading && courseData.user_ratings.length ? courseData?.user_ratings?.map((value,i)=>{
+            {!loading && courseData?.user_ratings?.length ? courseData?.user_ratings?.map((value,i)=>{
                    return <div className='w-full h-auto bg-slate-50 flex flex-row items-center rounded-md mb-3 '>
                     <div className='w-1/6 h-full p-3 flex justify-center items-center'>
                     <div className='mx-auto my-auto h-14 w-14 rounded-full bg-slate-600 flex justify-center items-center text-4xl text-white'>{value.user_name?.charAt(0).toUpperCase()}</div>
