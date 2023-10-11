@@ -10,10 +10,9 @@ const EditUser = ({user,func}) => {
     const [email, setEmail] = useState(user.email);
     const [mobile ,setMobile] = useState(user.mobile);
 
-    const updateProfile=()=>{
-      axiosInstance.patch("/user",{ id,name,email,mobile
+    const updateProfile=async()=>{
+     await axiosInstance.patch("/user",{ id,name,email,mobile
         }).then((res)=>{
-            console.log(res);
             toast.success('success')
             func(false)
         }).catch((error)=>{
@@ -63,25 +62,6 @@ return (
               </div>
             </div>
             <hr className="mb-4" />
-            <div className="flex mb-4">
-              <p className="w-1/4 mb-0">
-                <img
-                  id="imagePreview"
-                  className="w-20 h-20"
-                  src="https://static.thenounproject.com/png/576092-200.png"
-                  alt="Avatar Preview"
-                />
-              </p>
-              <div className="w-3/4">
-                <p className="mb-2">"Please Update Your Photo!!"</p>
-                <input
-                  type="file"
-                  name="photo"
-                  accept=".jpg,.jpeg,.png"
-                  id="file"
-                />
-              </div>
-            </div>
             <div className="flex justify-center">
               <button
                 type="button"
