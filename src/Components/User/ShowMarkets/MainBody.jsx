@@ -15,6 +15,7 @@ import {
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { toast } from 'react-toastify'
 import ScrollToTopButton from '../../ScrollToTopButton'
+import axios from 'axios'
 
 const MainBody = () => {
   const axiosInstance = userAxios()
