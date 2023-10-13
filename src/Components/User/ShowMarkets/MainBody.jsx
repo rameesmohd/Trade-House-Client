@@ -154,7 +154,7 @@ const fetchLiveCurrencyData=async()=>{
     //API : https://currencylayer.com/
     const targetCurrencies = 'EUR,GBP,CAD,JPY,AUD,CHF,CNY,SEK,NZD,MXN'
     try {
-    const response = await fetch(`http://apilayer.net/api/live?access_key=e3816b0a1e1c31ab8074bc00786cc420&currencies=${targetCurrencies}&source=USD&format=1`)
+    const response = await fetch(`https://apilayer.net/api/live?access_key=e3816b0a1e1c31ab8074bc00786cc420&currencies=${targetCurrencies}&source=USD&format=1`)
       console.log(response,'response');
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
