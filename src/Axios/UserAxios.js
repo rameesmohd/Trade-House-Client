@@ -5,9 +5,7 @@ import { useSelector } from 'react-redux'
 const userAxios=()=>{
     const token = useSelector((store)=>store.Client.Token)
     const userAxiosInstance = axios.create({
-        baseURL: userAPI,
-        withCredentials: true, 
-        crossdomain: true
+        baseURL: userAPI
     })
 
 
