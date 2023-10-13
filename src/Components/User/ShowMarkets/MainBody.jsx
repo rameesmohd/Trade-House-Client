@@ -26,10 +26,119 @@ const MainBody = () => {
   const [coinStats,setCoinStates] = useState({})
   const baseRef = useRef()
   const quoteRef = useRef()
-  const [livePrice,setLivePrice] = useState()
+  const [livePrice,setLivePrice] = useState('1.0546')
   const [base,setBase] = useState('EUR')
   const [quote,setQuote] = useState('USD')
-  const [economicCalender,setEconomicCalender] = useState([])
+  const [economicCalender,setEconomicCalender] = 
+  useState([
+  {year:"2023",
+    date:"2023-09-08",
+    time:"1:00am",
+    currency:"JPY",
+    impact:"Low Impact Expected",
+    name:"Economy Watchers Sentiment",
+    actual:"53.6",
+    forecast:"54.4",
+    previous:"54.4"},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"2:00am",
+    currency:"EUR",
+    impact:"Low Impact Expected",
+    name:"German Final CPI m/m",
+    actual:"0.3%",
+    forecast:"0.3%",
+    previous:"0.3%"},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"2:45am",
+    currency:"EUR",
+    impact:"Low Impact Expected",
+    name:"French Industrial Production m/m",
+    actual:"0.8%",
+    forecast:"0.2%",
+    previous:"-0.9%"},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"8:30am",
+    currency:"CAD",
+    impact:"High Impact Expected",
+    name:"Employment Change",
+    actual:"39.9K",
+    forecast:"18.9K",
+    previous:"-6.4K"},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"8:30am",
+    currency:"CAD",
+    impact:"High Impact Expected",
+    name:"Unemployment Rate",
+    actual:"5.5%",
+    forecast:"5.6%",
+    previous:"5.5%"},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"8:30am",
+    currency:"CAD",
+    impact:"Low Impact Expected",
+    name:"Capacity Utilization Rate",
+    actual:"81.4%",
+    forecast:"82.5%",
+    previous:"81.9%"},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"9:00am",
+    currency:"USD",
+    impact:"Low Impact Expected",
+    name:"FOMC Member Barr Speaks",
+    actual:"",
+    forecast:"",
+    previous:""},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"10:00am",
+    currency:"USD",
+    impact:"Low Impact Expected",
+    name:"Final Wholesale Inventories m/m",
+    actual:"-0.2%",
+    forecast:"-0.1%",
+    previous:"-0.1%"},
+    {year:"2023",
+    date:"2023-09-08",
+    time:"3:00pm",
+    currency:"USD",
+    impact:"Low Impact Expected",
+    name:"Consumer Credit m/m",
+    actual:"10.4B",
+    forecast:"16.1B",
+    previous:"17.8B"},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"9:30pm",
+    currency:"CNY",
+    impact:"High Impact Expected",
+    name:"CPI y/y",
+    actual:"0.1%",
+    forecast:"0.2%",
+    previous:"-0.3%"},
+
+    {year:"2023",
+    date:"2023-09-08",
+    time:"9:30pm",
+    currency:"CNY",
+    impact:"Medium Impact Expected",
+    name:"PPI y/y",
+    actual:"-3.0%",
+    forecast:"-3.0%",
+    previous:"-4.4%"}])
   const [todayDate,setTodayDate]= useState()
   const [activeSlide, setActiveSlide] = useState(1);
   const [modifiedQuotesData,setModifiedData] = useState([])
@@ -84,12 +193,13 @@ const handleLivePriceFunction=()=>{
   if(upperQuote && upperBase){
     setBase(upperBase)
     setQuote(upperQuote)
+    calculateLiveFxPrice(upperBase,upperQuote)
   }else{
     toast.error('Please enter base and quote..')
   }
 }
 
-const calculateLiveFxPrice=async()=>{
+const calculateLiveFxPrice=async(base,quote)=>{
   console.log(base,quote);
     const options = {
       method: 'GET',
@@ -105,6 +215,7 @@ const calculateLiveFxPrice=async()=>{
     }
   }
   setLoading(true)
+
   await axiosInstance.request(options).then((res)=>{
     const number = res.data
     const roundedNumber = number.toFixed(4);
@@ -217,14 +328,10 @@ const fetchLiveCurrencyData=async()=>{
     });
   }, []);
 
-  useEffect(() => {
-    calculateLiveFxPrice();
-  }, [base, quote]);
-
   useEffect(()=>{
-    fetchcalenderData()
+    // fetchcalenderData()
     fetchCryptoData()
-   fetchLiveCurrencyData()
+    fetchLiveCurrencyData()
   },[])
 
   return (
@@ -295,8 +402,8 @@ const fetchLiveCurrencyData=async()=>{
                     <tr key={index}>
                       {row.map((item, subIndex) => (
                         <React.Fragment key={subIndex}>
-                          <td className="px-6 py-3 font-semibold font-poppins">{item.currency}</td>
-                          <td className="px-6 py-3">{item.price}</td>
+                          <td className="px-6 py-3 font-semibold font-poppins bg-white text-black">{item.currency}</td>
+                          <td className="px-6 py-3 font-bold text-red-500 bg-gray-200">{item.price}</td>
                         </React.Fragment>
                       ))}
                     </tr>
