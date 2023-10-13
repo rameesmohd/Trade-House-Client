@@ -152,13 +152,13 @@ const SparklineChart = ({ data }) => {
 
 const fetchLiveCurrencyData=async()=>{
     //API : https://currencylayer.com/
+    // const targetCurrencies = 'EUR,GBP,CAD,JPY,AUD,CHF,CNY,SEK,NZD,MXN'
     // try {
     // const response = await fetch(`http://apilayer.net/api/live?access_key=fa81cecba1e88a485437a82450f85da8&currencies=${targetCurrencies}&source=USD&format=1`)
     //   console.log(response,'response');
     // if (!response.ok) {
     //   throw new Error(`HTTP error! Status: ${response.status}`);
     // }
-    
     // const data = await response.json();
     // const dataArray = Object.entries(data.quotes).map(([currency, price]) => ({
     //   currency,
