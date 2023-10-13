@@ -173,12 +173,8 @@ const SparklineChart = ({ data }) => {
 
 const fetchLiveCurrencyData=async()=>{
     //API : https://currencylayer.com/
-    const apiKey = '932162e27cd10f8d6cf87a5b1a4d2a53';
-    const baseCurrency = 'USD';
-    const targetCurrencies = 'EUR,GBP,CAD,JPY,AUD,CHF,CNY,SEK,NZD,MXN';
-    const format = 1;
-    const apiUrl = `http://apilayer.net/api/live?access_key=${apiKey}&currencies=${targetCurrencies}&source=${baseCurrency}&format=${format}`;
-    fetch(apiUrl)
+    const targetCurrencies = 'EUR,GBP,CAD,JPY,AUD,CHF,CNY,SEK,NZD,MXN'
+    fetch(`http://apilayer.net/api/live?access_key=8f81e2e34426e4884e452d86e4d32d21&currencies=${targetCurrencies}&source=USD&format=1`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
