@@ -16,21 +16,7 @@ import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { toast } from 'react-toastify'
 import ScrollToTopButton from '../../ScrollToTopButton'
 
-
-
-const MainBody = () => {
-  const axiosInstance = userAxios()
-  const [loading,setLoading] = useState(false)
-  const [cryptoData,setCryptoData] = useState([])
-  const [cryptoPagination,setCryptoPagination] = useState(0)
-  const [coinStats,setCoinStates] = useState({})
-  const baseRef = useRef()
-  const quoteRef = useRef()
-  const [livePrice,setLivePrice] = useState('1.0546')
-  const [base,setBase] = useState('EUR')
-  const [quote,setQuote] = useState('USD')
-  const [economicCalender,setEconomicCalender] = 
-  useState([
+const data = [
   {year:"2023",
     date:"2023-09-08",
     time:"1:00am",
@@ -138,7 +124,21 @@ const MainBody = () => {
     name:"PPI y/y",
     actual:"-3.0%",
     forecast:"-3.0%",
-    previous:"-4.4%"}])
+    previous:"-4.4%"}]
+
+
+const MainBody = () => {
+  const axiosInstance = userAxios()
+  const [loading,setLoading] = useState(false)
+  const [cryptoData,setCryptoData] = useState([])
+  const [cryptoPagination,setCryptoPagination] = useState(0)
+  const [coinStats,setCoinStates] = useState({})
+  const baseRef = useRef()
+  const quoteRef = useRef()
+  const [livePrice,setLivePrice] = useState('1.0546')
+  const [base,setBase] = useState('EUR')
+  const [quote,setQuote] = useState('USD')
+  const [economicCalender,setEconomicCalender] = useState([])
   const [todayDate,setTodayDate]= useState()
   const [activeSlide, setActiveSlide] = useState(1);
   const [modifiedQuotesData,setModifiedData] = useState([])
@@ -147,7 +147,7 @@ const MainBody = () => {
     ecnomicCalender : true,
     cryptoPrice : true
   })
-
+console.log(economicCalender,'economicCalender');
 const goToPreviousSlide = () => {
   setActiveSlide(activeSlide === 1 ? 4 : activeSlide - 1);
 };
@@ -157,32 +157,12 @@ const goToNextSlide = () => {
 };
 
 const fetchcalenderData=async()=>{
-      const today = new Date(); 
-      const year = today.getFullYear();
-      const month = today.getMonth() + 1; 
-      const day = today.getDate();
-      const options = {
-      method: 'GET',
-      url: 'https://forex-factory-scraper1.p.rapidapi.com/get_real_time_calendar_details',
-      params: {
-        calendar: 'Forex',
-        year: year,
-        month: month,
-        day: day
-      },
-      headers: {
-        'X-RapidAPI-Key': '0f86848d76mshb648d21621dcc6bp1dd038jsn90030cf66930',
-        'X-RapidAPI-Host': 'forex-factory-scraper1.p.rapidapi.com'
-      }
-    };
-
-    try {
-      const response = await axiosInstance.request(options);
-      setEconomicCalender(response.data)
+    await axiosInstance.get('/ecnomic-calender').then((res)=>{
+      console.log(res.data);
+      console.log(res.data.data.forexcalender);
+      setEconomicCalender(res.data.data.forexcalender)
       setApiLoading(prevState => ({ ...prevState, ecnomicCalender: false }));
-    } catch (error) {
-      console.error(error);
-    }
+    })
 }
 
 const handleLivePriceFunction=()=>{
@@ -329,7 +309,7 @@ const fetchLiveCurrencyData=async()=>{
   }, []);
 
   useEffect(()=>{
-    // fetchcalenderData()
+    fetchcalenderData()
     fetchCryptoData()
     fetchLiveCurrencyData()
   },[])
