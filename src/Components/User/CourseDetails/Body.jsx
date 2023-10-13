@@ -21,6 +21,7 @@ const Body = () => {
     const navigate = useNavigate()
     const selectedcourse  = location.state
     const purchasedCourses= useSelector((store)=>store.CoursesLoad.purchasedCourses)
+    const user_id = useSelector((store)=>store.Client.user_id)
     const token = useSelector((store)=>store.Client.Token) 
     const [isPurchased,setIsPurchased] = useState(false)
     const [loading,setLoading] = useState(true)
@@ -32,8 +33,9 @@ const Body = () => {
     
     const loadPurchasedCourses = async()=>{
         setLoading(true)
-        await axiosInstance.get(`/load-course?courseId=${selectedcourse._id}`)
+        await axiosInstance.get(`/load-course?courseId=${selectedcourse._id}&user_id=${user_id}`)
         .then((res)=>{
+            console.log(res.data);
             setCourseData({...courseData,...res.data.courseExpand})
             dispatch(setPurchsedCourses(res.data.result))
         }).catch((error)=>{
@@ -62,7 +64,7 @@ const Body = () => {
                 setTotalRating(totalRating)
             }
         }
-    },[courseData])
+    },[courseData,purchasedCourses])
 
     const accessChat=async()=>{
         if(!token) navigate('/login')
