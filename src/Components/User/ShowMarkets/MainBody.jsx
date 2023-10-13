@@ -153,18 +153,18 @@ const SparklineChart = ({ data }) => {
 const fetchLiveCurrencyData=async()=>{
     //API : https://currencylayer.com/
     const targetCurrencies = 'EUR,GBP,CAD,JPY,AUD,CHF,CNY,SEK,NZD,MXN'
-    fetch(`http://apilayer.net/api/live?access_key=4b4208e527a8f698e0b594c3f078264a&currencies=${targetCurrencies}&source=USD&format=1`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        const dataArray = Object.entries(data.quotes).map(([currency, price]) => ({
-          currency,
-          price
-        }));
+    try {
+    const response = await fetch(`http://apilayer.net/api/live?access_key=e3816b0a1e1c31ab8074bc00786cc420&currencies=${targetCurrencies}&source=USD&format=1`)
+      console.log(response,'response');
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const dataArray = Object.entries(data.quotes).map(([currency, price]) => ({
+      currency,
+      price
+    }));
         const modifiedData = []
         for (let i = 0; i < dataArray.length; i += 2) {
           if (i + 1 < dataArray.length) {
@@ -173,12 +173,12 @@ const fetchLiveCurrencyData=async()=>{
             modifiedData.push([dataArray[i]]);
           }
         }
+        console.log(modifiedData,'modifiedData');
         setModifiedData(modifiedData)
         setApiLoading(prevState => ({ ...prevState, majorCurr: false }));
-      })
-      .catch(error => {
+      }catch(error){
         console.error(error);
-      });
+      }
   }
 
   useEffect(() => {
@@ -198,7 +198,7 @@ const fetchLiveCurrencyData=async()=>{
 
   useEffect(()=>{
     fetchcalenderData()
-    fetchCryptoData()
+    // fetchCryptoData()
     fetchLiveCurrencyData()
   },[])
 
