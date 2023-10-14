@@ -55,8 +55,6 @@ const fetchmarketData=async()=>{
     })
 }
 
-console.log(modifiedQuotesData,'modifiedQuotesDatastateeeeeeeeeeeeee');
-
 const handleLivePriceFunction=()=>{
   const Base = baseRef.current.value
   const Quote = quoteRef.current.value
