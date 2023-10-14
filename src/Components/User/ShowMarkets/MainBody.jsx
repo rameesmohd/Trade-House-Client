@@ -46,10 +46,13 @@ const goToNextSlide = () => {
   setActiveSlide(activeSlide === 4 ? 1 : activeSlide + 1);
 };
 
-const fetchcalenderData=async()=>{
-    await axiosInstance.get('/ecnomic-calender').then((res)=>{
+const fetchmarketData=async()=>{
+    await axiosInstance.get('/market-data').then((res)=>{
+      console.log(res.data.data);
       setEconomicCalender(res.data.data.forexcalender)
+      setModifiedData(res.data.data.modifiedData)
       setApiLoading(prevState => ({ ...prevState, ecnomicCalender: false }));
+      setApiLoading(prevState => ({ ...prevState, majorCurr: false }));
     })
 }
 
@@ -150,56 +153,7 @@ const SparklineChart = ({ data }) => {
   );
 }
 
-const fetchLiveCurrencyData=async()=>{
-    //API : https://currencylayer.com/
-    // const targetCurrencies = 'EUR,GBP,CAD,JPY,AUD,CHF,CNY,SEK,NZD,MXN'
-    // try {
-    // const response = await fetch(`http://apilayer.net/api/live?access_key=fa81cecba1e88a485437a82450f85da8&currencies=${targetCurrencies}&source=USD&format=1`)
-    //   console.log(response,'response');
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! Status: ${response.status}`);
-    // }
-    // const data = await response.json();
-    // const dataArray = Object.entries(data.quotes).map(([currency, price]) => ({
-    //   currency,
-    //   price
-    // }));
-    //     const modifiedData = []
-    //     for (let i = 0; i < dataArray.length; i += 2) {
-    //       if (i + 1 < dataArray.length) {
-    //         modifiedData.push([dataArray[i], dataArray[i + 1]]);
-    //       } else {
-    //         modifiedData.push([dataArray[i]]);
-    //       }
-    //     }
-    //     console.log(modifiedData,'modifiedData');
-    //     setModifiedData(modifiedData)
-    //     setApiLoading(prevState => ({ ...prevState, majorCurr: false }));
-    //   }catch(error){
-    //     console.error(error);
-    //   }
-    // const targetCurrencies = 'EUR,GBP,CAD,JPY,AUD,CHF,CNY,SEK,NZD,MXN'
 
-    // const options = {
-    //   method: 'GET',
-    //   url: 'https://currency-conversion-and-exchange-rates.p.rapidapi.com/latest',
-    //   params: {
-    //     from: 'USD',
-    //     to: targetCurrencies
-    //   },
-    //   headers: {
-    //     'X-RapidAPI-Key': '0f86848d76mshb648d21621dcc6bp1dd038jsn90030cf66930',
-    //     'X-RapidAPI-Host': 'currency-conversion-and-exchange-rates.p.rapidapi.com'
-    //   }
-    // };
-
-    // try {
-    //   const response = await axios.request(options);
-    //   console.log(response.data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  }
 
   useEffect(() => {
     const currentDate = new Date();
@@ -217,7 +171,7 @@ const fetchLiveCurrencyData=async()=>{
   }, []);
 
   useEffect(()=>{
-    fetchcalenderData()
+    fetchmarketData()
     fetchCryptoData()
     fetchLiveCurrencyData()
   },[])
