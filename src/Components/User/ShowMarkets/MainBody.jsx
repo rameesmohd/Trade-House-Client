@@ -37,7 +37,7 @@ const MainBody = () => {
     ecnomicCalender : true,
     cryptoPrice : true
   })
-console.log(economicCalender,'economicCalender');
+
 const goToPreviousSlide = () => {
   setActiveSlide(activeSlide === 1 ? 4 : activeSlide - 1);
 };
@@ -48,13 +48,14 @@ const goToNextSlide = () => {
 
 const fetchmarketData=async()=>{
     await axiosInstance.get('/market-data').then((res)=>{
-      console.log(res.data.data);
       setEconomicCalender(res.data.data.forexcalender)
-      setModifiedData(res.data.data.modifiedData)
+      setModifiedData(res.data.data.CurrencyData)
       setApiLoading(prevState => ({ ...prevState, ecnomicCalender: false }));
       setApiLoading(prevState => ({ ...prevState, majorCurr: false }));
     })
 }
+
+console.log(modifiedQuotesData,'modifiedQuotesDatastateeeeeeeeeeeeee');
 
 const handleLivePriceFunction=()=>{
   const Base = baseRef.current.value
@@ -173,7 +174,6 @@ const SparklineChart = ({ data }) => {
   useEffect(()=>{
     fetchmarketData()
     fetchCryptoData()
-    fetchLiveCurrencyData()
   },[])
 
   return (
