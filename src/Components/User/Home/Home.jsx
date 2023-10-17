@@ -255,7 +255,7 @@ function Home() {
         <section className='col-span-4 col-start-3'>
             <div className="container my-24 mx-auto md:px-6">
                 <div className="mb-32">
-                    <div className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <div className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] ">
                     <div className="flex flex-wrap items-center bg-black rounded-lg">
                         <div className="block w-full shrink-0 grow-0 basis-auto lg:flex lg:w-4/6 xl:w-8/12 bg-white">
                             <div className="h-full md:h-[500px] w-full">
@@ -290,10 +290,10 @@ function Home() {
                                 <p className="mb-2 font-bold dark:text-white">
                                     Technical support
                                 </p>
-                                <p className="text-neutral-500 dark:text-neutral-200">
+                                <p className="text-neutral-200">
                                     support@th.com
                                 </p>
-                                <p className="text-neutral-500 dark:text-neutral-200">
+                                <p className="text-neutral-200">
                                     +1 234-567-89
                                 </p>
                                 </div>
@@ -311,13 +311,13 @@ function Home() {
                                     </div>
                                     </div>
                                     <div className="ml-6 grow">
-                                    <p className="mb-2 font-bold dark:text-white">
+                                    <p className="mb-2 font-bold text-white">
                                         Sales questions
                                     </p>
-                                    <p className="text-neutral-500 dark:text-neutral-200">
+                                    <p className=" text-neutral-200">
                                         sales@th.com
                                     </p>
-                                    <p className="text-neutral-500 dark:text-neutral-200">
+                                    <p className=" text-neutral-200">
                                         +1 234-567-89
                                     </p>
                                     </div>
