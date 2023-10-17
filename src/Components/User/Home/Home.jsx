@@ -287,7 +287,7 @@ function Home() {
                                 </div>
                                 </div>
                                 <div className="ml-6 grow">
-                                <p className="mb-2 font-bold dark:text-white">
+                                <p className="mb-2 font-bold text-white">
                                     Technical support
                                 </p>
                                 <p className="text-neutral-200">
