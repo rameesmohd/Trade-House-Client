@@ -219,16 +219,16 @@ const SparklineChart = ({ data }) => {
       <div className='bg-black'>  
             <div className='text-white text-center'><p className='text-lg font-bold font-poppins'>MAJOR CURRENCY</p><p className='mb-2 font-poppins'>Live Prices</p></div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-white">
-                <thead class="text-xs text-gray-700 uppercase dark:text-white font-semibold border">
+            <table class="w-full text-sm text-left text-white">
+                <thead class="text-xs  uppercase text-white font-semibold border">
                     <tr>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
+                        <th scope="col" class="px-6 py-3 bg-gray-800">
                             Currency
                         </th>
                         <th scope="col" class="px-6 py-3" >
                             Price
                         </th>
-                        <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
+                        <th scope="col" class="px-6 py-3 bg-gray-800">
                             Currency
                         </th>
                         <th scope="col" class="px-6 py-3">
