@@ -5,7 +5,7 @@ import { BsDownload } from 'react-icons/bs';
 import { MdCheckCircle,MdCancel } from 'react-icons/md';
 import Modal from '../ConfirmModal';
 import { toast } from 'react-toastify';
-let action;
+var action;
 
 const TutorReq = () => {
     const axiosInstance = adminAxios()
@@ -38,28 +38,31 @@ const TutorReq = () => {
     };
 
     
-    const handleModal=(_id,state)=>{
-        if (state) {
+    const handleModal=async({_id,status})=>{
+        if (status) {
             action = handleApprove; 
         } else {
             action = handleReject; 
         }
         setId(_id)
-        setShowModal(true)
+        setShowModal(!showModal)
     }
 
     const handleApprove=async()=>{
+        if(id){       
         await axiosInstance.patch(`/approve-request?id=${id}`)
         .then((res)=>{
-            setUserData(res.data.result)
+                setUserData(res.data.result)
         }).catch((error)=>{
             toast.error(error.message);
         }).finally(()=>{
             setShowModal(false)
         })
     }
+    }
 
     const handleReject=async()=>{
+    if(id){
         await axiosInstance.patch(`/reject-request?id=${id}`)
         .then((res)=>{
             setUserData(res.data.result)
@@ -68,6 +71,7 @@ const TutorReq = () => {
         }).finally(()=>{
             setShowModal(false)
         })
+    }
     }
 
   return (
@@ -102,11 +106,11 @@ const TutorReq = () => {
                     <div className='flex'>
                     <button type="button" 
                     className='btn-sm mx-2 bg-green-500 rounded-md text-sm flex flex-row items-center text-white hover:bg-green-600' 
-                    onClick={()=>handleModal(obj._id,true)}>Approve<MdCheckCircle color="white"/>
+                    onClick={()=>handleModal({_id:obj._id,status:true})}>Approve<MdCheckCircle color="white"/>
                     </button>
                     <button type="button" 
                     className='btn-sm bg-red-500 rounded-md text-sm flex flex-row items-center text-white hover:bg-red-600' 
-                    onClick={()=>handleModal(obj._id,false)}>Reject<MdCancel color="white"/>
+                    onClick={()=>handleModal({_id:obj._id,status:false})}>Reject<MdCancel color="white"/>
                     </button>
                     </div>
                 </td>
