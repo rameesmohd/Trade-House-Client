@@ -37,17 +37,6 @@ const TutorReq = () => {
         document.body.removeChild(anchor);
     };
 
-    
-    const handleModal=async({_id,status})=>{
-        if (status) {
-            action = handleApprove; 
-        } else {
-            action = handleReject; 
-        }
-        setId(_id)
-        setShowModal(!showModal)
-    }
-
     const handleApprove=async()=>{
         if(id){       
         await axiosInstance.patch(`/approve-request?id=${id}`)
@@ -72,6 +61,16 @@ const TutorReq = () => {
             setShowModal(false)
         })
     }
+    }
+
+    const handleModal=async({_id,status})=>{
+        if (status) {
+            action = handleApprove; 
+        } else {
+            action = handleReject; 
+        }
+        setId(_id)
+        setShowModal(!showModal)
     }
 
   return (
