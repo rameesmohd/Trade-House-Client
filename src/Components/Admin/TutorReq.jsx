@@ -13,13 +13,17 @@ const TutorReq = () => {
     const [usersData , setUserData] = useState([])
     const [id,setId] = useState('')
 
-    useEffect(()=>{
-        axiosInstance.get('/tutor-requests').then((res)=>{
-                    setUserData(res.data.result)
+    const fetchdata=async()=>{
+        await axiosInstance.get('/tutor-requests').then((res)=>{
+            setUserData(res.data.result)
         }).catch((error)=>{
             console.log(error.message);
             toast.error(error.message)
         })
+    }
+
+    useEffect(()=>{
+        fetchdata()
     },[])  
 
     const handleDownload = (fileUrl,fileName) => {
@@ -35,7 +39,11 @@ const TutorReq = () => {
 
     
     const handleModal=(_id,state)=>{
-        state ? action = handleApprove : action = handleReject
+        if (state) {
+            action = handleApprove; 
+        } else {
+            action = handleReject; 
+        }
         setId(_id)
         setShowModal(true)
     }
@@ -46,8 +54,9 @@ const TutorReq = () => {
             setUserData(res.data.result)
         }).catch((error)=>{
             toast.error(error.message);
+        }).finally(()=>{
+            setShowModal(false)
         })
-        setShowModal(false)
     }
 
     const handleReject=async()=>{
@@ -56,8 +65,9 @@ const TutorReq = () => {
             setUserData(res.data.result)
         }).catch((error)=>{
             toast.error(error.message);
+        }).finally(()=>{
+            setShowModal(false)
         })
-        setShowModal(false)
     }
 
   return (
